@@ -1,7 +1,6 @@
 package ky.someone.mods.gag.client;
 
 import com.google.common.collect.Iterables;
-import com.mojang.blaze3d.vertex.PoseStack;
 import dev.architectury.event.events.client.ClientGuiEvent;
 import dev.architectury.event.events.client.ClientLifecycleEvent;
 import dev.architectury.registry.client.level.entity.EntityRendererRegistry;
@@ -22,7 +21,7 @@ import ky.someone.mods.gag.particle.client.MagicParticle;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.network.chat.Component;
@@ -35,14 +34,10 @@ import java.util.List;
 @Environment(EnvType.CLIENT)
 public interface GAGClient {
 
-	Screen DUMMY_SCREEN = new Screen(Component.empty()) {
-	};
-
 	static void init() {
 		registerEntityRenderers();
 
 		ClientLifecycleEvent.CLIENT_SETUP.register(GAGClient::setup);
-		ClientLifecycleEvent.CLIENT_STARTED.register(GAGClient::clientDone);
 		ClientGuiEvent.RENDER_HUD.register(GAGClient::renderHUD);
 
 		ParticleProviderRegistry.register(ParticleTypeRegistry.MAGIC, MagicParticle.Provider::new);
@@ -54,21 +49,21 @@ public interface GAGClient {
 		EntityRendererRegistry.register(EntityTypeRegistry.FISHING_DYNAMITE, ThrownItemRenderer::new);
 	}
 
-	static void renderHUD(PoseStack poseStack, float partialTicks) {
-		var minecraft = Minecraft.getInstance();
+	static void renderHUD(GuiGraphics graphics, float partialTicks) {
+		var mc = Minecraft.getInstance();
 
-		if (minecraft == null || minecraft.options.hideGui || minecraft.gameMode.getPlayerMode() == GameType.SPECTATOR) {
+		if (mc == null || mc.options.hideGui || mc.gameMode.getPlayerMode() == GameType.SPECTATOR) {
 			return;
 		}
 
-		var level = minecraft.level;
-		var player = minecraft.player;
+		var level = mc.level;
+		var player = mc.player;
 
 		if (level == null || player == null) {
 			return;
 		}
 
-		if (minecraft.hitResult instanceof BlockHitResult blockHit) {
+		if (mc.hitResult instanceof BlockHitResult blockHit) {
 			var pos = blockHit.getBlockPos();
 			var block = level.getBlockState(pos).getBlock();
 
@@ -79,7 +74,7 @@ public interface GAGClient {
 
 				if (accelSpeed == 0) return;
 
-				renderHudTooltip(poseStack, List.of(
+				renderHudTooltip(mc, graphics, List.of(
 						block.getName(),
 						Component.translatable("info.gag.time_sand_tooltip_mult",
 								GAGUtil.asStyledValue(accelSpeed, GAGConfig.SandsOfTime.MAX_RATE.get(), Integer.toString(1 << accelSpeed))),
@@ -103,23 +98,18 @@ public interface GAGClient {
 		}
 
 		if (!tooltip.isEmpty()) {
-			renderHudTooltip(poseStack, tooltip);
+			renderHudTooltip(mc, graphics, tooltip);
 		}
 	}
 
-	private static void renderHudTooltip(PoseStack poseStack, List<Component> text) {
-		var mc = Minecraft.getInstance();
-		var x = (DUMMY_SCREEN.width = mc.getWindow().getGuiScaledWidth()) / 2;
-		var y = (DUMMY_SCREEN.height = mc.getWindow().getGuiScaledHeight()) / 2;
-		DUMMY_SCREEN.renderComponentTooltip(poseStack, text, x + 10, y);
+	private static void renderHudTooltip(Minecraft mc, GuiGraphics graphics, List<Component> text) {
+		var x = mc.getWindow().getGuiScaledWidth() / 2;
+		var y = mc.getWindow().getGuiScaledHeight() / 2;
+		graphics.renderComponentTooltip(mc.font, text, x + 10, y);
 	}
 
 	static void setup(Minecraft minecraft) {
 		RenderTypeRegistry.register(RenderType.cutoutMipped(), BlockRegistry.NO_SOLICITORS_SIGN.get());
 		MenuRegistry.registerScreenFactory(MenuTypeRegistry.LABELING.get(), LabelingMenuScreen::new);
-	}
-
-	static void clientDone(Minecraft minecraft) {
-		DUMMY_SCREEN.init(minecraft, minecraft.getWindow().getGuiScaledWidth(), minecraft.getWindow().getGuiScaledHeight());
 	}
 }

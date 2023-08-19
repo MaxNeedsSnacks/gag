@@ -1,8 +1,8 @@
 package ky.someone.mods.gag.item;
 
-import ky.someone.mods.gag.GAG;
 import ky.someone.mods.gag.GAGUtil;
 import ky.someone.mods.gag.menu.LabelingMenu;
+import ky.someone.mods.gag.tab.GAGCreativeTabs;
 import net.minecraft.network.chat.Component;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
@@ -27,7 +27,7 @@ public class LabelingToolItem extends GAGItem implements MenuProvider {
 	public static final int XP_COST = 10;
 
 	public LabelingToolItem() {
-		super(new Properties().tab(GAG.CREATIVE_TAB).stacksTo(1));
+		super(new Properties().stacksTo(1));
 	}
 
 	@Override

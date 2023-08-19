@@ -34,7 +34,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -86,7 +86,7 @@ public class NoSolicitorsSign extends Block {
 	));
 
 	public NoSolicitorsSign() {
-		super(BlockBehaviour.Properties.of(Material.WOOD).sound(SoundType.WOOD).noCollission().strength(4.0F));
+		super(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).sound(SoundType.WOOD).noCollission().strength(4.0F));
 		this.registerDefaultState(this.stateDefinition.any().setValue(SILENT, false)
 				.setValue(FACING, Direction.NORTH)
 				.setValue(WATERLOGGED, Boolean.FALSE));
@@ -112,7 +112,7 @@ public class NoSolicitorsSign extends Block {
 
 	@Override
 	public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
-		return level.getBlockState(pos.relative(state.getValue(FACING).getOpposite())).getMaterial().isSolid();
+		return level.getBlockState(pos.relative(state.getValue(FACING).getOpposite())).isSolid();
 	}
 
 	@Nullable

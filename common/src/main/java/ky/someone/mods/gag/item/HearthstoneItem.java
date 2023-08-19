@@ -1,12 +1,11 @@
 package ky.someone.mods.gag.item;
 
-import ky.someone.mods.gag.GAG;
 import ky.someone.mods.gag.GAGUtil;
 import ky.someone.mods.gag.config.GAGConfig;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
-import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -37,9 +36,7 @@ public class HearthstoneItem extends GAGItem {
 	}
 
 	public HearthstoneItem(int durability) {
-		super(new Properties()
-				.tab(GAG.CREATIVE_TAB)
-				.durability(durability));
+		super(new Properties().durability(durability));
 	}
 
 	@Override
@@ -131,7 +128,7 @@ public class HearthstoneItem extends GAGItem {
 	private ItemStack tryTeleport(ItemStack stack, ServerLevel level, ServerPlayer player, Vec3 pos, float yaw) {
 		var creative = player.isCreative();
 
-		var durabilityUsed = level.equals(player.getLevel()) ? 1 : GAGConfig.Hearthstone.DIMENSION_MULTIPLIER.get();
+		var durabilityUsed = level.equals(player.serverLevel()) ? 1 : GAGConfig.Hearthstone.DIMENSION_MULTIPLIER.get();
 		var distance = player.position().distanceTo(pos) * durabilityUsed;
 		var range = GAGConfig.Hearthstone.RANGE.get();
 
@@ -212,7 +209,7 @@ public class HearthstoneItem extends GAGItem {
 
 		@Nullable
 		public ServerLevel getLevel(MinecraftServer server) {
-			return server.getLevel(ResourceKey.create(Registry.DIMENSION_REGISTRY, level));
+			return server.getLevel(ResourceKey.create(Registries.DIMENSION, level));
 		}
 	}
 }

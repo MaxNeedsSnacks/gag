@@ -61,7 +61,7 @@ public class EnergizedHearthstoneItem extends HearthstoneItem {
 
 			var text = Component.translatable(String.format("(%.1f %.1f %.1f)", pos.x, pos.y, pos.z)).withStyle(GAGUtil.COLOUR_TRUE);
 
-			if (player == null || !level.equals(player.level.dimension().location())) {
+			if (player == null || !level.equals(player.level().dimension().location())) {
 				text.append(" @ ").append(Component.translatable(level.toString()).withStyle(ChatFormatting.GRAY));
 			}
 
@@ -76,7 +76,7 @@ public class EnergizedHearthstoneItem extends HearthstoneItem {
 		var stack = player.getItemInHand(hand);
 		if (!isBound(stack)) {
 			if (player.isShiftKeyDown()) {
-				var pos = new TeleportPos(player.level.dimension().location(), player.position(), player.getYRot());
+				var pos = new TeleportPos(player.level().dimension().location(), player.position(), player.getYRot());
 				stack.addTagElement(TARGET_KEY, pos.toNbt());
 
 				player.playSound(SoundEvents.TRIDENT_THUNDER, 0.5f, 1.25f);

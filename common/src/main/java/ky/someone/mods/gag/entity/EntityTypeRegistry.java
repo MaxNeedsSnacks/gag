@@ -4,11 +4,12 @@ import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import ky.someone.mods.gag.GAGUtil;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 
 public interface EntityTypeRegistry {
-	DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(GAGUtil.MOD_ID, Registry.ENTITY_TYPE_REGISTRY);
+	DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(GAGUtil.MOD_ID, Registries.ENTITY_TYPE);
 
 	RegistrySupplier<EntityType<TimeAcceleratorEntity>> TIME_ACCELERATOR =
 			ENTITIES.register("time_accelerator", () -> EntityType.Builder.of(TimeAcceleratorEntity::new, MobCategory.MISC)

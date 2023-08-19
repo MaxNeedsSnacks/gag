@@ -1,7 +1,7 @@
 package ky.someone.mods.gag.item;
 
-import ky.someone.mods.gag.GAG;
 import ky.someone.mods.gag.config.GAGConfig;
+import ky.someone.mods.gag.tab.GAGCreativeTabs;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -10,7 +10,7 @@ import net.minecraft.world.level.Level;
 
 public class TimeSandItem extends GAGItem {
 	public TimeSandItem() {
-		super(new Item.Properties().tab(GAG.CREATIVE_TAB).stacksTo(16));
+		super(new Item.Properties().stacksTo(16));
 	}
 
 	@Override

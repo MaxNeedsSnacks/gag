@@ -5,7 +5,6 @@ import dev.architectury.event.events.common.CommandRegistrationEvent;
 import dev.architectury.event.events.common.EntityEvent;
 import dev.architectury.event.events.common.LifecycleEvent;
 import dev.architectury.event.events.common.LightningEvent;
-import dev.architectury.registry.CreativeTabRegistry;
 import dev.architectury.utils.Env;
 import dev.architectury.utils.EnvExecutor;
 import dev.ftb.mods.ftblibrary.snbt.config.ConfigUtil;
@@ -21,17 +20,13 @@ import ky.someone.mods.gag.item.EnergizedHearthstoneItem;
 import ky.someone.mods.gag.item.ItemRegistry;
 import ky.someone.mods.gag.menu.MenuTypeRegistry;
 import ky.someone.mods.gag.particle.ParticleTypeRegistry;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.CreativeModeTab;
+import ky.someone.mods.gag.tab.GAGCreativeTabs;
 import org.slf4j.Logger;
 
 import static dev.ftb.mods.ftblibrary.snbt.config.ConfigUtil.CONFIG_DIR;
 
 public class GAG {
 	public static final Logger LOGGER = LogUtils.getLogger();
-
-	public static final CreativeModeTab CREATIVE_TAB = CreativeTabRegistry.create(new ResourceLocation(GAGUtil.MOD_ID, GAGUtil.MOD_ID),
-			() -> ItemRegistry.HEARTHSTONE.get().getDefaultInstance());
 
 	public GAG() {
 		BlockRegistry.BLOCKS.register();
@@ -40,6 +35,7 @@ public class GAG {
 		EffectRegistry.EFFECTS.register();
 		ParticleTypeRegistry.PARTICLE_TYPES.register();
 		MenuTypeRegistry.MENUS.register();
+		GAGCreativeTabs.TABS.register();
 
 		GAGConfig.init();
 		LifecycleEvent.SERVER_BEFORE_START.register((server) -> ConfigUtil.loadDefaulted(GAGConfig.CONFIG, CONFIG_DIR, GAGUtil.MOD_ID));

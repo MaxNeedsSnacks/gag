@@ -6,8 +6,8 @@ import ky.someone.mods.gag.config.GAGConfig;
 import ky.someone.mods.gag.item.ItemRegistry;
 import ky.someone.mods.gag.platform.PlatformInvokers;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.protocol.game.ClientboundExplodePacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
@@ -35,7 +35,7 @@ import java.util.Set;
 
 public class MiningDynamiteEntity extends AbstractDynamiteEntity {
 
-	public static final TagKey<Block> MINING_DYNAMITE_EFFECTIVE = TagKey.create(Registry.BLOCK_REGISTRY, GAGUtil.id("mining_dynamite_effective"));
+	public static final TagKey<Block> MINING_DYNAMITE_EFFECTIVE = TagKey.create(Registries.BLOCK, GAGUtil.id("mining_dynamite_effective"));
 
 	public MiningDynamiteEntity(EntityType<? extends MiningDynamiteEntity> type, Level level) {
 		super(type, level);
@@ -54,7 +54,7 @@ public class MiningDynamiteEntity extends AbstractDynamiteEntity {
 		super.tick();
 		Vec3 vec3 = this.getDeltaMovement();
 		// add some smoke particles above the entity to make it look nicer
-		this.level.addParticle(ParticleTypes.SMOKE,
+		level().addParticle(ParticleTypes.SMOKE,
 				getX(-vec3.x) + random.nextDouble() * 0.6 - 0.3,
 				getY(-vec3.y) + random.nextDouble() * getBbHeight(),
 				getZ(-vec3.z) + random.nextDouble() * 0.6 - 0.3,
@@ -74,7 +74,8 @@ public class MiningDynamiteEntity extends AbstractDynamiteEntity {
 	@Override
 	public void detonate(Vec3 pos) {
 		var r = GAGConfig.Dynamite.MINING_RADIUS.get();
-		var explosion = new BlockMiningExplosion(this.level, this, pos.x, pos.y, pos.z, r);
+		var level = level();
+		var explosion = new BlockMiningExplosion(level, this, pos.x, pos.y, pos.z, r);
 		if (!PlatformInvokers.explosionPre(level, explosion)) {
 			explosion.explode();
 
@@ -115,7 +116,7 @@ public class MiningDynamiteEntity extends AbstractDynamiteEntity {
 				public boolean shouldBlockExplode(Explosion explosion, BlockGetter blockGetter, BlockPos blockPos, BlockState blockState, float f) {
 					return blockState.getFluidState().isEmpty() && super.shouldBlockExplode(explosion, blockGetter, blockPos, blockState, f);
 				}
-			}, x, y, z, radius, false, BlockInteraction.BREAK);
+			}, x, y, z, radius, false, BlockInteraction.DESTROY);
 		}
 
 		/**
@@ -125,7 +126,7 @@ public class MiningDynamiteEntity extends AbstractDynamiteEntity {
 		 */
 		@Override
 		public void explode() {
-			this.level.gameEvent(this.source, GameEvent.EXPLODE, new BlockPos(this.x, this.y, this.z));
+			this.level.gameEvent(this.source, GameEvent.EXPLODE, BlockPos.containing(this.x, this.y, this.z));
 			Set<BlockPos> set = Sets.newHashSet();
 			for (int j = 0; j < 16; ++j) {
 				for (int k = 0; k < 16; ++k) {
@@ -144,7 +145,7 @@ public class MiningDynamiteEntity extends AbstractDynamiteEntity {
 							double o = this.z;
 
 							for (float p = 0.3F; h > 0.0F; h -= 0.22500001F) {
-								BlockPos blockPos = new BlockPos(m, n, o);
+								BlockPos blockPos = BlockPos.containing(m, n, o);
 								BlockState blockState = this.level.getBlockState(blockPos);
 								FluidState fluidState = this.level.getFluidState(blockPos);
 								if (!this.level.isInWorldBounds(blockPos)) {

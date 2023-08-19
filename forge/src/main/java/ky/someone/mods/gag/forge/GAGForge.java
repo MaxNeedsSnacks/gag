@@ -4,7 +4,7 @@ import dev.architectury.platform.forge.EventBuses;
 import ky.someone.mods.gag.GAG;
 import ky.someone.mods.gag.GAGUtil;
 import ky.someone.mods.gag.item.ItemRegistry;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -23,7 +23,7 @@ public class GAGForge {
 	public static void onRegistryMissingMappings(MissingMappingsEvent event) {
 		// remap "tiab:time_in_a_bottle" to "gag:temporal_pouch" if TIAB Standalone is missing
 		//  (requested by people wanting to transition from TIAB Standalone to GAG)
-		for (var mapping : event.getAllMappings(Registry.ITEM_REGISTRY)) {
+		for (var mapping : event.getAllMappings(Registries.ITEM)) {
 			if (mapping.getKey().equals(new ResourceLocation("tiab:time_in_a_bottle"))) {
 				mapping.remap(ItemRegistry.TIME_SAND_POUCH.get());
 				break;

@@ -1,6 +1,5 @@
 package ky.someone.mods.gag.item;
 
-import ky.someone.mods.gag.GAG;
 import ky.someone.mods.gag.GAGUtil;
 import ky.someone.mods.gag.config.GAGConfig;
 import net.minecraft.ChatFormatting;
@@ -29,9 +28,7 @@ import static ky.someone.mods.gag.GAGUtil.TOOLTIP_EXTRA;
 
 public class EscapeRopeItem extends GAGItem {
 	public EscapeRopeItem() {
-		super(new Item.Properties()
-				.tab(GAG.CREATIVE_TAB)
-				.durability(GAGConfig.EscapeRope.DURABILITY.get()));
+		super(new Item.Properties().durability(GAGConfig.EscapeRope.DURABILITY.get()));
 	}
 
 	@Override
@@ -67,7 +64,7 @@ public class EscapeRopeItem extends GAGItem {
 					for (var newPos : BlockPos.spiralAround(new BlockPos(pos.getX(), level.getSeaLevel(), pos.getY()), 16, Direction.EAST, Direction.SOUTH)) {
 						BlockState bs = level.getBlockState(newPos);
 
-						if (bs.getMaterial().isSolidBlocking() && level.isEmptyBlock(newPos.above(1)) && level.isEmptyBlock(newPos.above(2)) && level.isEmptyBlock(newPos.above(3))) {
+						if (bs.isCollisionShapeFullBlock(serverLevel, newPos) && level.isEmptyBlock(newPos.above(1)) && level.isEmptyBlock(newPos.above(2)) && level.isEmptyBlock(newPos.above(3))) {
 							teleportPos = newPos.above();
 							break;
 						}

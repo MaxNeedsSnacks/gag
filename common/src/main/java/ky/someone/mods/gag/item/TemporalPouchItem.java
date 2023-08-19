@@ -2,13 +2,12 @@ package ky.someone.mods.gag.item;
 
 import dev.architectury.hooks.level.entity.PlayerHooks;
 import dev.architectury.platform.Platform;
-import ky.someone.mods.gag.GAG;
 import ky.someone.mods.gag.GAGUtil;
 import ky.someone.mods.gag.entity.EntityTypeRegistry;
 import ky.someone.mods.gag.entity.TimeAcceleratorEntity;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -44,10 +43,10 @@ public class TemporalPouchItem extends GAGItem {
 	//  which we want to remap to our own if the mod is not loaded
 	public static final String TIAB_STORED_KEY = "storedTime";
 
-	public static TagKey<BlockEntityType<?>> DO_NOT_ACCELERATE = TagKey.create(Registry.BLOCK_ENTITY_TYPE_REGISTRY, GAGUtil.id("do_not_accelerate"));
+	public static TagKey<BlockEntityType<?>> DO_NOT_ACCELERATE = TagKey.create(Registries.BLOCK_ENTITY_TYPE, GAGUtil.id("do_not_accelerate"));
 
 	public TemporalPouchItem() {
-		super(new Item.Properties().tab(GAG.CREATIVE_TAB).stacksTo(1));
+		super(new Item.Properties().stacksTo(1));
 	}
 
 	public static int getStoredGrains(ItemStack stack) {
@@ -136,10 +135,11 @@ public class TemporalPouchItem extends GAGItem {
 		Player player = ctx.getPlayer();
 
 		// good lord this is a mouthful...
+		var beRegistry = level.registryAccess().registryOrThrow(Registries.BLOCK_ENTITY_TYPE);
 		var validBlockEntity = Optional.ofNullable(level.getBlockEntity(pos))
 				.map(BlockEntity::getType)
-				.flatMap(Registry.BLOCK_ENTITY_TYPE::getResourceKey)
-				.flatMap(Registry.BLOCK_ENTITY_TYPE::getHolder)
+				.flatMap(beRegistry::getResourceKey)
+				.flatMap(beRegistry::getHolder)
 				.filter(type -> !type.is(DO_NOT_ACCELERATE))
 				.isPresent();
 
@@ -189,7 +189,8 @@ public class TemporalPouchItem extends GAGItem {
 	private void playNote(Level level, BlockPos pos, int rate) {
 		var pitches = new int[]{-6, -4, -2, -1, 1, 3, 5, 6};
 		var pitch = (float) Math.pow(2.0D, (pitches[(rate - 1) % 8]) / 12.0D);
-		level.playSound(null, pos, rate > 8 ? SoundEvents.NOTE_BLOCK_FLUTE : SoundEvents.NOTE_BLOCK_CHIME, SoundSource.PLAYERS, 3.0F, pitch);
+		var sound = rate > 8 ? SoundEvents.NOTE_BLOCK_FLUTE : SoundEvents.NOTE_BLOCK_CHIME;
+		level.playSound(null, pos, sound.value(), SoundSource.PLAYERS, 3.0F, pitch);
 	}
 
 	@Override

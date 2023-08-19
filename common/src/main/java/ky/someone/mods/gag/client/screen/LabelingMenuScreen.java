@@ -1,7 +1,6 @@
 package ky.someone.mods.gag.client.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import ky.someone.mods.gag.GAGUtil;
 import ky.someone.mods.gag.item.LabelingToolItem;
 import ky.someone.mods.gag.menu.LabelingMenu;
@@ -9,6 +8,7 @@ import ky.someone.mods.gag.network.LabelerTryRenamePacket;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
@@ -38,7 +38,6 @@ public class LabelingMenuScreen extends AbstractContainerScreen<LabelingMenu> im
 	@Override
 	protected void init() {
 		super.init();
-		minecraft.keyboardHandler.setSendRepeatsToGui(true);
 		int i = (this.width - this.imageWidth) / 2;
 		int j = (this.height - this.imageHeight) / 2;
 
@@ -60,7 +59,6 @@ public class LabelingMenuScreen extends AbstractContainerScreen<LabelingMenu> im
 	@Override
 	public void removed() {
 		super.removed();
-		minecraft.keyboardHandler.setSendRepeatsToGui(false);
 		this.menu.removeSlotListener(this);
 	}
 
@@ -95,33 +93,32 @@ public class LabelingMenuScreen extends AbstractContainerScreen<LabelingMenu> im
 	}
 
 	@Override
-	public void render(PoseStack poseStack, int i, int j, float f) {
-		this.renderBackground(poseStack);
-		super.render(poseStack, i, j, f);
+	public void render(GuiGraphics graphics, int i, int j, float f) {
+		this.renderBackground(graphics);
+		super.render(graphics, i, j, f);
 		RenderSystem.disableBlend();
-		labelBox.render(poseStack, i, j, f);
-		this.renderTooltip(poseStack, i, j);
+		labelBox.render(graphics, i, j, f);
+		this.renderTooltip(graphics, i, j);
 	}
 
 	@Override
-	public void renderBg(PoseStack poseStack, float f, int i, int j) {
-		RenderSystem.setShader(GameRenderer::getPositionTexShader);
-		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-		RenderSystem.setShaderTexture(0, BG);
+	public void renderBg(GuiGraphics graphics, float f, int i, int j) {
 		int cx = (this.width - this.imageWidth) / 2;
 		int cy = (this.height - this.imageHeight) / 2;
+
+		var poseStack = graphics.pose();
 
 		poseStack.pushPose();
 		poseStack.translate(cx, cy, 0);
 
-		// note to self - blit(PoseStack, int x, int y, int u, int v, int width, int height)
+		// note to self - blit(ResourceLocation texture, int x, int y, int u, int v, int width, int height)
 		// draw background
-		this.blit(poseStack, 0, 0, 0, 0, this.imageWidth, this.imageHeight);
+		graphics.blit(BG, 0, 0, 0, 0, this.imageWidth, this.imageHeight);
 
 		// pigment slot (currently unused UI)
 		// u 0 v 166, 164x31 at (6, 40)
 		if (UNUSED_UI) {
-			this.blit(poseStack, 6, 40, 0, 166, 164, 31);
+			graphics.blit(BG, 6, 40, 0, 166, 164, 31);
 		}
 
 		/*
@@ -130,10 +127,10 @@ public class LabelingMenuScreen extends AbstractContainerScreen<LabelingMenu> im
 		 * output: u 176 v 0, 18x18 at (134, 41)
 		 * arrow: u 176 v 18, 22x15 at (103, 43)
 		 */
-		this.blit(poseStack, 59, 20, 0, 197, 110, 16);
-		this.blit(poseStack, 76, 41, 176, 0, 18, 18);
-		this.blit(poseStack, 134, 41, 176, 0, 18, 18);
-		this.blit(poseStack, 103, 43, 176, 18, 22, 15);
+		graphics.blit(BG, 59, 20, 0, 197, 110, 16);
+		graphics.blit(BG, 76, 41, 176, 0, 18, 18);
+		graphics.blit(BG, 134, 41, 176, 0, 18, 18);
+		graphics.blit(BG, 103, 43, 176, 18, 22, 15);
 
 		poseStack.popPose();
 	}

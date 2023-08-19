@@ -2,11 +2,11 @@ package ky.someone.mods.gag.item;
 
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
-import ky.someone.mods.gag.GAG;
 import ky.someone.mods.gag.GAGUtil;
 import ky.someone.mods.gag.entity.FishingDynamiteEntity;
 import ky.someone.mods.gag.entity.MiningDynamiteEntity;
-import net.minecraft.core.Registry;
+import ky.someone.mods.gag.tab.GAGCreativeTabs;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.function.UnaryOperator;
 
 public interface ItemRegistry {
-	DeferredRegister<Item> ITEMS = DeferredRegister.create(GAGUtil.MOD_ID, Registry.ITEM_REGISTRY);
+	DeferredRegister<Item> ITEMS = DeferredRegister.create(GAGUtil.MOD_ID, Registries.ITEM);
 
 	RegistrySupplier<TemporalPouchItem> TIME_SAND_POUCH = ITEMS.register("time_sand_pouch", TemporalPouchItem::new);
 	//RegistrySupplier<TimeSandItem> SANDS_OF_TIME = ITEMS.register("time_sand", TimeSandItem::new);
@@ -40,10 +40,10 @@ public interface ItemRegistry {
 	RegistrySupplier<Item> LABELING_TOOL = ITEMS.register("labeling_tool", LabelingToolItem::new);
 
 	private static RegistrySupplier<Item> repelling(String name, UnaryOperator<Item.Properties> properties, int duration, int amplifier, boolean hasTooltip) {
-		return ITEMS.register(name, () -> new RepellingItem(properties.apply(new Item.Properties().tab(GAG.CREATIVE_TAB)), duration, amplifier, hasTooltip));
+		return ITEMS.register(name, () -> new RepellingItem(properties.apply(new Item.Properties()), duration, amplifier, hasTooltip));
 	}
 
 	private static RegistrySupplier<Item> dynamite(String name, DynamiteItem.EntityFactory factory, List<Component> tooltip, double throwSpeed) {
-		return ITEMS.register(name, () -> new DynamiteItem<>(new Item.Properties().tab(GAG.CREATIVE_TAB), factory, tooltip, throwSpeed));
+		return ITEMS.register(name, () -> new DynamiteItem<>(new Item.Properties(), factory, tooltip, throwSpeed));
 	}
 }

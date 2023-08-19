@@ -33,7 +33,7 @@ public class GAGCommands {
 													setStoredGrains(stack, newTime);
 													player.inventoryMenu.broadcastChanges();
 
-													ctx.getSource().sendSuccess(Component.translatable("commands.gag.give_time.success", time, player.getDisplayName()), true);
+													ctx.getSource().sendSuccess(() -> Component.translatable("commands.gag.give_time.success", time, player.getDisplayName()), true);
 													return 1;
 												}
 											}

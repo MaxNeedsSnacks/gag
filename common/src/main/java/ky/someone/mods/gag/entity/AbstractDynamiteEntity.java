@@ -23,7 +23,7 @@ public abstract class AbstractDynamiteEntity extends ThrowableItemProjectile {
 	@Override
 	protected void onHit(HitResult hitResult) {
 		super.onHit(hitResult);
-		if (!this.level.isClientSide && shouldExplode(hitResult)) {
+		if (!level().isClientSide && shouldExplode(hitResult)) {
 			this.detonate(hitResult.getLocation());
 			this.discard();
 		}

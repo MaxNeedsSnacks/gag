@@ -5,6 +5,7 @@ import ky.someone.mods.gag.config.GAGConfig;
 import ky.someone.mods.gag.particle.ParticleTypeRegistry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -43,6 +44,7 @@ public class TimeAcceleratorEntity extends Entity {
 		super.tick();
 
 		var pos = blockPosition();
+		var level = level();
 		int x = pos.getX(), y = pos.getY(), z = pos.getZ();
 
 		BlockState state = level.getBlockState(pos);
@@ -57,11 +59,11 @@ public class TimeAcceleratorEntity extends Entity {
 				}
 			} else if (state.isRandomlyTicking()) {
 				// if it's a random ticking block, try to tick it
-				if (level instanceof ServerLevel level) {
+				if (!level.isClientSide()) {
 					// this might be 0 if people increase randomTickSpeed with cheats, so be careful
 					var randomChance = GAGConfig.SandsOfTime.RANDOM_TICK_CHANCE.get() / level.getGameRules().getInt(GameRules.RULE_RANDOMTICKING);
 					if (randomChance == 0 || level.random.nextInt(randomChance) == 0) {
-						state.randomTick(level, pos, level.random);
+						state.randomTick((ServerLevel) level, pos, level.random);
 					}
 				}
 			} else {
@@ -104,7 +106,7 @@ public class TimeAcceleratorEntity extends Entity {
 	}
 
 	@Override
-	public Packet<?> getAddEntityPacket() {
+	public Packet<ClientGamePacketListener> getAddEntityPacket() {
 		return NetworkManager.createAddEntityPacket(this);
 	}
 
