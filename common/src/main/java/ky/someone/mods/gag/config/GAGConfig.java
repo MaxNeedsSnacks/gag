@@ -134,17 +134,17 @@ public interface GAGConfig {
 		BooleanValue MINING_GIVES_HASTE = GROUP.addBoolean("miningGivesHaste", true)
 				.comment("Controls whether the Mining Dynamite should give the Haste status effect if it hits a player");
 
-		IntValue FISHING_RADIUS = GROUP.getInt("fishingRadius", 4, 1, 64)
+		IntValue FISHING_RADIUS = GROUP.addInt("fishingRadius", 4, 1, 64)
 				.comment("Radius (in blocks) of the Fishing Dynamite's explosion, default is 4");
 
-		BooleanValue FISHING_INSTAKILL_FISH = GROUP.getBoolean("fishingInstakillFish", true)
+		BooleanValue FISHING_INSTAKILL_FISH = GROUP.addBoolean("fishingInstakillFish", true)
 				.comment("Controls whether the Fishing Dynamite should instakill fish")
 				.comment("If false, the Fishing Dynamite will instead deal 2x damage to fish");
 
-		BooleanValue FISHING_DAMAGE_ALL = GROUP.getBoolean("fishingDamageAll", true)
+		BooleanValue FISHING_DAMAGE_ALL = GROUP.addBoolean("fishingDamageAll", true)
 				.comment("Controls whether the Fishing Dynamite should deal damage to all entities, or only to fish");
 
-		EnumValue<TargetFilter> FISHING_TARGET_FILTER = GROUP.getEnum("fishingTargetFilter", TargetFilter.MAP)
+		EnumValue<TargetFilter> FISHING_TARGET_FILTER = GROUP.addEnum("fishingTargetFilter", TargetFilter.MAP)
 				.comment("Controls what entities the Fishing Dynamite should target as fish")
 				.comment("Valid values are: tag, water_animal, abstract_fish, hybrid (default)")
 				.comment("tag: Only entities with the 'gag:fishing_dynamite_fish' tag will be targeted, this includes all vanilla fish by default")
@@ -152,7 +152,7 @@ public interface GAGConfig {
 				.comment("abstract_fish: Only entities that are instances of AbstractFish will be targeted, this might not work with some modded fish that do not extend AbstractFish")
 				.comment("hybrid: Combines the abstract_fish check with the tag filter, this is the default value since it should be the most reliable");
 
-		IntValue ADDITIONAL_FISHING_LOOT = GROUP.getInt("fishingAdditionalLoot", 5, 0, 16)
+		IntValue ADDITIONAL_FISHING_LOOT = GROUP.addInt("fishingAdditionalLoot", 5, 0, 16)
 				.comment("Describes the amount of additional fish (generated from the vanilla loot table) that may be dropped by Fishing Dynamite")
 				.comment("(This value is random and biased towards dropping less the more fish were already hit by the explosion)");
 

@@ -38,7 +38,7 @@ public class FishsplosionPacket extends BaseS2CMessage {
 
 	@Override
 	public void handle(NetworkManager.PacketContext context) {
-		var explosion = new FishingDynamiteEntity.Fishsplosion(context.getPlayer().level, null, this.pos.x, this.pos.y, this.pos.z, this.radius);
+		var explosion = new FishingDynamiteEntity.Fishsplosion(context.getPlayer().level(), null, this.pos.x, this.pos.y, this.pos.z, this.radius);
 		explosion.finalizeExplosion(true);
 	}
 }

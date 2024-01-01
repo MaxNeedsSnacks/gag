@@ -6,8 +6,8 @@ import ky.someone.mods.gag.item.ItemRegistry;
 import ky.someone.mods.gag.network.FishsplosionPacket;
 import ky.someone.mods.gag.platform.PlatformInvokers;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -24,7 +24,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
-import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
@@ -37,7 +37,7 @@ import java.util.List;
 
 public class FishingDynamiteEntity extends AbstractDynamiteEntity {
 
-	public static final TagKey<EntityType<?>> FISH_TAG = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, GAGUtil.id("fishing_dynamite_fish"));
+	public static final TagKey<EntityType<?>> FISH_TAG = TagKey.create(Registries.ENTITY_TYPE, GAGUtil.id("fishing_dynamite_fish"));
 
 	public FishingDynamiteEntity(EntityType<? extends FishingDynamiteEntity> type, Level level) {
 		super(type, level);
@@ -56,7 +56,7 @@ public class FishingDynamiteEntity extends AbstractDynamiteEntity {
 		super.tick();
 		Vec3 vec3 = this.getDeltaMovement();
 		// add some smoke particles above the entity to make it look nicer
-		level.addParticle(ParticleTypes.DRIPPING_WATER,
+		level().addParticle(ParticleTypes.DRIPPING_WATER,
 				getX(-vec3.x) + random.nextDouble() * 0.6 - 0.3,
 				getY(-vec3.y) + random.nextDouble() * getBbHeight(),
 				getZ(-vec3.z) + random.nextDouble() * 0.6 - 0.3,
@@ -71,6 +71,7 @@ public class FishingDynamiteEntity extends AbstractDynamiteEntity {
 	@Override
 	public void detonate(Vec3 pos) {
 		var r = GAGConfig.Dynamite.FISHING_RADIUS.get();
+		var level = level();
 		var explosion = new Fishsplosion(level, this, pos.x, pos.y, pos.z, r);
 		if (!PlatformInvokers.explosionPre(level, explosion)) {
 			explosion.explode();
@@ -98,7 +99,7 @@ public class FishingDynamiteEntity extends AbstractDynamiteEntity {
 		private final boolean isInWater;
 
 		public Fishsplosion(Level level, @Nullable Entity entity, double x, double y, double z, float radius) {
-			super(level, entity, null, null, x, y, z, radius, false, BlockInteraction.NONE);
+			super(level, entity, null, null, x, y, z, radius, false, BlockInteraction.KEEP);
 
 			var eps = 0.028;
 			isInWater = BlockPos.betweenClosedStream(AABB.ofSize(pos, eps, eps, eps))
@@ -160,7 +161,7 @@ public class FishingDynamiteEntity extends AbstractDynamiteEntity {
 						points.add(new Vec3(x, 0, z));
 					}
 
-					var cur = new BlockPos(pos).above();
+					var cur = BlockPos.containing(pos).above();
 					while (level.isInWorldBounds(cur) && !level.getFluidState(cur).isEmpty()) {
 						for (var p : points) {
 							level.addParticle(ParticleTypes.BUBBLE, p.x, cur.getY() + 0.5, p.z, 0, 0.1, 0);
@@ -180,7 +181,7 @@ public class FishingDynamiteEntity extends AbstractDynamiteEntity {
 						level.addParticle(ParticleTypes.SPLASH, x, y, z, 0, 0.1, 0);
 					}
 
-					level.playLocalSound(cur.getX(), cur.getY(), cur.getZ(), SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS, 0.3F, 1.5F, false);
+					level.playLocalSound(cur, SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS, 0.3F, 1.5F, false);
 				} else {
 					// if the dynamite did not hit water, just add a small splash at the position it landed
 					for (int i = 0; i < 20; i++) {
@@ -200,12 +201,12 @@ public class FishingDynamiteEntity extends AbstractDynamiteEntity {
 					var fishDropped = fishHit;
 					List<ItemStack> itemsToDrop = new ArrayList<>();
 
-					LootContext lootParams = new LootContext.Builder((ServerLevel) level)
+					LootParams lootParams = new LootParams.Builder((ServerLevel) level)
 							.withParameter(LootContextParams.ORIGIN, pos)
 							.withParameter(LootContextParams.TOOL, ItemStack.EMPTY)
 							.withOptionalParameter(LootContextParams.THIS_ENTITY, source)
 							.create(LootContextParamSets.FISHING);
-					LootTable lootTable = level.getServer().getLootTables().get(BuiltInLootTables.FISHING_FISH);
+					LootTable lootTable = level.getServer().getLootData().getLootTable(BuiltInLootTables.FISHING_FISH);
 
 					// attempt to drop additional fish, with a lower chance to drop fish the more fish we've hit
 					for (int i = 0; i < add; i++) {
