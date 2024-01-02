@@ -2,8 +2,8 @@ package ky.someone.mods.gag.item;
 
 import ky.someone.mods.gag.GAGUtil;
 import ky.someone.mods.gag.entity.AbstractDynamiteEntity;
+import ky.someone.mods.gag.sound.GAGSounds;
 import net.minecraft.network.chat.Component;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
@@ -33,7 +33,7 @@ public class DynamiteItem<T extends AbstractDynamiteEntity> extends GAGItem {
 	public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
 		ItemStack itemStack = player.getItemInHand(hand);
 		level.playSound(null, player.getX(), player.getY(), player.getZ(),
-				SoundEvents.SNOWBALL_THROW, SoundSource.NEUTRAL, 0.5F, 0.4F / (level.getRandom().nextFloat() * 0.4F + 0.8F));
+				GAGSounds.DYNAMITE_THROW.get(), SoundSource.NEUTRAL, 0.5F, 0.4F / (level.getRandom().nextFloat() * 0.4F + 0.8F));
 
 		if (!level.isClientSide) {
 			AbstractDynamiteEntity dynamite = factory.create(player, level);

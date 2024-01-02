@@ -2,9 +2,9 @@ package ky.someone.mods.gag.item;
 
 import ky.someone.mods.gag.GAGUtil;
 import ky.someone.mods.gag.config.GAGConfig;
+import ky.someone.mods.gag.sound.GAGSounds;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
@@ -79,7 +79,7 @@ public class EnergizedHearthstoneItem extends HearthstoneItem {
 				var pos = new TeleportPos(player.level().dimension().location(), player.position(), player.getYRot());
 				stack.addTagElement(TARGET_KEY, pos.toNbt());
 
-				player.playSound(SoundEvents.TRIDENT_THUNDER, 0.5f, 1.25f);
+				player.playSound(GAGSounds.HEARTHSTONE_THUNDER.get(), 0.5f, 1.25f);
 				return InteractionResultHolder.success(stack);
 			} else {
 				return InteractionResultHolder.fail(stack);

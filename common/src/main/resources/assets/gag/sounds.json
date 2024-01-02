@@ -1,0 +1,40 @@
+{
+  "entity.dynamite.throw": {
+    "sounds": [
+      "random/bow"
+    ],
+    "subtitle": "subtitles.gag.entity.dynamite.throw"
+  },
+  "item.hearthstone.thunder": {
+    "sounds": [
+      "item/trident/thunder1",
+      "item/trident/thunder2"
+    ],
+    "subtitle": "subtitles.entity.lightning_bolt.thunder"
+  },
+  "generic.teleport": {
+    "sounds": [
+      "mob/endermen/portal",
+      "mob/endermen/portal2"
+    ],
+    "subtitle": "subtitles.entity.player.teleport"
+  },
+  "generic.teleport.fail": {
+    "sounds": [
+      {
+        "name": "item/totem/use_totem",
+        "volume": 0.8,
+        "pitch": 0.5
+      }
+    ]
+  },
+  "item.repelling.apply": {
+    "sounds": [
+      {
+        "type": "event",
+        "name": "minecraft:item.honeycomb.wax_on"
+      }
+    ],
+    "subtitle": "subtitles.gag.item.repelling.apply"
+  }
+}

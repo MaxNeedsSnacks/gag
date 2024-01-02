@@ -44,5 +44,7 @@
   "item.gag.fishing_dynamite": "Fishing Dynamite",
   "item.gag.fishing_dynamite.info": "Throwable explosive that only works underwater and deals increased damage to fish. Perfect if you don't like fishing!",
   "commands.gag.give_time.success": "Successfully gave %s ticks worth of time to %s",
-  "commands.gag.give_time.no_pouch": "%s does not have a temporal pouch in their inventory!"
+  "commands.gag.give_time.no_pouch": "%s does not have a temporal pouch in their inventory!",
+  "subtitles.gag.entity.dynamite.throw": "Dynamite thrown",
+  "subtitles.gag.item.repelling.apply": "Repelling item applied"
 }

@@ -2,8 +2,8 @@ package ky.someone.mods.gag.item;
 
 import ky.someone.mods.gag.GAGUtil;
 import ky.someone.mods.gag.effect.EffectRegistry;
+import ky.someone.mods.gag.sound.GAGSounds;
 import net.minecraft.network.chat.Component;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -48,7 +48,7 @@ public class RepellingItem extends GAGItem {
 		var hasEffect = player.hasEffect(EffectRegistry.REPELLING.get());
 		var stack = player.getItemInHand(hand);
 		if (!hasEffect) {
-			level.playSound(null, player.blockPosition(), SoundEvents.HONEYCOMB_WAX_ON, SoundSource.PLAYERS, 1.5f, 1);
+			level.playSound(null, player.blockPosition(), GAGSounds.REPELLING_APPLY.get(), SoundSource.PLAYERS, 1.5f, 1);
 			player.addEffect(new MobEffectInstance(EffectRegistry.REPELLING.get(), duration, amplifier));
 			stack.shrink(1);
 		}

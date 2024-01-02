@@ -20,6 +20,7 @@ import ky.someone.mods.gag.item.EnergizedHearthstoneItem;
 import ky.someone.mods.gag.item.ItemRegistry;
 import ky.someone.mods.gag.menu.MenuTypeRegistry;
 import ky.someone.mods.gag.particle.ParticleTypeRegistry;
+import ky.someone.mods.gag.sound.GAGSounds;
 import ky.someone.mods.gag.tab.GAGCreativeTabs;
 import org.slf4j.Logger;
 
@@ -35,6 +36,7 @@ public class GAG {
 		EffectRegistry.EFFECTS.register();
 		ParticleTypeRegistry.PARTICLE_TYPES.register();
 		MenuTypeRegistry.MENUS.register();
+		GAGSounds.SOUND_EVENTS.register();
 		GAGCreativeTabs.TABS.register();
 
 		GAGConfig.init();

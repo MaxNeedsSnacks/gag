@@ -2,6 +2,7 @@ package ky.someone.mods.gag.item;
 
 import ky.someone.mods.gag.GAGUtil;
 import ky.someone.mods.gag.config.GAGConfig;
+import ky.someone.mods.gag.sound.GAGSounds;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.core.particles.ParticleTypes;
@@ -14,7 +15,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -120,7 +120,7 @@ public class HearthstoneItem extends GAGItem {
 			}
 
 			player.sendSystemMessage(getTranslation("no_target").withStyle(ChatFormatting.RED));
-			level.playSound(null, player.blockPosition(), SoundEvents.TOTEM_USE, SoundSource.PLAYERS, 0.5f, 0.5f);
+			level.playSound(null, player.blockPosition(), GAGSounds.TELEPORT_FAIL.get(), SoundSource.PLAYERS, 0.6f, 1f);
 		}
 		return stack;
 	}
@@ -136,18 +136,18 @@ public class HearthstoneItem extends GAGItem {
 			if (range < 0 || distance < range) {
 				stack.hurtAndBreak(durabilityUsed, player, (p) -> p.broadcastBreakEvent(p.getUsedItemHand()));
 				player.teleportTo(level, pos.x, pos.y, pos.z, yaw, 0f);
-				level.playSound(null, player.blockPosition(), SoundEvents.CHORUS_FRUIT_TELEPORT, SoundSource.PLAYERS, 0.5f, 0.5f);
+				level.playSound(null, player.blockPosition(), GAGSounds.TELEPORT.get(), SoundSource.PLAYERS, 0.5f, 0.5f);
 
 				if (!stack.isEmpty() && !creative) {
 					player.getCooldowns().addCooldown(stack.getItem(), GAGConfig.Hearthstone.COOLDOWN.get());
 				}
 			} else {
 				player.sendSystemMessage(getTranslation("too_weak").withStyle(ChatFormatting.RED));
-				level.playSound(null, player.blockPosition(), SoundEvents.TOTEM_USE, SoundSource.PLAYERS, 0.5f, 0.5f);
+				level.playSound(null, player.blockPosition(), GAGSounds.TELEPORT_FAIL.get(), SoundSource.PLAYERS, 0.6f, 1f);
 			}
 		} else {
 			player.sendSystemMessage(getTranslation("too_weak").withStyle(ChatFormatting.RED));
-			level.playSound(null, player.blockPosition(), SoundEvents.TOTEM_USE, SoundSource.PLAYERS, 0.5f, 0.5f);
+			level.playSound(null, player.blockPosition(), GAGSounds.TELEPORT_FAIL.get(), SoundSource.PLAYERS, 0.6f, 1f);
 		}
 		return stack;
 	}
