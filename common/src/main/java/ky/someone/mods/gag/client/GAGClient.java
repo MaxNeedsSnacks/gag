@@ -103,6 +103,7 @@ public interface GAGClient {
 	}
 
 	private static void renderHudTooltip(Minecraft mc, GuiGraphics graphics, List<Component> text) {
+		if (mc.screen != null) return;
 		var x = mc.getWindow().getGuiScaledWidth() / 2;
 		var y = mc.getWindow().getGuiScaledHeight() / 2;
 		graphics.renderComponentTooltip(mc.font, text, x + 10, y);
