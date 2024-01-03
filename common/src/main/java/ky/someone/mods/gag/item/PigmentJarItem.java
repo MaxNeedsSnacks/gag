@@ -2,14 +2,17 @@ package ky.someone.mods.gag.item;
 
 import ky.someone.mods.gag.GAGUtil;
 import net.minecraft.ChatFormatting;
+import net.minecraft.Util;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackLinkedSet;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
@@ -70,10 +73,19 @@ public class PigmentJarItem extends GAGItem {
 		} else {
 			var pigment = Objects.requireNonNull(getPigment(stack));
 			list.add(Component.translatable("item.gag.pigment_jar.contents",
-					GAGUtil.asStyledValue(pigment.amount, MAX_AMOUNT / 4.0, Integer.toString(pigment.amount)),
+					GAGUtil.asStyledValue(pigment.amount, MAX_AMOUNT / 2, Integer.toString(pigment.amount)),
 					Component.literal(pigment.hex()).withStyle(s -> s.withColor(pigment.color))
 			).withStyle(TOOLTIP_FLAVOUR));
 		}
+	}
+
+	@Override
+	public Collection<ItemStack> getAdditionalSubItems() {
+		return Util.make(ItemStackLinkedSet.createTypeAndTagSet(), set -> {
+			for (DyeColor color : DyeColor.values()) {
+				set.add(Pigment.fromDye(color, DYE_AMOUNT).asJar());
+			}
+		});
 	}
 
 	@Override

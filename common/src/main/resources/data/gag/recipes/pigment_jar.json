@@ -11,5 +11,7 @@
       "tag": "minecraft:wooden_buttons"
     }
   ],
-  "result": "gag:pigment_jar"
+  "result": {
+    "item": "gag:pigment_jar"
+  }
 }

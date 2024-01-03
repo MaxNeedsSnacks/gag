@@ -117,18 +117,9 @@ public interface GAGClient {
 		RenderTypeRegistry.register(RenderType.cutoutMipped(), BlockRegistry.NO_SOLICITORS_SIGN.get());
 		MenuRegistry.registerScreenFactory(MenuTypeRegistry.LABELING.get(), LabelingMenuScreen::new);
 
-		ColorHandlerRegistry.registerItemColors((stack, index) -> {
-			if (index == 1 && stack.is(ItemRegistry.PIGMENT_JAR.get())) {
-				return PigmentJarItem.getColor(stack);
-			}
-			return -1;
-		}, ItemRegistry.PIGMENT_JAR.get());
+		ColorHandlerRegistry.registerItemColors((stack, index) -> index == 0 ? PigmentJarItem.getColor(stack) : -1, ItemRegistry.PIGMENT_JAR.get());
 
-		ItemPropertiesRegistry.register(ItemRegistry.PIGMENT_JAR.get(), GAGUtil.id("pigment_amount"), (stack, level, entity, seed) -> {
-			if (stack.is(ItemRegistry.PIGMENT_JAR.get())) {
-				return PigmentJarItem.getColorAmount(stack);
-			}
-			return 0;
-		});
+		ItemPropertiesRegistry.register(ItemRegistry.PIGMENT_JAR.get(), GAGUtil.id("pigment_amount"),
+				(stack, level, entity, seed) -> PigmentJarItem.getColorAmount(stack) / (float) PigmentJarItem.MAX_AMOUNT);
 	}
 }

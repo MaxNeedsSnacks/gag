@@ -14,7 +14,7 @@ import java.util.List;
  * item extensions common to both Forge and Fabric, as
  * well as some general convenience methods.
  */
-public abstract class GAGItem extends Item {
+public abstract class GAGItem extends Item implements ItemWithSubsets {
 	public GAGItem(Properties properties) {
 		super(properties);
 	}
