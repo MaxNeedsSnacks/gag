@@ -24,11 +24,11 @@ public class PigmentJarItem extends GAGItem {
 	public static final String COLOR_NBT_KEY = "color";
 	public static final String AMOUNT_NBT_KEY = "amount";
 
-	public static final int MAX_AMOUNT = 255;
-	public static final int DYE_AMOUNT = 8;
+	public static final int MAX_AMOUNT = 64;
+	public static final int DYE_AMOUNT = 4;
 
 	public PigmentJarItem() {
-		super(new Properties().stacksTo(1));
+		super(new Properties().stacksTo(16));
 	}
 
 	public static boolean isEmpty(ItemStack stack) {
@@ -105,7 +105,7 @@ public class PigmentJarItem extends GAGItem {
 			if (other.isEmpty()) return this;
 
 			var newAmount = this.amount + other.amount;
-			if (newAmount > 255) newAmount = 255;
+			if (newAmount > MAX_AMOUNT) newAmount = MAX_AMOUNT;
 			if (this.color == other.color) return new Pigment(this.color, newAmount);
 
 			var weight = this.amount / (float) newAmount;
@@ -113,6 +113,7 @@ public class PigmentJarItem extends GAGItem {
 			var thisHsv = this.hsb();
 			var otherHsv = other.hsb();
 
+			// todo: we probably need to handle hue differently (blue + black makes a weird dark teal instead a dark blue)
 			var h = (weight * thisHsv[0] + (1 - weight) * otherHsv[0]);
 			var s = (weight * thisHsv[1] + (1 - weight) * otherHsv[1]);
 			var b = (weight * thisHsv[2] + (1 - weight) * otherHsv[2]);
