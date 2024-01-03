@@ -5,7 +5,9 @@ import dev.architectury.event.events.client.ClientGuiEvent;
 import dev.architectury.event.events.client.ClientLifecycleEvent;
 import dev.architectury.registry.client.level.entity.EntityRendererRegistry;
 import dev.architectury.registry.client.particle.ParticleProviderRegistry;
+import dev.architectury.registry.client.rendering.ColorHandlerRegistry;
 import dev.architectury.registry.client.rendering.RenderTypeRegistry;
+import dev.architectury.registry.item.ItemPropertiesRegistry;
 import dev.architectury.registry.menu.MenuRegistry;
 import ky.someone.mods.gag.GAGUtil;
 import ky.someone.mods.gag.block.BlockRegistry;
@@ -15,6 +17,8 @@ import ky.someone.mods.gag.config.GAGConfig;
 import ky.someone.mods.gag.entity.EntityTypeRegistry;
 import ky.someone.mods.gag.entity.TimeAcceleratorEntity;
 import ky.someone.mods.gag.item.GAGItem;
+import ky.someone.mods.gag.item.ItemRegistry;
+import ky.someone.mods.gag.item.PigmentJarItem;
 import ky.someone.mods.gag.menu.MenuTypeRegistry;
 import ky.someone.mods.gag.particle.ParticleTypeRegistry;
 import ky.someone.mods.gag.particle.client.MagicParticle;
@@ -112,5 +116,19 @@ public interface GAGClient {
 	static void setup(Minecraft minecraft) {
 		RenderTypeRegistry.register(RenderType.cutoutMipped(), BlockRegistry.NO_SOLICITORS_SIGN.get());
 		MenuRegistry.registerScreenFactory(MenuTypeRegistry.LABELING.get(), LabelingMenuScreen::new);
+
+		ColorHandlerRegistry.registerItemColors((stack, index) -> {
+			if (index == 1 && stack.getItem() instanceof PigmentJarItem jar) {
+				return jar.getColor(stack);
+			}
+			return -1;
+		}, ItemRegistry.PIGMENT_JAR.get());
+
+		ItemPropertiesRegistry.register(ItemRegistry.PIGMENT_JAR.get(), GAGUtil.id("pigment_amount"), (stack, level, entity, seed) -> {
+			if (stack.getItem() instanceof PigmentJarItem jar) {
+				return jar.getColorAmount(stack);
+			}
+			return 0;
+		});
 	}
 }

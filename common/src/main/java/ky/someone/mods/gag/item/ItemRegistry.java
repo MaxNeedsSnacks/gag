@@ -5,7 +5,6 @@ import dev.architectury.registry.registries.RegistrySupplier;
 import ky.someone.mods.gag.GAGUtil;
 import ky.someone.mods.gag.entity.FishingDynamiteEntity;
 import ky.someone.mods.gag.entity.MiningDynamiteEntity;
-import ky.someone.mods.gag.tab.GAGCreativeTabs;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
@@ -38,6 +37,7 @@ public interface ItemRegistry {
 	), 1.5);
 
 	RegistrySupplier<Item> LABELING_TOOL = ITEMS.register("labeling_tool", LabelingToolItem::new);
+	RegistrySupplier<Item> PIGMENT_JAR = ITEMS.register("pigment_jar", PigmentJarItem::new);
 
 	private static RegistrySupplier<Item> repelling(String name, UnaryOperator<Item.Properties> properties, int duration, int amplifier, boolean hasTooltip) {
 		return ITEMS.register(name, () -> new RepellingItem(properties.apply(new Item.Properties()), duration, amplifier, hasTooltip));

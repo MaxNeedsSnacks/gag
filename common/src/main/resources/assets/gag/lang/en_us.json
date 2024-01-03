@@ -29,6 +29,8 @@
   "item.gag.labeling_tool.charges": "%s charges remaining",
   "item.gag.labeling_tool.no_charges": "Out of charges!",
   "item.gag.labeling_tool.text_box": "Rename Item",
+  "item.gag.pigment_jar": "Pigment Jar",
+  "item.gag.pigment_jar.contents": "Contains %s charges of %s",
   "block.gag.no_solicitors": "'No Solicitors!' Sign",
   "block.gag.no_solicitors.info.1": "Wards off certain pesky intruders within a reasonable area.",
   "block.gag.no_solicitors.info.2": "(Right-click with wool to toggle silent mode)",

@@ -1,0 +1,6 @@
+{
+  "parent": "gag:item/pigment_jar",
+  "textures": {
+    "layer1": "gag:item/pigment_overlay"
+  }
+}

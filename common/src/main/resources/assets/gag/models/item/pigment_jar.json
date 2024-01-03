@@ -1,0 +1,14 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "gag:item/pigment_jar"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "gag:pigment_amount": 1
+      },
+      "model": "gag:item/pigment_jar_filled"
+    }
+  ]
+}
