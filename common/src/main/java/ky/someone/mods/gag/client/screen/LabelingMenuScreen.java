@@ -11,7 +11,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
@@ -23,7 +22,7 @@ import net.minecraft.world.item.ItemStack;
 @Environment(EnvType.CLIENT)
 public class LabelingMenuScreen extends AbstractContainerScreen<LabelingMenu> implements ContainerListener {
 
-	private static final boolean UNUSED_UI = false;
+	private static final boolean UNUSED_UI = true;
 
 	private static final ResourceLocation BG = GAGUtil.id("textures/gui/container/labeling_tool.png");
 
@@ -139,7 +138,10 @@ public class LabelingMenuScreen extends AbstractContainerScreen<LabelingMenu> im
 		if (!name.isEmpty()) {
 			String s = name;
 			Slot slot = this.menu.getSlot(0);
-			if (slot.hasItem() && !slot.getItem().hasCustomHoverName() && name.equals(slot.getItem().getHoverName().getString())) {
+
+			if (slot.hasItem() && !slot.getItem().hasCustomHoverName()
+					&& name.equals(slot.getItem().getHoverName().getString())
+					&& !this.menu.getSlot(1).hasItem()) {
 				s = "";
 			}
 
@@ -154,6 +156,8 @@ public class LabelingMenuScreen extends AbstractContainerScreen<LabelingMenu> im
 			labelBox.setValue(stack.isEmpty() ? "" : stack.getHoverName().getString());
 			labelBox.setEditable(!stack.isEmpty());
 			this.setFocused(labelBox);
+		} else if (i == 1) {
+			nameChanged(labelBox.getValue());
 		}
 	}
 

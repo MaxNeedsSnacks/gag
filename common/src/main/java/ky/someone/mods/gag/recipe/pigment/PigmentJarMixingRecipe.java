@@ -41,7 +41,7 @@ public class PigmentJarMixingRecipe extends CustomRecipe {
 		// mix the contents of the two jars together
 		PigmentJarItem.Pigment result = null;
 		for (var stack : container.getItems()) {
-			if (stack.is(ItemRegistry.PIGMENT_JAR.get()) && !PigmentJarItem.isEmpty(stack)) {
+			if (PigmentJarItem.isNonEmptyJar(stack)) {
 				var pigment = PigmentJarItem.getPigment(stack);
 				if (result == null) {
 					result = pigment;

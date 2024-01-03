@@ -59,6 +59,10 @@ public class PigmentJarItem extends GAGItem {
 		return pigment == null ? 0 : pigment.amount;
 	}
 
+	public static boolean isNonEmptyJar(ItemStack stack) {
+		return stack.is(ItemRegistry.PIGMENT_JAR.get()) && !isEmpty(stack);
+	}
+
 	@Override
 	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> list, TooltipFlag tooltipFlag) {
 		if (isEmpty(stack)) {
@@ -66,7 +70,7 @@ public class PigmentJarItem extends GAGItem {
 		} else {
 			var pigment = Objects.requireNonNull(getPigment(stack));
 			list.add(Component.translatable("item.gag.pigment_jar.contents",
-					GAGUtil.asStyledValue(pigment.amount, MAX_AMOUNT),
+					GAGUtil.asStyledValue(pigment.amount, MAX_AMOUNT / 4.0, Integer.toString(pigment.amount)),
 					Component.literal(pigment.hex()).withStyle(s -> s.withColor(pigment.color))
 			).withStyle(TOOLTIP_FLAVOUR));
 		}
@@ -127,6 +131,7 @@ public class PigmentJarItem extends GAGItem {
 
 		public ItemStack asJar() {
 			var stack = ItemRegistry.PIGMENT_JAR.get().getDefaultInstance();
+			if (this.isEmpty()) return stack;
 			var tag = stack.getOrCreateTagElement(PIGMENT_NBT_KEY);
 			tag.putInt(COLOR_NBT_KEY, this.color);
 			tag.putInt(AMOUNT_NBT_KEY, this.amount);
