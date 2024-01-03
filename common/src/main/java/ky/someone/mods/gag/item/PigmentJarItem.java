@@ -16,7 +16,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
-import static ky.someone.mods.gag.GAGUtil.TOOLTIP_FLAVOUR;
+import static ky.someone.mods.gag.GAGUtil.*;
 
 public class PigmentJarItem extends GAGItem {
 
@@ -70,12 +70,20 @@ public class PigmentJarItem extends GAGItem {
 	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> list, TooltipFlag tooltipFlag) {
 		if (isEmpty(stack)) {
 			list.add(Component.translatable("item.gag.pigment_jar.contents.empty").withStyle(ChatFormatting.ITALIC).withStyle(TOOLTIP_FLAVOUR));
+			GAGUtil.appendInfoTooltip(list, List.of(
+					Component.translatable("item.gag.pigment_jar.info.empty.1").withStyle(TOOLTIP_MAIN),
+					Component.translatable("item.gag.pigment_jar.info.empty.2").withStyle(TOOLTIP_EXTRA)
+			));
 		} else {
 			var pigment = Objects.requireNonNull(getPigment(stack));
 			list.add(Component.translatable("item.gag.pigment_jar.contents",
 					GAGUtil.asStyledValue(pigment.amount, MAX_AMOUNT / 2, Integer.toString(pigment.amount)),
 					Component.literal(pigment.hex()).withStyle(s -> s.withColor(pigment.color))
 			).withStyle(TOOLTIP_FLAVOUR));
+			GAGUtil.appendInfoTooltip(list, List.of(
+					Component.translatable("item.gag.pigment_jar.info.filled.1").withStyle(TOOLTIP_MAIN),
+					Component.translatable("item.gag.pigment_jar.info.filled.2").withStyle(TOOLTIP_EXTRA)
+			));
 		}
 	}
 
@@ -132,7 +140,16 @@ public class PigmentJarItem extends GAGItem {
 			var thisHsv = this.hsb();
 			var otherHsv = other.hsb();
 
-			// todo: we probably need to handle hue differently (blue + black makes a weird dark teal instead a dark blue)
+			// todo: this is better, but still not perfect
+			var hDelta = Math.abs(thisHsv[0] - otherHsv[0]);
+			if (hDelta > 0.5) {
+				// hue is on a circle, so we need to wrap around
+				if (thisHsv[0] > otherHsv[0]) {
+					otherHsv[0] += 1;
+				} else {
+					thisHsv[0] += 1;
+				}
+			}
 			var h = (weight * thisHsv[0] + (1 - weight) * otherHsv[0]);
 			var s = (weight * thisHsv[1] + (1 - weight) * otherHsv[1]);
 			var b = (weight * thisHsv[2] + (1 - weight) * otherHsv[2]);

@@ -72,7 +72,7 @@ public class LabelingMenu extends BaseContainer {
 
 				var pigmentJar = input.getItem(1);
 				if (PigmentJarItem.isNonEmptyJar(pigmentJar) && wasPigmentApplied) {
-					player.playNotifySound(SoundEvents.BREWING_STAND_BREW, player.getSoundSource(), 0.5F, 2.0F);
+					player.playNotifySound(SoundEvents.BREWING_STAND_BREW, player.getSoundSource(), 0.75F, 1.5F);
 					if (!player.getAbilities().instabuild) {
 						var pigment = Objects.requireNonNull(PigmentJarItem.getPigment(pigmentJar));
 						input.setItem(1, pigment.withAmount(pigment.amount() - 1).asJar());
