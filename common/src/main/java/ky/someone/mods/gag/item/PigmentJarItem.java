@@ -1,6 +1,7 @@
 package ky.someone.mods.gag.item;
 
 import ky.someone.mods.gag.GAGUtil;
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
@@ -10,6 +11,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.util.List;
+import java.util.Objects;
 
 import static ky.someone.mods.gag.GAGUtil.TOOLTIP_FLAVOUR;
 
@@ -58,9 +60,11 @@ public class PigmentJarItem extends GAGItem {
 	}
 
 	@Override
-	public void appendHoverText(ItemStack itemStack, @Nullable Level level, List<Component> list, TooltipFlag tooltipFlag) {
-		var pigment = getPigment(itemStack);
-		if (pigment != null) {
+	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> list, TooltipFlag tooltipFlag) {
+		if (isEmpty(stack)) {
+			list.add(Component.translatable("item.gag.pigment_jar.contents.empty").withStyle(ChatFormatting.ITALIC).withStyle(TOOLTIP_FLAVOUR));
+		} else {
+			var pigment = Objects.requireNonNull(getPigment(stack));
 			list.add(Component.translatable("item.gag.pigment_jar.contents",
 					GAGUtil.asStyledValue(pigment.amount, MAX_AMOUNT),
 					Component.literal(pigment.hex()).withStyle(s -> s.withColor(pigment.color))
