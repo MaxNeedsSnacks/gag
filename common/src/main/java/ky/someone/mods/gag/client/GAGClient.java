@@ -118,15 +118,15 @@ public interface GAGClient {
 		MenuRegistry.registerScreenFactory(MenuTypeRegistry.LABELING.get(), LabelingMenuScreen::new);
 
 		ColorHandlerRegistry.registerItemColors((stack, index) -> {
-			if (index == 1 && stack.getItem() instanceof PigmentJarItem jar) {
-				return jar.getColor(stack);
+			if (index == 1 && stack.is(ItemRegistry.PIGMENT_JAR.get())) {
+				return PigmentJarItem.getColor(stack);
 			}
 			return -1;
 		}, ItemRegistry.PIGMENT_JAR.get());
 
 		ItemPropertiesRegistry.register(ItemRegistry.PIGMENT_JAR.get(), GAGUtil.id("pigment_amount"), (stack, level, entity, seed) -> {
-			if (stack.getItem() instanceof PigmentJarItem jar) {
-				return jar.getColorAmount(stack);
+			if (stack.is(ItemRegistry.PIGMENT_JAR.get())) {
+				return PigmentJarItem.getColorAmount(stack);
 			}
 			return 0;
 		});

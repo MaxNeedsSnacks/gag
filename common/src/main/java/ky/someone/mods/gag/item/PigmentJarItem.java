@@ -31,12 +31,12 @@ public class PigmentJarItem extends GAGItem {
 		super(new Properties().stacksTo(1));
 	}
 
-	public boolean isEmpty(ItemStack stack) {
+	public static boolean isEmpty(ItemStack stack) {
 		return stack.getTagElement(PIGMENT_NBT_KEY) == null;
 	}
 
 	@Nullable
-	public Pigment getPigment(ItemStack stack) {
+	public static Pigment getPigment(ItemStack stack) {
 		if (isEmpty(stack)) return null;
 
 		var pigmentTag = stack.getTagElement(PIGMENT_NBT_KEY);
@@ -48,12 +48,12 @@ public class PigmentJarItem extends GAGItem {
 		return new Pigment(color, amount);
 	}
 
-	public int getColor(ItemStack stack) {
+	public static int getColor(ItemStack stack) {
 		var pigment = getPigment(stack);
 		return pigment == null ? -1 : pigment.color;
 	}
 
-	public int getColorAmount(ItemStack stack) {
+	public static int getColorAmount(ItemStack stack) {
 		var pigment = getPigment(stack);
 		return pigment == null ? 0 : pigment.amount;
 	}
@@ -119,6 +119,14 @@ public class PigmentJarItem extends GAGItem {
 
 			var newColor = Color.HSBtoRGB(h, s, b) & 0xffffff;
 			return new Pigment(newColor, newAmount);
+		}
+
+		public ItemStack asJar() {
+			var stack = ItemRegistry.PIGMENT_JAR.get().getDefaultInstance();
+			var tag = stack.getOrCreateTagElement(PIGMENT_NBT_KEY);
+			tag.putInt(COLOR_NBT_KEY, this.color);
+			tag.putInt(AMOUNT_NBT_KEY, this.amount);
+			return stack;
 		}
 
 		public static Pigment fromDye(DyeColor dye) {
