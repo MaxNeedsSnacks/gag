@@ -115,9 +115,14 @@ public class LabelingMenu extends BaseContainer {
 					slot.onQuickCraft(stackInSlot, ret);
 				}
 				default -> {
-					// fixme: moveItemStackTo does not validate slot max stack size... yay
-					if (!this.moveItemStackTo(stackInSlot, 0, 2, PigmentJarItem.isNonEmptyJar(stackInSlot))) {
-						return ItemStack.EMPTY;
+					// if we have a non-empty pigment jar, attempt to move it to the pigment jar slot,
+					// otherwise, attempt to move the item to the input slot
+					if (PigmentJarItem.isNonEmptyJar(stackInSlot) && input.getItem(1).isEmpty()) {
+						input.setItem(1, stackInSlot.split(1));
+					} else {
+						if (!this.moveItemStackTo(stackInSlot, 0, 1, false)) {
+							return ItemStack.EMPTY;
+						}
 					}
 				}
 			}
