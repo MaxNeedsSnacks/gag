@@ -2,6 +2,7 @@ package ky.someone.mods.gag.recipe.pigment;
 
 import ky.someone.mods.gag.item.ItemRegistry;
 import ky.someone.mods.gag.item.PigmentJarItem;
+import ky.someone.mods.gag.recipe.GAGRecipeSerializers;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
@@ -23,46 +24,50 @@ public class PigmentJarMixingRecipe extends CustomRecipe {
 		int found = 0;
 
 		for (var stack : container.getItems()) {
-			if (stack.is(ItemRegistry.PIGMENT_JAR.get()) && !PigmentJarItem.isEmpty(stack)) {
-				found++;
+			if (stack.is(ItemRegistry.PIGMENT_JAR.get())) {
+				if (!PigmentJarItem.isEmpty(stack)) {
+					found++;
+				}
 			} else if (!stack.isEmpty()) {
 				return false;
 			}
 		}
 
-		return found == 2;
+		return found >= 2;
 	}
 
 	@Override
 	public ItemStack assemble(CraftingContainer container, RegistryAccess reg) {
 		// mix the contents of the two jars together
-		PigmentJarItem.Pigment first = null, second = null;
-
+		PigmentJarItem.Pigment result = null;
 		for (var stack : container.getItems()) {
 			if (stack.is(ItemRegistry.PIGMENT_JAR.get()) && !PigmentJarItem.isEmpty(stack)) {
-				if (first == null) {
-					first = PigmentJarItem.getPigment(stack);
+				var pigment = PigmentJarItem.getPigment(stack);
+				if (result == null) {
+					result = pigment;
 				} else {
-					second = PigmentJarItem.getPigment(stack);
+					result = result.mix(pigment);
 				}
 			}
 		}
 
-		if (first == null || second == null) return ItemStack.EMPTY;
-
-		return first.mix(second).asJar();
+		if (result == null) return ItemStack.EMPTY;
+		return result.asJar();
 	}
 
 	@Override
 	public NonNullList<ItemStack> getRemainingItems(CraftingContainer container) {
 		var list = NonNullList.withSize(container.getContainerSize(), ItemStack.EMPTY);
 
-		// find the first jar and place an empty one at that index
+		var first = true;
 		for (int i = 0; i < container.getContainerSize(); i++) {
 			var stack = container.getItem(i);
-			if (stack.is(ItemRegistry.PIGMENT_JAR.get()) && PigmentJarItem.isEmpty(stack)) {
-				list.set(i, ItemRegistry.PIGMENT_JAR.get().getDefaultInstance());
-				return list;
+			if (stack.is(ItemRegistry.PIGMENT_JAR.get())) {
+				if (first) {
+					first = false;
+				} else {
+					list.set(i, ItemRegistry.PIGMENT_JAR.get().getDefaultInstance());
+				}
 			}
 		}
 
@@ -76,6 +81,6 @@ public class PigmentJarMixingRecipe extends CustomRecipe {
 
 	@Override
 	public RecipeSerializer<?> getSerializer() {
-		return null;
+		return GAGRecipeSerializers.PIGMENT_JAR_MIXING.get();
 	}
 }
