@@ -92,7 +92,6 @@ public class PigmentJarItem extends GAGItem {
 		return Util.make(ItemStackLinkedSet.createTypeAndTagSet(), set -> {
 			for (DyeColor color : DyeColor.values()) {
 				set.add(Pigment.forText(color).asJar());
-				set.add(Pigment.forLeather(color).asJar());
 			}
 		});
 	}
