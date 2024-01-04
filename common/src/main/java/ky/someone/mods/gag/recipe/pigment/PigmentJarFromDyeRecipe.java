@@ -2,6 +2,7 @@ package ky.someone.mods.gag.recipe.pigment;
 
 import ky.someone.mods.gag.item.ItemRegistry;
 import ky.someone.mods.gag.item.PigmentJarItem;
+import ky.someone.mods.gag.misc.Pigment;
 import ky.someone.mods.gag.recipe.GAGRecipeSerializers;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
@@ -90,7 +91,7 @@ public class PigmentJarFromDyeRecipe extends CustomRecipe {
 			return ItemStack.EMPTY;
 		}
 
-		return PigmentJarItem.Pigment.fromDye(dye, amount).asJar();
+		return Pigment.forText(dye).withAmount(amount).asJar();
 	}
 
 	@Override

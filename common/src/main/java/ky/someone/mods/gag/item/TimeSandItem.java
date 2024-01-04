@@ -1,7 +1,6 @@
 package ky.someone.mods.gag.item;
 
 import ky.someone.mods.gag.config.GAGConfig;
-import ky.someone.mods.gag.tab.GAGCreativeTabs;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;

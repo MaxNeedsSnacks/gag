@@ -2,7 +2,6 @@ package ky.someone.mods.gag.item;
 
 import ky.someone.mods.gag.GAGUtil;
 import ky.someone.mods.gag.menu.LabelingMenu;
-import ky.someone.mods.gag.tab.GAGCreativeTabs;
 import net.minecraft.network.chat.Component;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;

@@ -56,7 +56,7 @@ public interface GAGClient {
 	static void renderHUD(GuiGraphics graphics, float partialTicks) {
 		var mc = Minecraft.getInstance();
 
-		if (mc == null || mc.options.hideGui || mc.gameMode.getPlayerMode() == GameType.SPECTATOR) {
+		if (mc.options.hideGui || mc.gameMode.getPlayerMode() == GameType.SPECTATOR) {
 			return;
 		}
 
@@ -117,7 +117,7 @@ public interface GAGClient {
 		RenderTypeRegistry.register(RenderType.cutoutMipped(), BlockRegistry.NO_SOLICITORS_SIGN.get());
 		MenuRegistry.registerScreenFactory(MenuTypeRegistry.LABELING.get(), LabelingMenuScreen::new);
 
-		ColorHandlerRegistry.registerItemColors((stack, index) -> index == 0 ? PigmentJarItem.getColor(stack) : -1, ItemRegistry.PIGMENT_JAR.get());
+		ColorHandlerRegistry.registerItemColors((stack, index) -> index == 0 ? PigmentJarItem.getRgbColor(stack) : -1, ItemRegistry.PIGMENT_JAR.get());
 
 		ItemPropertiesRegistry.register(ItemRegistry.PIGMENT_JAR.get(), GAGUtil.id("pigment_amount"),
 				(stack, level, entity, seed) -> PigmentJarItem.getColorAmount(stack) / (float) PigmentJarItem.MAX_AMOUNT);

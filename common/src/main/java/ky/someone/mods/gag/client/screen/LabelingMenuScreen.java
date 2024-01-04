@@ -104,7 +104,6 @@ public class LabelingMenuScreen extends AbstractContainerScreen<LabelingMenu> im
 		this.renderTooltip(graphics, i, j);
 	}
 
-	@SuppressWarnings("UnnecessaryLocalVariable") // it just makes it so much easier to read
 	@Override
 	public void renderBg(GuiGraphics graphics, float f, int i, int j) {
 		int cx = (this.width - this.imageWidth) / 2;
@@ -144,7 +143,7 @@ public class LabelingMenuScreen extends AbstractContainerScreen<LabelingMenu> im
 			poseStack.pushPose();
 			if (ratio > 0) {
 				// render filled pigment bar (up to 162x5, uvxy as below)
-				// tinted in the color of the pigment
+				// tinted in the rgb of the pigment
 				var u = 1;
 				var v = 214;
 				var x = 7;
@@ -152,7 +151,7 @@ public class LabelingMenuScreen extends AbstractContainerScreen<LabelingMenu> im
 				var w = (int) (162 * ratio);
 				var h = 5;
 
-				var color = pigment.color();
+				var color = pigment.rgb();
 				var rf = FastColor.ARGB32.red(color) / 255f;
 				var gf = FastColor.ARGB32.green(color) / 255f;
 				var bf = FastColor.ARGB32.blue(color) / 255f;
@@ -191,7 +190,7 @@ public class LabelingMenuScreen extends AbstractContainerScreen<LabelingMenu> im
 			labelBox.setEditable(!stack.isEmpty());
 			this.setFocused(labelBox);
 		} else if (i == 1) {
-			// labelBox.setTextColor(PigmentJarItem.getColor(stack)); // todo: does this look good?
+			// labelBox.setTextColor(PigmentJarItem.getRgbColor(stack)); // todo: does this look good?
 			nameChanged(labelBox.getValue());
 		}
 	}

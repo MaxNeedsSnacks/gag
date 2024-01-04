@@ -1,6 +1,7 @@
 package ky.someone.mods.gag.item;
 
 import ky.someone.mods.gag.GAGUtil;
+import ky.someone.mods.gag.misc.Pigment;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.network.chat.Component;
@@ -11,7 +12,6 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
-import java.awt.*;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -44,7 +44,7 @@ public class PigmentJarItem extends GAGItem {
 		var color = pigmentTag.getInt(COLOR_NBT_KEY);
 		var amount = pigmentTag.getInt(AMOUNT_NBT_KEY);
 
-		return new Pigment(color, amount);
+		return Pigment.ofRgb(color, amount);
 	}
 
 	public static boolean isEmpty(ItemStack stack) {
@@ -52,14 +52,14 @@ public class PigmentJarItem extends GAGItem {
 		return pigment == null || pigment.isEmpty();
 	}
 
-	public static int getColor(ItemStack stack) {
+	public static int getRgbColor(ItemStack stack) {
 		var pigment = getPigment(stack);
-		return pigment == null ? -1 : pigment.color;
+		return pigment == null ? -1 : pigment.rgb();
 	}
 
 	public static int getColorAmount(ItemStack stack) {
 		var pigment = getPigment(stack);
-		return pigment == null ? 0 : pigment.amount;
+		return pigment == null ? 0 : pigment.amount();
 	}
 
 	public static boolean isNonEmptyJar(ItemStack stack) {
@@ -77,8 +77,8 @@ public class PigmentJarItem extends GAGItem {
 		} else {
 			var pigment = Objects.requireNonNull(getPigment(stack));
 			list.add(Component.translatable("item.gag.pigment_jar.contents",
-					GAGUtil.asStyledValue(pigment.amount, MAX_AMOUNT / 2, Integer.toString(pigment.amount)),
-					Component.literal(pigment.hex()).withStyle(s -> s.withColor(pigment.color))
+					GAGUtil.asStyledValue(pigment.amount(), MAX_AMOUNT / 2.0, Integer.toString(pigment.amount())),
+					Component.literal(pigment.hex()).withStyle(s -> s.withColor(pigment.rgb()))
 			).withStyle(TOOLTIP_FLAVOUR));
 			GAGUtil.appendInfoTooltip(list, List.of(
 					Component.translatable("item.gag.pigment_jar.info.filled.1").withStyle(TOOLTIP_MAIN),
@@ -91,7 +91,8 @@ public class PigmentJarItem extends GAGItem {
 	public Collection<ItemStack> getAdditionalSubItems() {
 		return Util.make(ItemStackLinkedSet.createTypeAndTagSet(), set -> {
 			for (DyeColor color : DyeColor.values()) {
-				set.add(Pigment.fromDye(color, DYE_AMOUNT).asJar());
+				set.add(Pigment.forText(color).asJar());
+				set.add(Pigment.forLeather(color).asJar());
 			}
 		});
 	}
@@ -102,74 +103,6 @@ public class PigmentJarItem extends GAGItem {
 		var pigment = getPigment(stack);
 
 		if (pigment == null) return name;
-		return name.copy().withStyle(s -> s.withColor(pigment.color));
+		return name.copy().withStyle(s -> s.withColor(pigment.rgb()));
 	}
-
-	public record Pigment(int color, int amount) {
-		public boolean isEmpty() {
-			return amount <= 0 || color < 0;
-		}
-
-		public String hex() {
-			return String.format("#%06x", color);
-		}
-
-		@Override
-		public String toString() {
-			return String.format("Pigment{color=%s, amount=%d}", hex(), amount);
-		}
-
-		public float[] hsb() {
-			return Color.RGBtoHSB(color >> 16 & 0xff, color >> 8 & 0xff, color >> 0 & 0xff, null);
-		}
-
-		public Pigment withAmount(int amount) {
-			return new Pigment(this.color, amount);
-		}
-
-		public Pigment mix(Pigment other) {
-			if (this.isEmpty()) return other;
-			if (other.isEmpty()) return this;
-
-			var newAmount = this.amount + other.amount;
-			if (newAmount > MAX_AMOUNT) newAmount = MAX_AMOUNT;
-			if (this.color == other.color) return new Pigment(this.color, newAmount);
-
-			var weight = this.amount / (float) newAmount;
-
-			var thisHsv = this.hsb();
-			var otherHsv = other.hsb();
-
-			// todo: this is better, but still not perfect
-			var hDelta = Math.abs(thisHsv[0] - otherHsv[0]);
-			if (hDelta > 0.5) {
-				// hue is on a circle, so we need to wrap around
-				if (thisHsv[0] > otherHsv[0]) {
-					otherHsv[0] += 1;
-				} else {
-					thisHsv[0] += 1;
-				}
-			}
-			var h = (weight * thisHsv[0] + (1 - weight) * otherHsv[0]);
-			var s = (weight * thisHsv[1] + (1 - weight) * otherHsv[1]);
-			var b = (weight * thisHsv[2] + (1 - weight) * otherHsv[2]);
-
-			var newColor = Color.HSBtoRGB(h, s, b) & 0xffffff;
-			return new Pigment(newColor, newAmount);
-		}
-
-		public ItemStack asJar() {
-			var stack = ItemRegistry.PIGMENT_JAR.get().getDefaultInstance();
-			if (this.isEmpty()) return stack;
-			var tag = stack.getOrCreateTagElement(PIGMENT_NBT_KEY);
-			tag.putInt(COLOR_NBT_KEY, this.color);
-			tag.putInt(AMOUNT_NBT_KEY, this.amount);
-			return stack;
-		}
-
-		public static Pigment fromDye(DyeColor dye, int amount) {
-			return new Pigment(dye.getTextColor(), amount);
-		}
-	}
-
 }

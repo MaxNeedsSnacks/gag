@@ -7,6 +7,7 @@ import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import ky.someone.mods.gag.config.GAGConfig;
 import ky.someone.mods.gag.item.PigmentJarItem;
 import ky.someone.mods.gag.item.TemporalPouchItem;
+import ky.someone.mods.gag.misc.Pigment;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -19,21 +20,21 @@ import static ky.someone.mods.gag.item.TemporalPouchItem.setStoredGrains;
 
 public class GAGCommands {
 
-	public static final SimpleCommandExceptionType INVALID_COLOR = new SimpleCommandExceptionType(Component.literal("Invalid color!"));
+	public static final SimpleCommandExceptionType INVALID_COLOR = new SimpleCommandExceptionType(Component.literal("Invalid rgb!"));
 
 	public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext commandBuildContext, Commands.CommandSelection selection) {
 		dispatcher.register(Commands.literal("gag")
 				.requires(source -> source.hasPermission(2))
 				.then(Commands.literal("pigment_jar")
-						.then(Commands.argument("color", StringArgumentType.word())
+						.then(Commands.argument("rgb", StringArgumentType.word())
 								.then(Commands.argument("amount", IntegerArgumentType.integer(1, PigmentJarItem.MAX_AMOUNT))
 										.executes(ctx -> {
-											var clrString = StringArgumentType.getString(ctx, "color");
+											var clrString = StringArgumentType.getString(ctx, "rgb");
 											var amount = IntegerArgumentType.getInteger(ctx, "amount");
 
 											try {
 												var color = Integer.parseInt(clrString, 16);
-												var stack = new PigmentJarItem.Pigment(color, amount).asJar();
+												var stack = Pigment.ofRgb(color, amount).asJar();
 												var player = ctx.getSource().getPlayerOrException();
 
 												if (player.addItem(stack)) {

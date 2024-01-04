@@ -144,11 +144,6 @@ public class LabelingMenu extends BaseContainer {
 	}
 
 	@Override
-	public boolean stillValid(Player player) {
-		return true;
-	}
-
-	@Override
 	public void removed(Player player) {
 		super.removed(player);
 		clearContainer(player, this.input);
@@ -199,7 +194,7 @@ public class LabelingMenu extends BaseContainer {
 
 					// if there is a pigment jar in the slot, and the input name is not already colored
 					// with the same color as the pigment jar, then apply the pigment jar's color
-					if (PigmentJarItem.isNonEmptyJar(pigmentJar) && (inputColor == null || inputColor.getValue() != PigmentJarItem.getColor(pigmentJar))) {
+					if (PigmentJarItem.isNonEmptyJar(pigmentJar) && (inputColor == null || inputColor.getValue() != PigmentJarItem.getRgbColor(pigmentJar))) {
 						ret.setHoverName(Component.literal(this.name).withStyle(this::applyPigment));
 					}
 				}
@@ -211,7 +206,7 @@ public class LabelingMenu extends BaseContainer {
 	}
 
 	private Style applyPigment(Style input) {
-		var color = PigmentJarItem.getColor(this.input.getItem(1));
+		var color = PigmentJarItem.getRgbColor(this.input.getItem(1));
 		if (color != -1) {
 			didApplyPigment = true;
 			return input.withColor(color).withItalic(false);

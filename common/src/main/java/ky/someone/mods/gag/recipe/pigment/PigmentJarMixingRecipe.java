@@ -2,6 +2,7 @@ package ky.someone.mods.gag.recipe.pigment;
 
 import ky.someone.mods.gag.item.ItemRegistry;
 import ky.someone.mods.gag.item.PigmentJarItem;
+import ky.someone.mods.gag.misc.Pigment;
 import ky.someone.mods.gag.recipe.GAGRecipeSerializers;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
@@ -39,7 +40,7 @@ public class PigmentJarMixingRecipe extends CustomRecipe {
 	@Override
 	public ItemStack assemble(CraftingContainer container, RegistryAccess reg) {
 		// mix the contents of the two jars together
-		PigmentJarItem.Pigment result = null;
+		Pigment result = null;
 		for (var stack : container.getItems()) {
 			if (PigmentJarItem.isNonEmptyJar(stack)) {
 				var pigment = PigmentJarItem.getPigment(stack);

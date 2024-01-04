@@ -43,7 +43,7 @@ public class TemporalPouchItem extends GAGItem {
 	//  which we want to remap to our own if the mod is not loaded
 	public static final String TIAB_STORED_KEY = "storedTime";
 
-	public static TagKey<BlockEntityType<?>> DO_NOT_ACCELERATE = TagKey.create(Registries.BLOCK_ENTITY_TYPE, GAGUtil.id("do_not_accelerate"));
+	public static final TagKey<BlockEntityType<?>> DO_NOT_ACCELERATE = TagKey.create(Registries.BLOCK_ENTITY_TYPE, GAGUtil.id("do_not_accelerate"));
 
 	public TemporalPouchItem() {
 		super(new Item.Properties().stacksTo(1));

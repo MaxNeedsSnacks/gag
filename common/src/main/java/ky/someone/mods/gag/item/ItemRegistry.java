@@ -31,7 +31,6 @@ public interface ItemRegistry {
 	RegistrySupplier<Item> MINING_DYNAMITE = dynamite("mining_dynamite", MiningDynamiteEntity::new, List.of(
 			Component.translatable("item.gag.mining_dynamite.info").withStyle(GAGUtil.TOOLTIP_MAIN)
 	), 1.5);
-	// TODO: cba to implement this right now
 	RegistrySupplier<Item> FISHING_DYNAMITE = dynamite("fishing_dynamite", FishingDynamiteEntity::new, List.of(
 			Component.translatable("item.gag.fishing_dynamite.info").withStyle(GAGUtil.TOOLTIP_MAIN)
 	), 1.5);
