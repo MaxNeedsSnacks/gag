@@ -156,9 +156,8 @@ public class LabelingMenuScreen extends AbstractContainerScreen<LabelingMenu> im
 				var gf = FastColor.ARGB32.green(color) / 255f;
 				var bf = FastColor.ARGB32.blue(color) / 255f;
 
-				// graphics.blit(BG, x, y, u, v, w, h);
-				// = innerBlit(BG, x, x + w, y, y + h, u, u / 256, (u + w) / 256f, v / 256f, (v + h) / 256f);
-				graphics.innerBlit(BG, x, x + w, y, y + h, u, u / 256f, (u + w) / 256f, v / 256f, (v + h) / 256f, rf, gf, bf, 1f);
+				graphics.setColor(rf, gf, bf, 1f);
+				graphics.blit(BG, x, y, u, v, w, h);
 			}
 			poseStack.popPose();
 		}

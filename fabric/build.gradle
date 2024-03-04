@@ -38,7 +38,6 @@ task copyAccessWidener(type: Copy) {
 sourceSets {
     main {
         resources {
-            // srcDir generatedResources
             srcDir copyAccessWidener
         }
     }
