@@ -1,138 +1,122 @@
 plugins {
-    id 'base'
-    id 'architectury-plugin' version '3.4-SNAPSHOT'
-	id "dev.architectury.loom" version "1.5-SNAPSHOT" apply false
-    id "com.github.johnrengelman.shadow" version "7.0.0" apply false
-    id "com.matthewprenger.cursegradle" version "1.4.0" apply false
-    id "com.modrinth.minotaur" version "2.2.0" apply false
+	id 'base'
+	id 'java'
+	id 'maven-publish'
+	id "dev.architectury.loom" version "1.5-SNAPSHOT"
+	id "com.matthewprenger.cursegradle" version "1.4.0"
+	id "com.modrinth.minotaur" version "2.2.0"
 }
 
-architectury {
-    compileOnly()
+ext.ENV = System.getenv()
+
+repositories {
+	maven {
+		url "https://maven.neoforged.net/releases"
+	}
+	maven {
+		url "https://maven.architectury.dev/"
+	}
+	maven {
+		name = "Team Resourceful Maven"
+		url = "https://maven.teamresourceful.com/repository/maven-public/"
+	}
 }
 
-allprojects {
-    ext.ENV = System.getenv()
-
-    repositories {
-        maven {
-            url "https://maven.saps.dev/minecraft"
-            content {
-                includeGroup "dev.latvian.mods"
-                includeGroup "dev.ftb.mods"
-            }
-        }
-    }
-}
-
-version = "${mod_version}-build.${ENV.GITHUB_RUN_NUMBER ?: 9999}"
+version = mod_version
 group = project.maven_group
 base.archivesBaseName = project.archives_base_name
 
-subprojects {
-    apply plugin: "java"
-    apply plugin: "dev.architectury.loom"
-    apply plugin: 'architectury-plugin'
-    apply plugin: "maven-publish"
-    apply from: "https://files.latmod.com/public/markdown-git-changelog.gradle"
+loom {
+	silentMojangMappingsLicense()
 
-    version = rootProject.version
-    group = rootProject.group
-    base.archivesBaseName = rootProject.base.archivesBaseName
+	runs {
+		client {
+			vmArgs "-XX:+IgnoreUnrecognizedVMOptions", "-XX:+AllowEnhancedClassRedefinition", "-XX:HotswapAgent=fatjar"
+		}
+		server {
+			vmArgs "-XX:+IgnoreUnrecognizedVMOptions", "-XX:+AllowEnhancedClassRedefinition", "-XX:HotswapAgent=fatjar"
+		}
+	}
 
-    architectury {
-        compileOnly()
-    }
-
-    loom {
-        silentMojangMappingsLicense()
-
-        runs {
-            client {
-                vmArgs "-XX:+IgnoreUnrecognizedVMOptions", "-XX:+AllowEnhancedClassRedefinition", "-XX:HotswapAgent=fatjar"
-            }
-            server {
-                vmArgs "-XX:+IgnoreUnrecognizedVMOptions", "-XX:+AllowEnhancedClassRedefinition", "-XX:HotswapAgent=fatjar"
-            }
-        }
-    }
-
-    compileJava {
-        options.encoding = "UTF-8"
-        options.release.set(17)
-    }
-
-    java {
-        sourceCompatibility = targetCompatibility = '17'
-        withSourcesJar()
-    }
-
-    dependencies {
-        minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
-        mappings loom.layered() {
-            officialMojangMappings()
-        }
-    }
+	accessWidenerPath = file("src/main/resources/gag.accesswidener")
 }
 
-subprojects {
-    if (project.path != ':common') {
-        apply plugin: "com.github.johnrengelman.shadow"
-        apply plugin: "com.matthewprenger.cursegradle"
-        apply plugin: "com.modrinth.minotaur"
+dependencies {
+	minecraft "com.mojang:minecraft:${minecraft_version}"
+	mappings loom.officialMojangMappings()
 
-        configurations {
-            bundle {
-                canBeResolved(true)
-                canBeConsumed(false)
-            }
+	neoForge("net.neoforged:neoforge:${neoforge_version}")
 
-            common
-            compileClasspath.extendsFrom common
-            runtimeClasspath.extendsFrom common
-        }
+	modApi "dev.architectury:architectury-neoforge:${architectury_version}"
+	modImplementation "com.teamresourceful.resourcefulconfig:resourcefulconfig-neoforge-${minecraft_version}:${config_version}"
 
-        jar {
-            archiveClassifier.set "dev"
-        }
-
-        shadowJar {
-            archiveClassifier.set "dev-shadow"
-            configurations = [
-                    project.configurations.bundle
-            ]
-        }
-
-        remapJar {
-            dependsOn shadowJar
-            inputFile.set shadowJar.archiveFile
-            archiveBaseName.set "${rootProject.archives_base_name}-${project.name}"
-            archiveClassifier.set null
-        }
-
-        loom {
-            mods {
-                main { // to match the default mod generated for Forge
-                    sourceSet project.sourceSets.main
-                    sourceSet project(':common').sourceSets.main
-                }
-            }
-        }
-    }
+	modLocalRuntime modCompileOnly("me.shedaniel:RoughlyEnoughItems-neoforge:${rei_version}")
 }
 
-task collectJars(type: Copy) {
-    subprojects {
-        if (project.path != ":common") {
-            def remapJar = project.tasks.named('remapJar')
-            dependsOn remapJar
-            from remapJar
-        }
-    }
+processResources {
+	def toReplace = [
+			"version"             : project.version,
+			"architectury_version": architectury_version
+	]
 
-    into(buildDir.toPath().resolve("libs"))
+	inputs.properties toReplace
+	filesMatching("META-INF/mods.toml") {
+		expand toReplace
+	}
 }
 
-assemble {
-    dependsOn(collectJars)
+compileJava {
+	options.encoding = "UTF-8"
+	options.release.set(17)
+}
+
+java {
+	sourceCompatibility = targetCompatibility = '17'
+	withSourcesJar()
+}
+
+if (ENV.CURSE_API_KEY) {
+	curseforge {
+		apiKey = ENV.CURSE_API_KEY
+		project {
+			id = rootProject.curseforge_id
+			changelog = getGitChangelog
+			changelogType = 'markdown'
+			releaseType = rootProject.artifact_type
+
+			addGameVersion '1.20.4'
+			addGameVersion 'NeoForge'
+
+			relations {
+				requiredDependency 'architectury-api'
+				requiredDependency 'ftb-library-forge'
+			}
+
+			mainArtifact(remapJar) {
+				displayName = "[NeoForge] $mod_name $project.version"
+			}
+		}
+	}
+}
+
+
+publishing {
+	publications {
+		mavenForge(MavenPublication) {
+			artifactId = "${rootProject.archives_base_name}-${project.name}"
+			from components.java
+		}
+	}
+
+	repositories {
+		if (ENV.SAPS_TOKEN) {
+			maven {
+				url "https://maven.saps.dev/minecraft"
+				credentials {
+					username = "max"
+					password = "${ENV.SAPS_TOKEN}"
+				}
+			}
+		}
+	}
 }

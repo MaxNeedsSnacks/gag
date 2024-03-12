@@ -1,0 +1,38 @@
+modLoader = "javafml"
+loaderVersion = "[2,)"
+#issueTrackerURL = ""
+license = "MIT"
+
+[[mods]]
+modId = "gag"
+version = "${version}"
+displayName = "Gadgets Against Grind"
+authors = "MaxNeedsSnacks"
+description = '''
+A Minecraft mod that adds various different utility items and blocks!
+'''
+#logoFile = ""
+
+[[dependencies.gag]]
+modId = "neoforge"
+mandatory = true
+versionRange = "[20.4.190,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.gag]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[1.20.4,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.gag]]
+modId = "architectury"
+mandatory = true
+versionRange = "[9.1.12,)"
+ordering = "AFTER"
+side = "BOTH"
+
+[[mixins]]
+config = "gag.mixins.json"
