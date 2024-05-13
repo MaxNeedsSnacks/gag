@@ -2,14 +2,14 @@ package ky.someone.mods.gag.entity;
 
 import com.google.common.collect.Sets;
 import ky.someone.mods.gag.GAGUtil;
-import ky.someone.mods.gag.config.GAGConfigOld;
+import ky.someone.mods.gag.config.GAGConfig;
 import ky.someone.mods.gag.item.ItemRegistry;
-import ky.someone.mods.gag.platform.PlatformInvokers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.protocol.game.ClientboundExplodePacket;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -66,7 +66,7 @@ public class MiningDynamiteEntity extends AbstractDynamiteEntity {
 	@Override
 	protected void onHitEntity(EntityHitResult hitEntity) {
 		super.onHitEntity(hitEntity);
-		if (GAGConfigOld.Dynamite.MINING_GIVES_HASTE.get() && hitEntity.getEntity() instanceof LivingEntity entity) {
+		if (GAGConfig.Dynamite.MINING_GIVES_HASTE.get() && hitEntity.getEntity() instanceof LivingEntity entity) {
 			entity.addEffect(new MobEffectInstance(MobEffects.DIG_SPEED, 160, 1, false, false));
 			entity.addEffect(new MobEffectInstance(MobEffects.GLOWING, 60, 1, false, false));
 		}
@@ -74,7 +74,7 @@ public class MiningDynamiteEntity extends AbstractDynamiteEntity {
 
 	@Override
 	public void detonate(Vec3 pos) {
-		var r = GAGConfigOld.Dynamite.MINING_RADIUS.get();
+		var r = GAGConfig.Dynamite.MINING_RADIUS.get();
 		var level = level();
 		var explosion = new BlockMiningExplosion(level, this, pos.x, pos.y, pos.z, r);
 		if (!EventHooks.onExplosionStart(level, explosion)) {
@@ -83,7 +83,15 @@ public class MiningDynamiteEntity extends AbstractDynamiteEntity {
 			explosion.finalizeExplosion(false);
 			for (Player player : level.players()) {
 				if (player.distanceToSqr(this) < 4096.0D) {
-					((ServerPlayer) player).connection.send(new ClientboundExplodePacket(pos.x, pos.y, pos.z, r, explosion.getToBlow(), null));
+					((ServerPlayer) player).connection.send(new ClientboundExplodePacket(
+							pos.x, pos.y, pos.z, r,
+							explosion.getToBlow(),
+							null,
+							explosion.getBlockInteraction(),
+							explosion.getSmallExplosionParticles(),
+							explosion.getLargeExplosionParticles(),
+							explosion.getExplosionSound()
+					));
 				}
 			}
 		}
@@ -117,7 +125,7 @@ public class MiningDynamiteEntity extends AbstractDynamiteEntity {
 				public boolean shouldBlockExplode(Explosion explosion, BlockGetter blockGetter, BlockPos blockPos, BlockState blockState, float f) {
 					return blockState.getFluidState().isEmpty() && super.shouldBlockExplode(explosion, blockGetter, blockPos, blockState, f);
 				}
-			}, x, y, z, radius, false, BlockInteraction.DESTROY);
+			}, x, y, z, radius, false, BlockInteraction.DESTROY, ParticleTypes.EXPLOSION, ParticleTypes.EXPLOSION_EMITTER, SoundEvents.GENERIC_EXPLODE);
 		}
 
 		/**
@@ -127,7 +135,7 @@ public class MiningDynamiteEntity extends AbstractDynamiteEntity {
 		 */
 		@Override
 		public void explode() {
-			this.level.gameEvent(this.source, GameEvent.EXPLODE, BlockPos.containing(this.x, this.y, this.z));
+			this.level.gameEvent(getDirectSourceEntity(), GameEvent.EXPLODE, BlockPos.containing(this.x, this.y, this.z));
 			Set<BlockPos> set = Sets.newHashSet();
 			for (int j = 0; j < 16; ++j) {
 				for (int k = 0; k < 16; ++k) {
@@ -140,7 +148,7 @@ public class MiningDynamiteEntity extends AbstractDynamiteEntity {
 							d /= g;
 							e /= g;
 							f /= g;
-							float h = this.radius * (0.7F + this.level.random.nextFloat() * 0.6F);
+							float h = this.radius() * (0.7F + this.level.random.nextFloat() * 0.6F);
 							double m = this.x;
 							double n = this.y;
 							double o = this.z;

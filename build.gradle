@@ -2,7 +2,7 @@ plugins {
 	id 'base'
 	id 'java'
 	id 'maven-publish'
-	id "dev.architectury.loom" version "1.5-SNAPSHOT"
+	id "dev.architectury.loom" version "1.6-SNAPSHOT"
 	id "com.matthewprenger.cursegradle" version "1.4.0"
 	id "com.modrinth.minotaur" version "2.2.0"
 }
@@ -17,8 +17,8 @@ repositories {
 		url "https://maven.architectury.dev/"
 	}
 	maven {
-		name = "Team Resourceful Maven"
-		url = "https://maven.teamresourceful.com/repository/maven-public/"
+		name = "FTB Library"
+		url = "https://maven.saps.dev/minecraft"
 	}
 }
 
@@ -48,7 +48,7 @@ dependencies {
 	neoForge("net.neoforged:neoforge:${neoforge_version}")
 
 	modApi "dev.architectury:architectury-neoforge:${architectury_version}"
-	modImplementation "com.teamresourceful.resourcefulconfig:resourcefulconfig-neoforge-${minecraft_version}:${config_version}"
+	include(implementation("dev.ftb.mods:ftb-library-neoforge:${config_version}"))
 
 	modLocalRuntime modCompileOnly("me.shedaniel:RoughlyEnoughItems-neoforge:${rei_version}")
 }

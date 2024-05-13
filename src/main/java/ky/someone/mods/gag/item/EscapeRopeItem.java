@@ -1,7 +1,7 @@
 package ky.someone.mods.gag.item;
 
 import ky.someone.mods.gag.GAGUtil;
-import ky.someone.mods.gag.config.GAGConfigOld;
+import ky.someone.mods.gag.config.GAGConfig;
 import ky.someone.mods.gag.sound.GAGSounds;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -28,7 +28,7 @@ import static ky.someone.mods.gag.GAGUtil.TOOLTIP_MAIN;
 
 public class EscapeRopeItem extends GAGItem {
 	public EscapeRopeItem() {
-		super(new Item.Properties().durability(GAGConfigOld.EscapeRope.DURABILITY.get()));
+		super(new Item.Properties().durability(GAGConfig.EscapeRope.DURABILITY.get()));
 	}
 
 	@Override
@@ -50,7 +50,7 @@ public class EscapeRopeItem extends GAGItem {
 
 	@Override
 	public int getUseDuration(ItemStack stack) {
-		return GAGConfigOld.EscapeRope.WARMUP.get();
+		return GAGConfig.EscapeRope.WARMUP.get();
 	}
 
 	@Override
@@ -90,7 +90,7 @@ public class EscapeRopeItem extends GAGItem {
 			}
 
 			if (!stack.isEmpty() && !creative) {
-				player.getCooldowns().addCooldown(stack.getItem(), GAGConfigOld.EscapeRope.COOLDOWN.get());
+				player.getCooldowns().addCooldown(stack.getItem(), GAGConfig.EscapeRope.COOLDOWN.get());
 			}
 		}
 		return stack;

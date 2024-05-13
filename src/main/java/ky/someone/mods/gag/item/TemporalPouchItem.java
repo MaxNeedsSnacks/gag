@@ -33,7 +33,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import static ky.someone.mods.gag.GAGUtil.TOOLTIP_MAIN;
-import static ky.someone.mods.gag.config.GAGConfigOld.SandsOfTime;
+import static ky.someone.mods.gag.config.GAGConfig.SandsOfTime;
 
 public class TemporalPouchItem extends GAGItem {
 

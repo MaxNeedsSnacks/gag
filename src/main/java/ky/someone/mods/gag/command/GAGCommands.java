@@ -4,7 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
-import ky.someone.mods.gag.config.GAGConfigOld;
+import ky.someone.mods.gag.config.GAGConfig;
 import ky.someone.mods.gag.item.PigmentJarItem;
 import ky.someone.mods.gag.item.TemporalPouchItem;
 import ky.someone.mods.gag.misc.Pigment;
@@ -66,7 +66,7 @@ public class GAGCommands {
 												ItemStack stack = player.getInventory().getItem(i);
 												if (stack.getItem() instanceof TemporalPouchItem) {
 													var storedGrains = getStoredGrains(stack);
-													var newTime = Math.min(storedGrains + time, GAGConfigOld.SandsOfTime.POUCH_CAPACITY.get());
+													var newTime = Math.min(storedGrains + time, GAGConfig.SandsOfTime.POUCH_CAPACITY.get());
 													setStoredGrains(stack, newTime);
 													player.inventoryMenu.broadcastChanges();
 

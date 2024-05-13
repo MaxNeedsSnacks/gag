@@ -1,10 +1,9 @@
 package ky.someone.mods.gag.entity;
 
 import ky.someone.mods.gag.GAGUtil;
-import ky.someone.mods.gag.config.GAGConfigOld;
+import ky.someone.mods.gag.config.GAGConfig;
 import ky.someone.mods.gag.item.ItemRegistry;
 import ky.someone.mods.gag.network.FishsplosionPacket;
-import ky.someone.mods.gag.platform.PlatformInvokers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
@@ -71,7 +70,7 @@ public class FishingDynamiteEntity extends AbstractDynamiteEntity {
 
 	@Override
 	public void detonate(Vec3 pos) {
-		var r = GAGConfigOld.Dynamite.FISHING_RADIUS.get();
+		var r = GAGConfig.Dynamite.FISHING_RADIUS.get();
 		var level = level();
 		var explosion = new Fishsplosion(level, this, pos.x, pos.y, pos.z, r);
 		if (!EventHooks.onExplosionStart(level, explosion)) {
@@ -96,11 +95,12 @@ public class FishingDynamiteEntity extends AbstractDynamiteEntity {
 		private int fishHit = 0;
 
 		public final Vec3 pos = new Vec3(this.x, this.y, this.z);
+		public final float radius = this.radius();
 
 		private final boolean isInWater;
 
 		public Fishsplosion(Level level, @Nullable Entity entity, double x, double y, double z, float radius) {
-			super(level, entity, null, null, x, y, z, radius, false, BlockInteraction.KEEP);
+			super(level, entity, x, y, z, radius, false, BlockInteraction.KEEP);
 
 			var eps = 0.028;
 			isInWater = BlockPos.betweenClosedStream(AABB.ofSize(pos, eps, eps, eps))
@@ -121,11 +121,11 @@ public class FishingDynamiteEntity extends AbstractDynamiteEntity {
 			for (var entity : this.level.getEntitiesOfClass(LivingEntity.class, hitbox)) {
 				double distSqr = entity.distanceToSqr(pos);
 				if (distSqr > radius * radius) continue;
-				if (entity.isInWater() && !entity.ignoreExplosion()) {
-					var filter = GAGConfigOld.Dynamite.FISHING_TARGET_FILTER.get();
-					if (GAGConfigOld.Dynamite.FISHING_INSTAKILL_FISH.get() && filter.isFish(entity)) {
+				if (entity.isInWater() && !entity.ignoreExplosion(this)) {
+					var filter = GAGConfig.Dynamite.FISHING_TARGET_FILTER.get();
+					if (GAGConfig.Dynamite.FISHING_INSTAKILL_FISH.get() && filter.isFish(entity)) {
 						fishHit++;
-						entity.hurt(this.getDamageSource(), Float.MAX_VALUE);
+						entity.hurt(this.damageSource, Float.MAX_VALUE);
 					} else {
 						var relDist = Math.sqrt(distSqr) / radius;
 						double seen = getSeenPercent(pos, entity);
@@ -135,9 +135,9 @@ public class FishingDynamiteEntity extends AbstractDynamiteEntity {
 						// fish take double damage
 						if (filter.isFish(entity)) {
 							fishHit++;
-							entity.hurt(this.getDamageSource(), damage * 2);
-						} else if (GAGConfigOld.Dynamite.FISHING_DAMAGE_ALL.get()) {
-							entity.hurt(this.getDamageSource(), damage / 2);
+							entity.hurt(this.damageSource, damage * 2);
+						} else if (GAGConfig.Dynamite.FISHING_DAMAGE_ALL.get()) {
+							entity.hurt(this.damageSource, damage / 2);
 						}
 					}
 				}
@@ -197,14 +197,14 @@ public class FishingDynamiteEntity extends AbstractDynamiteEntity {
 				level.playSound(null, pos.x, pos.y, pos.z, SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS, 0.6F, 1.0F);
 
 				if (!isClient) {
-					var add = GAGConfigOld.Dynamite.ADDITIONAL_FISHING_LOOT.get();
+					var add = GAGConfig.Dynamite.ADDITIONAL_FISHING_LOOT.get();
 					var fishDropped = fishHit;
 					List<ItemStack> itemsToDrop = new ArrayList<>();
 
 					LootParams lootParams = new LootParams.Builder((ServerLevel) level)
 							.withParameter(LootContextParams.ORIGIN, pos)
 							.withParameter(LootContextParams.TOOL, ItemStack.EMPTY)
-							.withOptionalParameter(LootContextParams.THIS_ENTITY, source)
+							.withOptionalParameter(LootContextParams.THIS_ENTITY, getDirectSourceEntity())
 							.create(LootContextParamSets.FISHING);
 					LootTable lootTable = level.getServer().getLootData().getLootTable(BuiltInLootTables.FISHING_FISH);
 

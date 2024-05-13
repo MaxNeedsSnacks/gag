@@ -6,8 +6,6 @@ import ky.someone.mods.gag.item.LabelingToolItem;
 import ky.someone.mods.gag.item.PigmentJarItem;
 import ky.someone.mods.gag.menu.LabelingMenu;
 import ky.someone.mods.gag.network.LabelerTryRenamePacket;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
@@ -20,10 +18,12 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerListener;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 import java.util.Objects;
 
-@Environment(EnvType.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class LabelingMenuScreen extends AbstractContainerScreen<LabelingMenu> implements ContainerListener {
 
 	private static final boolean UNUSED_UI = true;
@@ -66,12 +66,6 @@ public class LabelingMenuScreen extends AbstractContainerScreen<LabelingMenu> im
 	}
 
 	@Override
-	public void containerTick() {
-		super.containerTick();
-		labelBox.tick();
-	}
-
-	@Override
 	public void resize(Minecraft minecraft, int i, int j) {
 		String name = labelBox.getValue();
 		init(minecraft, i, j);
@@ -97,7 +91,6 @@ public class LabelingMenuScreen extends AbstractContainerScreen<LabelingMenu> im
 
 	@Override
 	public void render(GuiGraphics graphics, int i, int j, float f) {
-		this.renderBackground(graphics);
 		super.render(graphics, i, j, f);
 		RenderSystem.disableBlend();
 		labelBox.render(graphics, i, j, f);

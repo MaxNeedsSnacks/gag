@@ -1,7 +1,7 @@
 package ky.someone.mods.gag.item;
 
 import ky.someone.mods.gag.GAGUtil;
-import ky.someone.mods.gag.config.GAGConfigOld;
+import ky.someone.mods.gag.config.GAGConfig;
 import ky.someone.mods.gag.misc.TeleportPos;
 import ky.someone.mods.gag.sound.GAGSounds;
 import net.minecraft.ChatFormatting;
@@ -26,7 +26,7 @@ public class EnergizedHearthstoneItem extends HearthstoneItem {
 	private static final String TARGET_KEY = "target";
 
 	public EnergizedHearthstoneItem() {
-		super(GAGConfigOld.Hearthstone.ENERGIZED_DURABILITY.get());
+		super(GAGConfig.Hearthstone.ENERGIZED_DURABILITY.get());
 	}
 
 	public boolean isBound(ItemStack stack) {

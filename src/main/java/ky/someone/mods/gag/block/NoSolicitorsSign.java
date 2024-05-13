@@ -3,7 +3,7 @@ package ky.someone.mods.gag.block;
 import dev.architectury.event.EventResult;
 import ky.someone.mods.gag.GAG;
 import ky.someone.mods.gag.GAGUtil;
-import ky.someone.mods.gag.config.GAGConfigOld;
+import ky.someone.mods.gag.config.GAGConfig;
 import ky.someone.mods.gag.world.GAGPointOfInterestStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -191,7 +191,7 @@ public class NoSolicitorsSign extends Block {
 
 	public static boolean blockWandererSpawn(ServerLevel serverLevel, BlockPos pos) {
 		var ward = GAGPointOfInterestStorage.get(serverLevel)
-				.checkNearbyPOIs(BlockRegistry.NO_SOLICITORS_SIGN.get(), pos, GAGConfigOld.Miscellaneous.NO_SOLICITORS_RADIUS.get());
+				.checkNearbyPOIs(BlockRegistry.NO_SOLICITORS_SIGN.get(), pos, GAGConfig.Miscellaneous.NO_SOLICITORS_RADIUS.get());
 
 		GAG.LOGGER.debug("Wanderer spawn check at {} returned {}", pos, ward.isPresent());
 

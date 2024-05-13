@@ -10,7 +10,7 @@ import ky.someone.mods.gag.block.BlockRegistry;
 import ky.someone.mods.gag.block.NoSolicitorsSign;
 import ky.someone.mods.gag.client.GAGClient;
 import ky.someone.mods.gag.command.GAGCommands;
-import ky.someone.mods.gag.config.GAGConfigOld;
+import ky.someone.mods.gag.config.GAGConfig;
 import ky.someone.mods.gag.effect.EffectRegistry;
 import ky.someone.mods.gag.effect.RepellingEffect;
 import ky.someone.mods.gag.entity.EntityTypeRegistry;
@@ -22,16 +22,21 @@ import ky.someone.mods.gag.particle.ParticleTypeRegistry;
 import ky.someone.mods.gag.recipe.GAGRecipeSerializers;
 import ky.someone.mods.gag.sound.GAGSounds;
 import ky.someone.mods.gag.tab.GAGCreativeTabs;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.loading.FMLEnvironment;
+import net.neoforged.neoforge.registries.RegisterEvent;
 import org.slf4j.Logger;
 
 import static dev.ftb.mods.ftblibrary.snbt.config.ConfigUtil.CONFIG_DIR;
+import static net.neoforged.fml.common.Mod.EventBusSubscriber.Bus.MOD;
 
 @Mod(GAGUtil.MOD_ID)
-@Mod.EventBusSubscriber
+@Mod.EventBusSubscriber(bus = MOD)
 public class GAG {
 	public static final Logger LOGGER = LogUtils.getLogger();
 
@@ -46,8 +51,8 @@ public class GAG {
 		GAGCreativeTabs.TABS.register(bus);
 		GAGRecipeSerializers.RECIPE_SERIALIZERS.register(bus);
 
-		GAGConfigOld.init();
-		LifecycleEvent.SERVER_BEFORE_START.register((server) -> ConfigUtil.loadDefaulted(GAGConfigOld.CONFIG, CONFIG_DIR, GAGUtil.MOD_ID));
+		GAGConfig.init();
+		LifecycleEvent.SERVER_BEFORE_START.register((server) -> ConfigUtil.loadDefaulted(GAGConfig.CONFIG, CONFIG_DIR, GAGUtil.MOD_ID));
 
 		EntityEvent.LIVING_CHECK_SPAWN.register(RepellingEffect::applyRepel);
 		LightningEvent.STRIKE.register(EnergizedHearthstoneItem::lightningStrike);
@@ -59,19 +64,16 @@ public class GAG {
 		LifecycleEvent.SETUP.register(GAGNetwork::init);
 
 		if (FMLEnvironment.dist == Dist.CLIENT) {
-			GAGClient.init();
+			GAGClient.init(bus);
 		}
 	}
 
-		/*@SubscribeEvent
-	public static void onRegistryMissingMappings(IdMappingEvent event) {
+	@SubscribeEvent
+	public static void replaceTiabMapping(RegisterEvent event) {
+		var reg = event.getRegistry(Registries.ITEM);
+		if (reg == null) return;
 		// remap "tiab:time_in_a_bottle" to "gag:temporal_pouch" if TIAB Standalone is missing
 		//  (requested by people wanting to transition from TIAB Standalone to GAG)
-		for (var mapping : event.getRemaps(Registries.ITEM.location())) {
-			if (mapping.key.equals(new ResourceLocation("tiab:time_in_a_bottle"))) {
-				mapping.remap(ItemRegistry.TIME_SAND_POUCH.get());
-				break;
-			}
-		}
-	}*/
+		reg.addAlias(new ResourceLocation("tiab:time_in_a_bottle"), ItemRegistry.TIME_SAND_POUCH.getId());
+	}
 }

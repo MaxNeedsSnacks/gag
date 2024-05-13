@@ -1,7 +1,7 @@
 package ky.someone.mods.gag.entity;
 
 import dev.architectury.networking.NetworkManager;
-import ky.someone.mods.gag.config.GAGConfigOld;
+import ky.someone.mods.gag.config.GAGConfig;
 import ky.someone.mods.gag.particle.ParticleTypeRegistry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
@@ -61,7 +61,7 @@ public class TimeAcceleratorEntity extends Entity {
 				// if it's a random ticking block, try to tick it
 				if (!level.isClientSide()) {
 					// this might be 0 if people increase randomTickSpeed with cheats, so be careful
-					var randomChance = GAGConfigOld.SandsOfTime.RANDOM_TICK_CHANCE.get() / level.getGameRules().getInt(GameRules.RULE_RANDOMTICKING);
+					var randomChance = GAGConfig.SandsOfTime.RANDOM_TICK_CHANCE.get() / level.getGameRules().getInt(GameRules.RULE_RANDOMTICKING);
 					if (randomChance == 0 || level.random.nextInt(randomChance) == 0) {
 						state.randomTick((ServerLevel) level, pos, level.random);
 					}
@@ -73,8 +73,8 @@ public class TimeAcceleratorEntity extends Entity {
 			}
 		}
 
-		var particleChance = (double) getTimesAccelerated() / GAGConfigOld.SandsOfTime.MAX_RATE.get() *
-				(double) getTicksRemaining() / (GAGConfigOld.SandsOfTime.DURATION_PER_USE.get() * 20);
+		var particleChance = (double) getTimesAccelerated() / GAGConfig.SandsOfTime.MAX_RATE.get() *
+				(double) getTicksRemaining() / (GAGConfig.SandsOfTime.DURATION_PER_USE.get() * 20);
 
 		if (random.nextDouble() < particleChance) {
 			var magic = ParticleTypeRegistry.MAGIC.get();

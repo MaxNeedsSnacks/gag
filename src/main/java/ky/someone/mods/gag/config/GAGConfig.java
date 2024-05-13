@@ -12,7 +12,7 @@ import net.minecraft.world.level.Level;
 import java.util.List;
 
 
-public interface GAGConfigOld {
+public interface GAGConfig {
 	SNBTConfig CONFIG = SNBTConfig.create(GAGUtil.MOD_ID)
 			.comment("Config for GAG", "If you're a modpack maker, use the defaultconfigs folder instead!");
 

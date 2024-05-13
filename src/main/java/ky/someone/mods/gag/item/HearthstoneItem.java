@@ -1,7 +1,7 @@
 package ky.someone.mods.gag.item;
 
 import ky.someone.mods.gag.GAGUtil;
-import ky.someone.mods.gag.config.GAGConfigOld;
+import ky.someone.mods.gag.config.GAGConfig;
 import ky.someone.mods.gag.misc.TeleportPos;
 import ky.someone.mods.gag.sound.GAGSounds;
 import net.minecraft.ChatFormatting;
@@ -27,7 +27,7 @@ import java.util.List;
 public class HearthstoneItem extends GAGItem {
 
 	public HearthstoneItem() {
-		this(GAGConfigOld.Hearthstone.DURABILITY.get());
+		this(GAGConfig.Hearthstone.DURABILITY.get());
 	}
 
 	public HearthstoneItem(int durability) {
@@ -68,14 +68,14 @@ public class HearthstoneItem extends GAGItem {
 
 	@Override
 	public int getUseDuration(ItemStack stack) {
-		return GAGConfigOld.Hearthstone.WARMUP.get();
+		return GAGConfig.Hearthstone.WARMUP.get();
 	}
 
 	@Nullable
 	public TeleportPos getTeleportPos(@Nullable Player player, ItemStack stack) {
-		boolean allowSpawn = GAGConfigOld.Hearthstone.ALLOW_SPAWN.get();
-		boolean ignoreSpawnBlock = GAGConfigOld.Hearthstone.IGNORE_SPAWN_BLOCK.get();
-		boolean useAnchorCharge = GAGConfigOld.Hearthstone.USE_ANCHOR_CHARGE.get();
+		boolean allowSpawn = GAGConfig.Hearthstone.ALLOW_SPAWN.get();
+		boolean ignoreSpawnBlock = GAGConfig.Hearthstone.IGNORE_SPAWN_BLOCK.get();
+		boolean useAnchorCharge = GAGConfig.Hearthstone.USE_ANCHOR_CHARGE.get();
 
 		if (player instanceof ServerPlayer serverPlayer) {
 			var server = serverPlayer.server;
@@ -123,9 +123,9 @@ public class HearthstoneItem extends GAGItem {
 	private ItemStack tryTeleport(ItemStack stack, ServerLevel level, ServerPlayer player, Vec3 pos, float yaw) {
 		var creative = player.isCreative();
 
-		var durabilityUsed = level.equals(player.serverLevel()) ? 1 : GAGConfigOld.Hearthstone.DIMENSION_MULTIPLIER.get();
+		var durabilityUsed = level.equals(player.serverLevel()) ? 1 : GAGConfig.Hearthstone.DIMENSION_MULTIPLIER.get();
 		var distance = player.position().distanceTo(pos) * durabilityUsed;
-		var range = GAGConfigOld.Hearthstone.RANGE.get();
+		var range = GAGConfig.Hearthstone.RANGE.get();
 
 		if (durabilityUsed > 0) {
 			if (range < 0 || distance < range) {
@@ -134,7 +134,7 @@ public class HearthstoneItem extends GAGItem {
 				level.playSound(null, player.blockPosition(), GAGSounds.TELEPORT.get(), SoundSource.PLAYERS, 0.5f, 0.5f);
 
 				if (!stack.isEmpty() && !creative) {
-					player.getCooldowns().addCooldown(stack.getItem(), GAGConfigOld.Hearthstone.COOLDOWN.get());
+					player.getCooldowns().addCooldown(stack.getItem(), GAGConfig.Hearthstone.COOLDOWN.get());
 				}
 			} else {
 				player.sendSystemMessage(getTranslation("too_weak").withStyle(ChatFormatting.RED));

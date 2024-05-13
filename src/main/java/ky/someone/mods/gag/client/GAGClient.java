@@ -13,7 +13,7 @@ import ky.someone.mods.gag.GAGUtil;
 import ky.someone.mods.gag.block.BlockRegistry;
 import ky.someone.mods.gag.client.render.TimeAcceleratorEntityRenderer;
 import ky.someone.mods.gag.client.screen.LabelingMenuScreen;
-import ky.someone.mods.gag.config.GAGConfigOld;
+import ky.someone.mods.gag.config.GAGConfig;
 import ky.someone.mods.gag.entity.EntityTypeRegistry;
 import ky.someone.mods.gag.entity.TimeAcceleratorEntity;
 import ky.someone.mods.gag.item.GAGItem;
@@ -22,8 +22,6 @@ import ky.someone.mods.gag.item.PigmentJarItem;
 import ky.someone.mods.gag.menu.MenuTypeRegistry;
 import ky.someone.mods.gag.particle.ParticleTypeRegistry;
 import ky.someone.mods.gag.particle.client.MagicParticle;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.RenderType;
@@ -32,19 +30,27 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
 
 import java.util.List;
 
-@Environment(EnvType.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public interface GAGClient {
 
-	static void init() {
+	static void init(IEventBus bus) {
 		registerEntityRenderers();
 
 		ClientLifecycleEvent.CLIENT_SETUP.register(GAGClient::setup);
 		ClientGuiEvent.RENDER_HUD.register(GAGClient::renderHUD);
 
-		ParticleProviderRegistry.register(ParticleTypeRegistry.MAGIC, MagicParticle.Provider::new);
+		bus.addListener(GAGClient::registerParticles);
+	}
+
+	static void registerParticles(RegisterParticleProvidersEvent event) {
+		event.registerSpriteSet(ParticleTypeRegistry.MAGIC.get(), MagicParticle.Provider::new);
 	}
 
 	static void registerEntityRenderers() {
@@ -81,9 +87,9 @@ public interface GAGClient {
 				renderHudTooltip(mc, graphics, List.of(
 						block.getName(),
 						Component.translatable("info.gag.time_sand_tooltip_mult",
-								GAGUtil.asStyledValue(accelSpeed, GAGConfigOld.SandsOfTime.MAX_RATE.get(), Integer.toString(1 << accelSpeed))),
+								GAGUtil.asStyledValue(accelSpeed, GAGConfig.SandsOfTime.MAX_RATE.get(), Integer.toString(1 << accelSpeed))),
 						Component.translatable("info.gag.time_sand_tooltip_time",
-								GAGUtil.asStyledValue(timeLeft, GAGConfigOld.SandsOfTime.DURATION_PER_USE.get(), String.format("%.2f", timeLeft)))
+								GAGUtil.asStyledValue(timeLeft, GAGConfig.SandsOfTime.DURATION_PER_USE.get(), String.format("%.2f", timeLeft)))
 				));
 
 				return;
