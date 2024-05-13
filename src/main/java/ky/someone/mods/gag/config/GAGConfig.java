@@ -1,9 +1,12 @@
 package ky.someone.mods.gag.config;
 
 import dev.ftb.mods.ftblibrary.config.NameMap;
+import dev.ftb.mods.ftblibrary.snbt.SNBTCompoundTag;
 import dev.ftb.mods.ftblibrary.snbt.config.*;
 import ky.someone.mods.gag.GAGUtil;
 import ky.someone.mods.gag.entity.FishingDynamiteEntity;
+import ky.someone.mods.gag.network.ServerConfigSyncPacket;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.animal.AbstractFish;
 import net.minecraft.world.entity.animal.WaterAnimal;
@@ -193,6 +196,14 @@ public interface GAGConfig {
 
 	private static int seconds(int i) {
 		return i * 20;
+	}
+
+	static void syncConfigTo(ServerPlayer player) {
+		var tag = new SNBTCompoundTag();
+		Hearthstone.GROUP.write(tag);
+		EscapeRope.GROUP.write(tag);
+
+		new ServerConfigSyncPacket(tag).sendTo(player);
 	}
 
 	// gotta love classloading!

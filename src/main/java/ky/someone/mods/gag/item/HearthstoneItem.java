@@ -1,5 +1,6 @@
 package ky.someone.mods.gag.item;
 
+import dev.ftb.mods.ftblibrary.snbt.config.IntValue;
 import ky.someone.mods.gag.GAGUtil;
 import ky.someone.mods.gag.config.GAGConfig;
 import ky.someone.mods.gag.misc.TeleportPos;
@@ -26,12 +27,15 @@ import java.util.List;
 
 public class HearthstoneItem extends GAGItem {
 
+	private final IntValue durability;
+
 	public HearthstoneItem() {
-		this(GAGConfig.Hearthstone.DURABILITY.get());
+		this(GAGConfig.Hearthstone.DURABILITY);
 	}
 
-	public HearthstoneItem(int durability) {
-		super(new Properties().durability(durability));
+	public HearthstoneItem(IntValue durability) {
+		super(new Properties().stacksTo(1));
+		this.durability = durability;
 	}
 
 	@Override
@@ -64,6 +68,11 @@ public class HearthstoneItem extends GAGItem {
 		var stack = player.getItemInHand(interactionHand);
 		player.startUsingItem(interactionHand);
 		return InteractionResultHolder.success(stack);
+	}
+
+	@Override
+	public int getMaxDamage(ItemStack stack) {
+		return durability.get();
 	}
 
 	@Override

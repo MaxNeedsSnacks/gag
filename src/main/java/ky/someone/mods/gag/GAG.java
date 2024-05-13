@@ -1,10 +1,7 @@
 package ky.someone.mods.gag;
 
 import com.mojang.logging.LogUtils;
-import dev.architectury.event.events.common.CommandRegistrationEvent;
-import dev.architectury.event.events.common.EntityEvent;
-import dev.architectury.event.events.common.LifecycleEvent;
-import dev.architectury.event.events.common.LightningEvent;
+import dev.architectury.event.events.common.*;
 import dev.ftb.mods.ftblibrary.snbt.config.ConfigUtil;
 import ky.someone.mods.gag.block.BlockRegistry;
 import ky.someone.mods.gag.block.NoSolicitorsSign;
@@ -53,6 +50,7 @@ public class GAG {
 
 		GAGConfig.init();
 		LifecycleEvent.SERVER_BEFORE_START.register((server) -> ConfigUtil.loadDefaulted(GAGConfig.CONFIG, CONFIG_DIR, GAGUtil.MOD_ID));
+		PlayerEvent.PLAYER_JOIN.register(GAGConfig::syncConfigTo);
 
 		EntityEvent.LIVING_CHECK_SPAWN.register(RepellingEffect::applyRepel);
 		LightningEvent.STRIKE.register(EnergizedHearthstoneItem::lightningStrike);

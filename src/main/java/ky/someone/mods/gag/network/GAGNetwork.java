@@ -11,6 +11,8 @@ public class GAGNetwork {
 
 	public static final MessageType FISHSPLOSION = CHANNEL.registerS2C("fishsplosion", FishsplosionPacket::new);
 
+	public static final MessageType SERVER_CONFIG_SYNC = CHANNEL.registerS2C("server_config_sync", ServerConfigSyncPacket::new);
+
 	public static void init() {
 	}
 }
