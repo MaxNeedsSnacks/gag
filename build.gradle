@@ -75,6 +75,10 @@ java {
 	withSourcesJar()
 }
 
+remapJar {
+	atAccessWideners.add "gag.accesswidener"
+}
+
 if (ENV.CURSE_API_KEY) {
 	curseforge {
 		apiKey = ENV.CURSE_API_KEY
