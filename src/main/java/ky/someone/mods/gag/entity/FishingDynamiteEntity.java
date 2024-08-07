@@ -181,7 +181,7 @@ public class FishingDynamiteEntity extends AbstractDynamiteEntity {
 						level.addParticle(ParticleTypes.SPLASH, x, y, z, 0, 0.1, 0);
 					}
 
-					level.playLocalSound(cur, SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS, 0.3F, 1.5F, false);
+					level.playLocalSound(cur, SoundEvents.GENERIC_EXPLODE.value(), SoundSource.BLOCKS, 0.3F, 1.5F, false);
 				} else {
 					// if the dynamite did not hit water, just add a small splash at the position it landed
 					for (int i = 0; i < 20; i++) {
@@ -206,7 +206,7 @@ public class FishingDynamiteEntity extends AbstractDynamiteEntity {
 							.withParameter(LootContextParams.TOOL, ItemStack.EMPTY)
 							.withOptionalParameter(LootContextParams.THIS_ENTITY, getDirectSourceEntity())
 							.create(LootContextParamSets.FISHING);
-					LootTable lootTable = level.getServer().getLootData().getLootTable(BuiltInLootTables.FISHING_FISH);
+					LootTable lootTable = level.getServer().reloadableRegistries().getLootTable(BuiltInLootTables.FISHING_FISH);
 
 					// attempt to drop additional fish, with a lower chance to drop fish the more fish we've hit
 					for (int i = 0; i < add; i++) {

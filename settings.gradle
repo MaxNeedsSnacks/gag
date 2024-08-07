@@ -1,8 +1,19 @@
 pluginManagement {
 	repositories {
-		maven { url "https://maven.fabricmc.net/" }
-		maven { url "https://maven.architectury.dev/" }
-		maven { url "https://maven.neoforged.net/releases" }
+		mavenLocal()
 		gradlePluginPortal()
+		maven { url = 'https://maven.neoforged.net/releases' }
+	}
+
+	plugins {
+		// latest @ https://projects.neoforged.net/neoforged/ModDevGradle
+		id 'net.neoforged.moddev' version '1.0.13'
+		id 'net.neoforged.moddev.repositories' version '1.0.13'
 	}
 }
+
+plugins {
+	id 'org.gradle.toolchains.foojay-resolver-convention' version '0.8.0'
+}
+
+rootProject.name = "gag"

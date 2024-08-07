@@ -11,6 +11,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -54,7 +55,7 @@ public class EscapeRopeItem extends GAGItem {
 	}
 
 	@Override
-	public int getUseDuration(ItemStack stack) {
+	public int getUseDuration(ItemStack stack, LivingEntity entity) {
 		return GAGConfig.EscapeRope.WARMUP.get();
 	}
 
@@ -85,7 +86,8 @@ public class EscapeRopeItem extends GAGItem {
 				var durabilityUsed = player.blockPosition().distManhattan(teleportPos);
 				var durabilityLeft = stack.getMaxDamage() - stack.getDamageValue();
 				if (creative || durabilityUsed <= durabilityLeft) {
-					stack.hurtAndBreak(durabilityUsed, player, (p) -> p.broadcastBreakEvent(p.getUsedItemHand()));
+					var hand = player.getUsedItemHand();
+					stack.hurtAndBreak(durabilityUsed, player, hand == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);
 					player.teleportTo(teleportPos.getX() + 0.5, teleportPos.getY() + 0.5, teleportPos.getZ() + 0.5);
 					level.playSound(null, teleportPos, GAGSounds.TELEPORT.get(), SoundSource.PLAYERS, 0.5f, 1f);
 				}
@@ -102,7 +104,7 @@ public class EscapeRopeItem extends GAGItem {
 	}
 
 	@Override
-	public void appendHoverText(ItemStack stack, Level level, List<Component> tooltip, TooltipFlag flag) {
+	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
 		GAGUtil.appendInfoTooltip(tooltip, List.of(
 				Component.translatable("item.gag.escape_rope.info").withStyle(TOOLTIP_MAIN),
 				Component.translatable("info.gag.supports_unbreaking").withStyle(TOOLTIP_EXTRA)

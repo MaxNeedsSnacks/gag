@@ -6,6 +6,7 @@ import dev.architectury.networking.simple.MessageType;
 import ky.someone.mods.gag.menu.LabelingMenu;
 import net.minecraft.SharedConstants;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 
 public class LabelerTryRenamePacket extends BaseC2SMessage {
 
@@ -25,7 +26,7 @@ public class LabelerTryRenamePacket extends BaseC2SMessage {
 	}
 
 	@Override
-	public void write(FriendlyByteBuf buf) {
+	public void write(RegistryFriendlyByteBuf buf) {
 		buf.writeUtf(name);
 	}
 

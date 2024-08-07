@@ -89,7 +89,7 @@ public class PigmentJarItem extends GAGItem {
 
 	@Override
 	public Collection<ItemStack> getAdditionalSubItems() {
-		return Util.make(ItemStackLinkedSet.createTypeAndTagSet(), set -> {
+		return Util.make(ItemStackLinkedSet.createTypeAndComponentsSet(), set -> {
 			for (DyeColor color : DyeColor.values()) {
 				set.add(Pigment.forText(color).asJar());
 			}

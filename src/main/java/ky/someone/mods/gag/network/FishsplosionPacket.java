@@ -5,6 +5,7 @@ import dev.architectury.networking.simple.BaseS2CMessage;
 import dev.architectury.networking.simple.MessageType;
 import ky.someone.mods.gag.entity.FishingDynamiteEntity;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.world.phys.Vec3;
 
 public class FishsplosionPacket extends BaseS2CMessage {
@@ -29,7 +30,7 @@ public class FishsplosionPacket extends BaseS2CMessage {
 	}
 
 	@Override
-	public void write(FriendlyByteBuf buf) {
+	public void write(RegistryFriendlyByteBuf buf) {
 		buf.writeDouble(this.pos.x);
 		buf.writeDouble(this.pos.y);
 		buf.writeDouble(this.pos.z);

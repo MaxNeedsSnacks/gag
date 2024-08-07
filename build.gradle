@@ -1,18 +1,24 @@
 plugins {
-	id 'base'
-	id 'java'
+	id 'net.neoforged.moddev'
 	id 'maven-publish'
-	id "dev.architectury.loom" version "1.6-SNAPSHOT"
-	id "com.matthewprenger.cursegradle" version "1.4.0"
-	id "com.modrinth.minotaur" version "2.2.0"
 }
 
 ext.ENV = System.getenv()
 
+tasks.named('wrapper', Wrapper).configure {
+	// Define wrapper values here so as to not have to always do so when updating gradlew.properties.
+	// Switching this to Wrapper.DistributionType.ALL will download the full gradle sources that comes with
+	// documentation attached on cursor hover of gradle classes and methods. However, this comes with increased
+	// file size for Gradle. If you do switch this to ALL, run the Gradle wrapper task twice afterwards.
+	// (Verify by checking gradle/wrapper/gradle-wrapper.properties to see if distributionUrl now points to `-all`)
+	distributionType = Wrapper.DistributionType.BIN
+}
+
+version = mod_version
+group = project.maven_group
+base.archivesBaseName = project.archives_base_name
+
 repositories {
-	maven {
-		url "https://maven.neoforged.net/releases"
-	}
 	maven {
 		url "https://maven.architectury.dev/"
 	}
@@ -20,37 +26,78 @@ repositories {
 		name = "FTB Library"
 		url = "https://maven.saps.dev/minecraft"
 	}
+	mavenCentral()
 }
 
-version = mod_version
-group = project.maven_group
-base.archivesBaseName = project.archives_base_name
+// Mojang ships Java 21 to end users starting in 1.20.5, so mods should target Java 21.
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
-loom {
-	silentMojangMappingsLicense()
+neoForge {
+	version = project.neoforge_version
+	accessTransformers {
+		publish(project.file('src/main/resources/META-INF/accesstransformer.cfg'))
+	}
+
+	interfaceInjectionData {
+		//from(file('interfaces.json'))
+		//publish(file('interfaces.json'))
+	}
 
 	runs {
-		client {
-			vmArgs "-XX:+IgnoreUnrecognizedVMOptions", "-XX:+AllowEnhancedClassRedefinition", "-XX:HotswapAgent=fatjar"
+		configureEach {
+			logLevel = org.slf4j.event.Level.INFO
+			jvmArguments.addAll("-XX:+IgnoreUnrecognizedVMOptions", "-XX:+AllowEnhancedClassRedefinition")
 		}
+
+		client {
+			client()
+
+			if (ENV.MC_CLIENT_ARGS) {
+				programArguments.addAll(ENV.MC_CLIENT_ARGS.split(' '))
+			}
+
+			gameDirectory = file 'run'
+		}
+
 		server {
-			vmArgs "-XX:+IgnoreUnrecognizedVMOptions", "-XX:+AllowEnhancedClassRedefinition", "-XX:HotswapAgent=fatjar"
+			server()
+			programArgument("--nogui")
+			gameDirectory = file 'run_server'
+		}
+
+		data {
+			data()
+			// Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
+			programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
 		}
 	}
 
-	accessWidenerPath = file("src/main/resources/gag.accesswidener")
+	mods {
+		"${mod_id}" {
+			sourceSet sourceSets.main
+		}
+	}
+
+	parchment {
+		minecraftVersion = minecraft_version
+		mappingsVersion = parchment_version
+	}
+}
+
+sourceSets.main.resources {
+	srcDir 'src/generated/resources'
+}
+
+// same as my old localRuntime loom config
+configurations {
+	runtimeClasspath.extendsFrom localRuntime
 }
 
 dependencies {
-	minecraft "com.mojang:minecraft:${minecraft_version}"
-	mappings loom.officialMojangMappings()
+	api "dev.architectury:architectury-neoforge:${architectury_version}"
+	implementation("dev.ftb.mods:ftb-library-neoforge:${config_version}")
 
-	neoForge("net.neoforged:neoforge:${neoforge_version}")
-
-	modApi "dev.architectury:architectury-neoforge:${architectury_version}"
-	include(implementation("dev.ftb.mods:ftb-library-neoforge:${config_version}"))
-
-	modLocalRuntime modCompileOnly("me.shedaniel:RoughlyEnoughItems-neoforge:${rei_version}")
+	localRuntime(compileOnly("me.shedaniel:RoughlyEnoughItems-neoforge:${rei_version}"))
 }
 
 processResources {
@@ -60,49 +107,25 @@ processResources {
 	]
 
 	inputs.properties toReplace
-	filesMatching("META-INF/mods.toml") {
+	filesMatching("META-INF/neoforge.mods.toml") {
 		expand toReplace
 	}
 }
 
-compileJava {
-	options.encoding = "UTF-8"
-	options.release.set(17)
-}
-
-java {
-	sourceCompatibility = targetCompatibility = '17'
-	withSourcesJar()
-}
-
-remapJar {
-	atAccessWideners.add "gag.accesswidener"
-}
-
-if (ENV.CURSE_API_KEY) {
-	curseforge {
-		apiKey = ENV.CURSE_API_KEY
-		project {
-			id = rootProject.curseforge_id
-			changelog = getGitChangelog
-			changelogType = 'markdown'
-			releaseType = rootProject.artifact_type
-
-			addGameVersion '1.20.4'
-			addGameVersion 'NeoForge'
-
-			relations {
-				requiredDependency 'architectury-api'
-				requiredDependency 'ftb-library-forge'
-			}
-
-			mainArtifact(remapJar) {
-				displayName = "[NeoForge] $mod_name $project.version"
-			}
-		}
+afterEvaluate {
+	tasks.withType(JavaCompile) {
+		options.compilerArgs << "-Xmaxerrs" << "1000"
+		options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
 	}
 }
 
+// i want auto src / jdoc downloads please and thank you
+idea {
+	module {
+		downloadSources = true
+		downloadJavadoc = true
+	}
+}
 
 publishing {
 	publications {

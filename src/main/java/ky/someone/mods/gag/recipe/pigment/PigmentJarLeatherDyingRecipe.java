@@ -4,12 +4,14 @@ import ky.someone.mods.gag.item.ItemRegistry;
 import ky.someone.mods.gag.item.PigmentJarItem;
 import ky.someone.mods.gag.misc.Pigment;
 import ky.someone.mods.gag.recipe.GAGRecipeSerializers;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.inventory.CraftingContainer;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.DyeItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
+import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
@@ -31,13 +33,13 @@ public class PigmentJarLeatherDyingRecipe extends CustomRecipe {
 	}
 
 	@Override
-	public boolean matches(CraftingContainer container, Level level) {
+	public boolean matches(CraftingInput container, Level level) {
 		// leather armour + pigment jar(s), where the total pigment amount is at least VALID_ITEMS[leather]
 		var leatherItem = ItemStack.EMPTY;
 		var hasPigment = false; // we want to fall back to vanilla if there are no pigment jars
 		var pigmentAmount = 0;
 
-		for (var stack : container.getItems()) {
+		for (var stack : container.items()) {
 			if (stack.getItem() instanceof DyeableLeatherItem item && VALID_ITEMS.containsKey(item)) {
 				if (!leatherItem.isEmpty()) return false;
 				leatherItem = stack;
@@ -55,12 +57,12 @@ public class PigmentJarLeatherDyingRecipe extends CustomRecipe {
 	}
 
 	@Override
-	public ItemStack assemble(CraftingContainer container, RegistryAccess reg) {
+	public ItemStack assemble(CraftingInput container, HolderLookup.Provider reg) {
 		// output should be the dyed leather armour
 		var leatherItem = ItemStack.EMPTY;
 		var output = Pigment.EMPTY; // use an empty pigment to start with
 
-		for (var stack : container.getItems()) {
+		for (var stack : container.items()) {
 			if (stack.getItem() instanceof DyeableLeatherItem item && VALID_ITEMS.containsKey(item)) {
 				if (!leatherItem.isEmpty()) return ItemStack.EMPTY;
 				leatherItem = stack.copy();
@@ -86,9 +88,9 @@ public class PigmentJarLeatherDyingRecipe extends CustomRecipe {
 	}
 
 	@Override
-	public NonNullList<ItemStack> getRemainingItems(CraftingContainer container) {
+	public NonNullList<ItemStack> getRemainingItems(CraftingInput container) {
 		// get all jars in the crafting grid and return empty jars in their place
-		var remaining = NonNullList.withSize(container.getContainerSize(), ItemStack.EMPTY);
+		var remaining = NonNullList.withSize(container.size(), ItemStack.EMPTY);
 
 		for (int i = 0; i < remaining.size(); i++) {
 			var stack = container.getItem(i);

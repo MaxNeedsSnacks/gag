@@ -43,7 +43,7 @@ public class EnergizedHearthstoneItem extends HearthstoneItem {
 	}
 
 	@Override
-	public void appendHoverText(ItemStack stack, Level level, List<Component> tooltip, TooltipFlag flag) {
+	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
 		tooltip.add(getTargetText(null, stack));
 		GAGUtil.appendInfoTooltip(tooltip, List.of(
 				getTranslation("info_adv").withStyle(GAGUtil.TOOLTIP_MAIN),
@@ -105,7 +105,7 @@ public class EnergizedHearthstoneItem extends HearthstoneItem {
 					var damage = stack.getDamageValue() / (float) stack.getMaxDamage();
 					newStack.setDamageValue((int) (newStack.getMaxDamage() * damage));
 					// copy enchantments over to the new stack
-					EnchantmentHelper.setEnchantments(EnchantmentHelper.getEnchantments(stack), newStack);
+					EnchantmentHelper.setEnchantments(newStack, EnchantmentHelper.getEnchantmentsForCrafting(stack));
 					itemEntity.setItem(newStack);
 					bolt.hitEntities.add(entity);
 					iter.remove();

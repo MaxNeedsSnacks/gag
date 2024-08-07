@@ -4,7 +4,6 @@ import com.google.common.collect.Iterables;
 import dev.architectury.event.events.client.ClientGuiEvent;
 import dev.architectury.event.events.client.ClientLifecycleEvent;
 import dev.architectury.registry.client.level.entity.EntityRendererRegistry;
-import dev.architectury.registry.client.particle.ParticleProviderRegistry;
 import dev.architectury.registry.client.rendering.ColorHandlerRegistry;
 import dev.architectury.registry.client.rendering.RenderTypeRegistry;
 import dev.architectury.registry.item.ItemPropertiesRegistry;
@@ -22,6 +21,7 @@ import ky.someone.mods.gag.item.PigmentJarItem;
 import ky.someone.mods.gag.menu.MenuTypeRegistry;
 import ky.someone.mods.gag.particle.ParticleTypeRegistry;
 import ky.someone.mods.gag.particle.client.MagicParticle;
+import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.RenderType;
@@ -59,7 +59,7 @@ public interface GAGClient {
 		EntityRendererRegistry.register(EntityTypeRegistry.FISHING_DYNAMITE, ThrownItemRenderer::new);
 	}
 
-	static void renderHUD(GuiGraphics graphics, float partialTicks) {
+	static void renderHUD(GuiGraphics graphics, DeltaTracker partialTicks) {
 		var mc = Minecraft.getInstance();
 
 		if (mc.options.hideGui || mc.gameMode.getPlayerMode() == GameType.SPECTATOR) {

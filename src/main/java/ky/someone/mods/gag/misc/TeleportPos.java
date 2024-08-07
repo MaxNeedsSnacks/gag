@@ -15,7 +15,7 @@ public record TeleportPos(ResourceLocation level, Vec3 pos, float yaw) {
 	@Nullable
 	public static TeleportPos fromNbt(@Nullable CompoundTag nbt) {
 		if (nbt == null) return null;
-		var level = new ResourceLocation(nbt.getString("dim"));
+		var level = ResourceLocation.parse(nbt.getString("dim"));
 		var x = nbt.getDouble("x");
 		var y = nbt.getDouble("y");
 		var z = nbt.getDouble("z");

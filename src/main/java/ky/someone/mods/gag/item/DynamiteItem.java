@@ -52,7 +52,7 @@ public class DynamiteItem<T extends AbstractDynamiteEntity> extends GAGItem {
 	}
 
 	@Override
-	public void appendHoverText(ItemStack itemStack, @Nullable Level level, List<Component> tooltip, TooltipFlag tooltipFlag) {
+	public void appendHoverText(ItemStack itemStack, TooltipContext context, List<Component> tooltip, TooltipFlag tooltipFlag) {
 		if (infoTooltip != null) {
 			GAGUtil.appendInfoTooltip(tooltip, this.infoTooltip);
 		}

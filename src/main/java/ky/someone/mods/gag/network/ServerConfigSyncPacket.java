@@ -3,15 +3,12 @@ package ky.someone.mods.gag.network;
 import dev.architectury.networking.NetworkManager;
 import dev.architectury.networking.simple.BaseS2CMessage;
 import dev.architectury.networking.simple.MessageType;
-import dev.ftb.mods.ftblibrary.snbt.SNBT;
 import dev.ftb.mods.ftblibrary.snbt.SNBTCompoundTag;
 import dev.ftb.mods.ftblibrary.snbt.SNBTNet;
 import ky.someone.mods.gag.GAG;
 import ky.someone.mods.gag.config.GAGConfig;
-import ky.someone.mods.gag.menu.LabelingMenu;
-import net.minecraft.SharedConstants;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 
 public class ServerConfigSyncPacket extends BaseS2CMessage {
 
@@ -31,7 +28,7 @@ public class ServerConfigSyncPacket extends BaseS2CMessage {
 	}
 
 	@Override
-	public void write(FriendlyByteBuf buf) {
+	public void write(RegistryFriendlyByteBuf buf) {
 		SNBTNet.write(buf, values);
 	}
 

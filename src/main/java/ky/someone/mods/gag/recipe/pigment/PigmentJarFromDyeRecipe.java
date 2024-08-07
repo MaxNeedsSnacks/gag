@@ -4,14 +4,13 @@ import ky.someone.mods.gag.item.ItemRegistry;
 import ky.someone.mods.gag.item.PigmentJarItem;
 import ky.someone.mods.gag.misc.Pigment;
 import ky.someone.mods.gag.recipe.GAGRecipeSerializers;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
+import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
@@ -33,7 +32,7 @@ public class PigmentJarFromDyeRecipe extends CustomRecipe {
 	}
 
 	@Override
-	public boolean matches(CraftingContainer container, Level level) {
+	public boolean matches(CraftingInput container, Level level) {
 		var emptyJar = false;
 		var flint = false;
 		var milk = false;
@@ -41,7 +40,7 @@ public class PigmentJarFromDyeRecipe extends CustomRecipe {
 		DyeColor dye = null;
 		var dyeAmount = 0;
 
-		for (var stack : container.getItems()) {
+		for (var stack : container.items()) {
 			if (!emptyJar && stack.is(ItemRegistry.PIGMENT_JAR.get()) && PigmentJarItem.isEmpty(stack)) {
 				emptyJar = true;
 			} else if (!flint && stack.is(Items.FLINT)) {
@@ -66,12 +65,12 @@ public class PigmentJarFromDyeRecipe extends CustomRecipe {
 	}
 
 	@Override
-	public ItemStack assemble(CraftingContainer container, RegistryAccess reg) {
+	public ItemStack assemble(CraftingInput container, HolderLookup.Provider reg) {
 		// count the number of dye and create a pigment jar with that color and amount
 		DyeColor dye = null;
 		var amount = 0;
 
-		for (var stack : container.getItems()) {
+		for (var stack : container.items()) {
 			if (stack.getItem() instanceof DyeItem dyeItem) {
 				if (dye == null) {
 					dye = dyeItem.getDyeColor();

@@ -40,7 +40,7 @@ public class LabelingToolItem extends GAGItem implements MenuProvider {
 	}
 
 	@Override
-	public void appendHoverText(ItemStack stack, Level level, List<Component> tooltip, TooltipFlag flag) {
+	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
 		GAGUtil.appendInfoTooltip(tooltip, List.of(Component.translatable("item.gag.labeling_tool.info").withStyle(TOOLTIP_MAIN)));
 	}
 

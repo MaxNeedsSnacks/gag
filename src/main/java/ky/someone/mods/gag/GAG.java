@@ -1,7 +1,11 @@
 package ky.someone.mods.gag;
 
 import com.mojang.logging.LogUtils;
-import dev.architectury.event.events.common.*;
+import dev.architectury.event.events.common.CommandRegistrationEvent;
+import dev.architectury.event.events.common.EntityEvent;
+import dev.architectury.event.events.common.LifecycleEvent;
+import dev.architectury.event.events.common.LightningEvent;
+import dev.architectury.event.events.common.PlayerEvent;
 import dev.ftb.mods.ftblibrary.snbt.config.ConfigUtil;
 import ky.someone.mods.gag.block.BlockRegistry;
 import ky.someone.mods.gag.block.NoSolicitorsSign;
@@ -24,16 +28,16 @@ import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.registries.RegisterEvent;
 import org.slf4j.Logger;
 
 import static dev.ftb.mods.ftblibrary.snbt.config.ConfigUtil.CONFIG_DIR;
-import static net.neoforged.fml.common.Mod.EventBusSubscriber.Bus.MOD;
 
 @Mod(GAGUtil.MOD_ID)
-@Mod.EventBusSubscriber(bus = MOD)
+@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD)
 public class GAG {
 	public static final Logger LOGGER = LogUtils.getLogger();
 
@@ -72,6 +76,6 @@ public class GAG {
 		if (reg == null) return;
 		// remap "tiab:time_in_a_bottle" to "gag:temporal_pouch" if TIAB Standalone is missing
 		//  (requested by people wanting to transition from TIAB Standalone to GAG)
-		reg.addAlias(new ResourceLocation("tiab:time_in_a_bottle"), ItemRegistry.TIME_SAND_POUCH.getId());
+		reg.addAlias(ResourceLocation.parse("tiab:time_in_a_bottle"), ItemRegistry.TIME_SAND_POUCH.getId());
 	}
 }

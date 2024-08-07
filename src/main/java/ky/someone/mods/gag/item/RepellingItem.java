@@ -32,7 +32,7 @@ public class RepellingItem extends GAGItem {
 	}
 
 	@Override
-	public void appendHoverText(ItemStack stack, Level level, List<Component> tooltip, TooltipFlag flag) {
+	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
 		var infoTooltips = new ArrayList<Component>();
 		// generic info tooltip
 		infoTooltips.add(Component.translatable("info.gag.repelling_item").withStyle(GAGUtil.TOOLTIP_MAIN));
@@ -45,11 +45,11 @@ public class RepellingItem extends GAGItem {
 
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
-		var hasEffect = player.hasEffect(EffectRegistry.REPELLING.get());
+		var hasEffect = player.hasEffect(EffectRegistry.REPELLING);
 		var stack = player.getItemInHand(hand);
 		if (!hasEffect) {
 			level.playSound(null, player.blockPosition(), GAGSounds.REPELLING_APPLY.get(), SoundSource.PLAYERS, 1.5f, 1);
-			player.addEffect(new MobEffectInstance(EffectRegistry.REPELLING.get(), duration, amplifier));
+			player.addEffect(new MobEffectInstance(EffectRegistry.REPELLING, duration, amplifier));
 			stack.shrink(1);
 		}
 		return hasEffect ? InteractionResultHolder.fail(stack) : InteractionResultHolder.sidedSuccess(stack, level.isClientSide);

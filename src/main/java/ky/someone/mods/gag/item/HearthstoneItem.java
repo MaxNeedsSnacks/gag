@@ -14,6 +14,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -76,7 +77,7 @@ public class HearthstoneItem extends GAGItem {
 	}
 
 	@Override
-	public int getUseDuration(ItemStack stack) {
+	public int getUseDuration(ItemStack stack, LivingEntity entity) {
 		return GAGConfig.Hearthstone.WARMUP.get();
 	}
 
@@ -138,7 +139,8 @@ public class HearthstoneItem extends GAGItem {
 
 		if (durabilityUsed > 0) {
 			if (range < 0 || distance < range) {
-				stack.hurtAndBreak(durabilityUsed, player, (p) -> p.broadcastBreakEvent(p.getUsedItemHand()));
+				var hand = player.getUsedItemHand();
+				stack.hurtAndBreak(durabilityUsed, player, hand == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);
 				player.teleportTo(level, pos.x, pos.y, pos.z, yaw, 0f);
 				level.playSound(null, player.blockPosition(), GAGSounds.TELEPORT.get(), SoundSource.PLAYERS, 0.5f, 0.5f);
 
@@ -157,7 +159,7 @@ public class HearthstoneItem extends GAGItem {
 	}
 
 	@Override
-	public void appendHoverText(ItemStack stack, Level level, List<Component> tooltip, TooltipFlag flag) {
+	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
 		GAGUtil.appendInfoTooltip(tooltip, List.of(
 				getTranslation("info").withStyle(GAGUtil.TOOLTIP_MAIN),
 				Component.translatable("info.gag.supports_unbreaking").withStyle(GAGUtil.TOOLTIP_EXTRA)
@@ -178,7 +180,7 @@ public class HearthstoneItem extends GAGItem {
 
 	@Override
 	public List<Component> getUsingTooltip(Player player, ItemStack stack, int useTicks) {
-		var totalUseTicks = getUseDuration(stack);
+		var totalUseTicks = getUseDuration(stack, player);
 		useTicks = Math.min(useTicks, totalUseTicks);
 		var warmupText = GAGUtil.asStyledValue(useTicks, totalUseTicks, String.format("%.2f", (totalUseTicks - useTicks) / 20d));
 		return List.of(

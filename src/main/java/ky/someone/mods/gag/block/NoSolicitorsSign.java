@@ -14,11 +14,12 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -26,7 +27,12 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -45,8 +51,8 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
-import static ky.someone.mods.gag.GAGUtil.TOOLTIP_MAIN;
 import static ky.someone.mods.gag.GAGUtil.TOOLTIP_EXTRA;
+import static ky.someone.mods.gag.GAGUtil.TOOLTIP_MAIN;
 
 public class NoSolicitorsSign extends Block {
 
@@ -103,7 +109,7 @@ public class NoSolicitorsSign extends Block {
 	}
 
 	@Override
-	public void appendHoverText(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag) {
+	public void appendHoverText(ItemStack stack, @Nullable Item.TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
 		GAGUtil.appendInfoTooltip(tooltip, List.of(
 				Component.translatable("block.gag.no_solicitors.info.1").withStyle(TOOLTIP_MAIN),
 				Component.translatable("block.gag.no_solicitors.info.2").withStyle(TOOLTIP_EXTRA)
@@ -154,16 +160,16 @@ public class NoSolicitorsSign extends Block {
 	}
 
 	@Override
-	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
-		if (player.getItemInHand(hand).is(ItemTags.WOOL)) {
+	protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+		if (stack.is(ItemTags.WOOL)) {
 			state = state.cycle(SILENT);
 			level.setBlockAndUpdate(pos, state);
 			level.playSound(null, pos, SoundEvents.POWDER_SNOW_PLACE, SoundSource.BLOCKS, 0.2F, 0.7F);
 			player.displayClientMessage(Component.translatable("block.gag.no_solicitors.silent",
 					GAGUtil.styledBool(state.getValue(SILENT))), true);
-			return InteractionResult.sidedSuccess(level.isClientSide());
+			return ItemInteractionResult.sidedSuccess(level.isClientSide());
 		}
-		return InteractionResult.PASS;
+		return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
 	}
 
 	@Override
@@ -177,7 +183,7 @@ public class NoSolicitorsSign extends Block {
 	@Override
 	public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity entity, ItemStack stack) {
 		if (level instanceof ServerLevel serverLevel) {
-			GAGPointOfInterestStorage.get(serverLevel).add(pos, this);
+			GAGPointOfInterestStorage.get(serverLevel).add(pos, builtInRegistryHolder());
 		}
 		super.setPlacedBy(level, pos, state, entity, stack);
 	}
@@ -191,7 +197,7 @@ public class NoSolicitorsSign extends Block {
 
 	public static boolean blockWandererSpawn(ServerLevel serverLevel, BlockPos pos) {
 		var ward = GAGPointOfInterestStorage.get(serverLevel)
-				.checkNearbyPOIs(BlockRegistry.NO_SOLICITORS_SIGN.get(), pos, GAGConfig.Miscellaneous.NO_SOLICITORS_RADIUS.get());
+				.checkNearbyPOIs(BlockRegistry.NO_SOLICITORS_SIGN, pos, GAGConfig.Miscellaneous.NO_SOLICITORS_RADIUS.get());
 
 		GAG.LOGGER.debug("Wanderer spawn check at {} returned {}", pos, ward.isPresent());
 

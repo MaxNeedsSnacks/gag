@@ -19,7 +19,7 @@ public class RepellingEffect extends MobEffect {
 		if (entity instanceof Enemy) {
 			var pos = new Vec3(x, y, z);
 			for (var player : level.players()) {
-				var repel = player.getEffect(EffectRegistry.REPELLING.get());
+				var repel = player.getEffect(EffectRegistry.REPELLING);
 				if (repel != null) {
 					var distance = pos.distanceToSqr(player.position());
 					var repelRange = 16 * (repel.getAmplifier() + 1); // TODO: make configurable

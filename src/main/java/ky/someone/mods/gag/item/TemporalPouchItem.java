@@ -194,7 +194,7 @@ public class TemporalPouchItem extends GAGItem {
 	}
 
 	@Override
-	public void appendHoverText(ItemStack stack, Level level, List<Component> tooltip, TooltipFlag flag) {
+	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
 		tooltip.add(Component.literal("If I could save time in a ")
 				.append(Component.literal("bottle").withStyle(ChatFormatting.STRIKETHROUGH))
 				.append(Component.literal(" bundle..."))
