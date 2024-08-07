@@ -1,13 +1,19 @@
 package ky.someone.mods.gag.misc;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.architectury.hooks.DyeColorHooks;
 import ky.someone.mods.gag.item.ItemRegistry;
 import ky.someone.mods.gag.item.PigmentJarItem;
+import ky.someone.mods.gag.item.data.DataComponentRegistry;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.Objects;
 
 // not a record so i can change the underlying colour representation later
@@ -16,6 +22,21 @@ public final class Pigment {
 	private final int amount;
 
 	public static final Pigment EMPTY = new Pigment(-1, 0);
+
+	public static final Codec<Pigment> CODEC = RecordCodecBuilder.create(builder ->
+			builder.group(
+					Codec.INT.fieldOf("color").forGetter(Pigment::color),
+					Codec.INT.fieldOf("amount").forGetter(Pigment::amount)
+			).apply(builder, Pigment::new)
+	);
+
+	public static final StreamCodec<FriendlyByteBuf, Pigment> STREAM_CODEC = StreamCodec.composite(
+			ByteBufCodecs.INT,
+			Pigment::color,
+			ByteBufCodecs.INT,
+			Pigment::amount,
+			Pigment::new
+	);
 
 	private Pigment(int color, int amount) {
 		this.color = color;
@@ -86,9 +107,7 @@ public final class Pigment {
 	public ItemStack asJar() {
 		var stack = ItemRegistry.PIGMENT_JAR.get().getDefaultInstance();
 		if (this.isEmpty()) return stack;
-		var tag = stack.getOrCreateTagElement(PigmentJarItem.PIGMENT_NBT_KEY);
-		tag.putInt(PigmentJarItem.COLOR_NBT_KEY, this.color());
-		tag.putInt(PigmentJarItem.AMOUNT_NBT_KEY, this.amount());
+		stack.set(DataComponentRegistry.PIGMENT, this);
 		return stack;
 	}
 

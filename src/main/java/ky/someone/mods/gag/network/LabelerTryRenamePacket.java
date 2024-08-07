@@ -4,9 +4,9 @@ import dev.architectury.networking.NetworkManager;
 import dev.architectury.networking.simple.BaseC2SMessage;
 import dev.architectury.networking.simple.MessageType;
 import ky.someone.mods.gag.menu.LabelingMenu;
-import net.minecraft.SharedConstants;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.util.StringUtil;
 
 public class LabelerTryRenamePacket extends BaseC2SMessage {
 
@@ -30,11 +30,12 @@ public class LabelerTryRenamePacket extends BaseC2SMessage {
 		buf.writeUtf(name);
 	}
 
+	// TODO: rework how renaming works (not content with it)
 	@Override
 	public void handle(NetworkManager.PacketContext context) {
 		context.queue(() -> {
 			if (context.getPlayer().containerMenu instanceof LabelingMenu menu) {
-				var name = SharedConstants.filterText(this.name);
+				var name = StringUtil.filterText(this.name);
 				if (name.length() <= 50) {
 					menu.setName(name);
 				}

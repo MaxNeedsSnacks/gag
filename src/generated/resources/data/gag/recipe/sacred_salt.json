@@ -1,0 +1,32 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    [
+      {
+        "item": "minecraft:gunpowder"
+      },
+      {
+        "item": "minecraft:redstone"
+      },
+      {
+        "item": "minecraft:glowstone_dust"
+      }
+    ],
+    [
+      {
+        "item": "minecraft:fermented_spider_eye"
+      },
+      {
+        "item": "minecraft:poisonous_potato"
+      }
+    ],
+    {
+      "item": "minecraft:glow_berries"
+    }
+  ],
+  "result": {
+    "count": 4,
+    "id": "gag:sacred_salt"
+  }
+}

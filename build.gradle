@@ -20,7 +20,11 @@ base.archivesBaseName = project.archives_base_name
 
 repositories {
 	maven {
-		url "https://maven.architectury.dev/"
+		url = "https://maven.architectury.dev/"
+	}
+	maven {
+		name = "Shadows (Placebo)"
+		url = "https://maven.shadowsoffire.dev/releases"
 	}
 	maven {
 		name = "FTB Library"
@@ -98,6 +102,13 @@ dependencies {
 	implementation("dev.ftb.mods:ftb-library-neoforge:${config_version}")
 
 	localRuntime(compileOnly("me.shedaniel:RoughlyEnoughItems-neoforge:${rei_version}"))
+
+	jarJar(implementation("dev.shadowsoffire:Placebo")) {
+		version {
+			strictly '[1.21-9.3.0,)'
+			prefer '1.21-9.3.5'
+		}
+	}
 }
 
 processResources {

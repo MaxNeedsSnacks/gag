@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_salve": {
+      "conditions": {
+        "items": [
+          {
+            "items": "gag:sacred_salve"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "gag:sacred_balm_from_salve"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_salve"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "gag:sacred_balm_from_salve"
+    ]
+  }
+}

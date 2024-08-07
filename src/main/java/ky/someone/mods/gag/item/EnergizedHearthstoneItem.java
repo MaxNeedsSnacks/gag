@@ -2,6 +2,7 @@ package ky.someone.mods.gag.item;
 
 import ky.someone.mods.gag.GAGUtil;
 import ky.someone.mods.gag.config.GAGConfig;
+import ky.someone.mods.gag.item.data.DataComponentRegistry;
 import ky.someone.mods.gag.misc.TeleportPos;
 import ky.someone.mods.gag.sound.GAGSounds;
 import net.minecraft.ChatFormatting;
@@ -10,6 +11,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LightningBolt;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -23,23 +25,17 @@ import java.util.List;
 
 public class EnergizedHearthstoneItem extends HearthstoneItem {
 
-	private static final String TARGET_KEY = "target";
-
 	public EnergizedHearthstoneItem() {
 		super(GAGConfig.Hearthstone.ENERGIZED_DURABILITY);
 	}
 
 	public boolean isBound(ItemStack stack) {
-		return stack.getTagElement(TARGET_KEY) != null;
+		return stack.has(DataComponentRegistry.TELEPORT_TARGET);
 	}
 
 	@Override
 	public TeleportPos getTeleportPos(@Nullable Player player, ItemStack stack) {
-		if (isBound(stack)) {
-			return TeleportPos.fromNbt(stack.getTagElement(TARGET_KEY));
-		}
-
-		return null;
+		return stack.get(DataComponentRegistry.TELEPORT_TARGET);
 	}
 
 	@Override
@@ -62,7 +58,7 @@ public class EnergizedHearthstoneItem extends HearthstoneItem {
 
 			var text = Component.translatable(String.format("(%.1f %.1f %.1f)", pos.x, pos.y, pos.z)).withStyle(GAGUtil.COLOUR_TRUE);
 
-			if (player == null || !level.equals(player.level().dimension().location())) {
+			if (player == null || !level.equals(player.level().dimension())) {
 				text.append(" @ ").append(Component.translatable(level.toString()).withStyle(ChatFormatting.GRAY));
 			}
 
@@ -77,8 +73,8 @@ public class EnergizedHearthstoneItem extends HearthstoneItem {
 		var stack = player.getItemInHand(hand);
 		if (!isBound(stack)) {
 			if (player.isShiftKeyDown()) {
-				var pos = new TeleportPos(player.level().dimension().location(), player.position(), player.getYRot());
-				stack.addTagElement(TARGET_KEY, pos.toNbt());
+				var pos = new TeleportPos(player.level().dimension(), player.position(), player.getYRot());
+				stack.set(DataComponentRegistry.TELEPORT_TARGET, pos);
 
 				player.playSound(GAGSounds.HEARTHSTONE_THUNDER.get(), 0.5f, 1.25f);
 				return InteractionResultHolder.success(stack);
@@ -90,8 +86,8 @@ public class EnergizedHearthstoneItem extends HearthstoneItem {
 	}
 
 	@Override
-	public int getUseDuration(ItemStack stack) {
-		return isBound(stack) ? super.getUseDuration(stack) : 0;
+	public int getUseDuration(ItemStack stack, LivingEntity entity) {
+		return isBound(stack) ? super.getUseDuration(stack, entity) : 0;
 	}
 
 	public static void lightningStrike(LightningBolt bolt, Level level, Vec3 pos, List<Entity> toStrike) {
@@ -113,7 +109,7 @@ public class EnergizedHearthstoneItem extends HearthstoneItem {
 					// why are lightning bolts like this mojang...
 					if (!bolt.hitEntities.contains(entity)) {
 						// unbind the hearthstone first
-						stack.removeTagKey(TARGET_KEY);
+						stack.remove(DataComponentRegistry.TELEPORT_TARGET);
 						// and repair it by up to 25% of its durability on hit
 						var damage = stack.getDamageValue() / (float) stack.getMaxDamage();
 						stack.setDamageValue((int) (stack.getMaxDamage() * Math.max(0, damage - 0.25)));

@@ -1,6 +1,7 @@
 package ky.someone.mods.gag.menu;
 
 import ky.someone.mods.gag.item.PigmentJarItem;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.sounds.SoundEvents;
@@ -179,13 +180,13 @@ public class LabelingMenu extends BasicMenu {
 			ItemStack ret = inputStack.copy();
 
 			if (StringUtils.isBlank(this.name)) {
-				if (inputStack.hasCustomHoverName()) {
-					ret.resetHoverName();
+				if (inputStack.has(DataComponents.CUSTOM_NAME)) {
+					ret.remove(DataComponents.CUSTOM_NAME);
 				}
 			} else {
 				var inputName = inputStack.getHoverName();
 				if (!this.name.equals(inputName.getString())) {
-					ret.setHoverName(Component.literal(this.name).withStyle(this::applyPigment));
+					ret.set(DataComponents.CUSTOM_NAME, Component.literal(this.name).withStyle(this::applyPigment));
 				} else {
 					// input name and hover name match
 					var inputColor = inputName.getStyle().getColor();
@@ -194,7 +195,7 @@ public class LabelingMenu extends BasicMenu {
 					// if there is a pigment jar in the slot, and the input name is not already colored
 					// with the same color as the pigment jar, then apply the pigment jar's color
 					if (PigmentJarItem.isNonEmptyJar(pigmentJar) && (inputColor == null || inputColor.getValue() != PigmentJarItem.getRgbColor(pigmentJar))) {
-						ret.setHoverName(Component.literal(this.name).withStyle(this::applyPigment));
+						ret.set(DataComponents.CUSTOM_NAME, Component.literal(this.name).withStyle(this::applyPigment));
 					}
 				}
 			}

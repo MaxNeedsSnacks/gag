@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "minecraft:honeycomb"
+    },
+    {
+      "item": "minecraft:phantom_membrane"
+    },
+    {
+      "item": "gag:sacred_salt"
+    },
+    {
+      "item": "gag:sacred_salt"
+    },
+    {
+      "item": "gag:sacred_salt"
+    },
+    {
+      "item": "gag:sacred_salt"
+    },
+    {
+      "item": "minecraft:bowl"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "gag:sacred_balm"
+  }
+}

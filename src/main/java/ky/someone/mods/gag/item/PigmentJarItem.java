@@ -1,6 +1,7 @@
 package ky.someone.mods.gag.item;
 
 import ky.someone.mods.gag.GAGUtil;
+import ky.someone.mods.gag.item.data.DataComponentRegistry;
 import ky.someone.mods.gag.misc.Pigment;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
@@ -9,7 +10,6 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackLinkedSet;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
@@ -20,15 +20,6 @@ import static ky.someone.mods.gag.GAGUtil.*;
 
 public class PigmentJarItem extends GAGItem {
 
-	/**
-	 * example nbt:
-	 * { "pigment": { "color": 16711680, "amount": 255 } }
-	 */
-
-	public static final String PIGMENT_NBT_KEY = "pigment";
-	public static final String COLOR_NBT_KEY = "color";
-	public static final String AMOUNT_NBT_KEY = "amount";
-
 	public static final int MAX_AMOUNT = 64;
 	public static final int DYE_AMOUNT = 4;
 
@@ -38,13 +29,7 @@ public class PigmentJarItem extends GAGItem {
 
 	@Nullable
 	public static Pigment getPigment(ItemStack stack) {
-		var pigmentTag = stack.getTagElement(PIGMENT_NBT_KEY);
-		if (pigmentTag == null) return null;
-
-		var color = pigmentTag.getInt(COLOR_NBT_KEY);
-		var amount = pigmentTag.getInt(AMOUNT_NBT_KEY);
-
-		return Pigment.ofRgb(color, amount);
+		return stack.get(DataComponentRegistry.PIGMENT);
 	}
 
 	public static boolean isEmpty(ItemStack stack) {
@@ -67,7 +52,7 @@ public class PigmentJarItem extends GAGItem {
 	}
 
 	@Override
-	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> list, TooltipFlag tooltipFlag) {
+	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag tooltipFlag) {
 		if (isEmpty(stack)) {
 			list.add(Component.translatable("item.gag.pigment_jar.contents.empty").withStyle(ChatFormatting.ITALIC).withStyle(TOOLTIP_FLAVOUR));
 			GAGUtil.appendInfoTooltip(list, List.of(

@@ -6,10 +6,12 @@ import ky.someone.mods.gag.misc.Pigment;
 import ky.someone.mods.gag.recipe.GAGRecipeSerializers;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.DyedItemColor;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CustomRecipe;
@@ -17,6 +19,7 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 
 import java.util.Map;
+import java.util.Objects;
 
 public class PigmentJarLeatherDyingRecipe extends CustomRecipe {
 
@@ -40,13 +43,14 @@ public class PigmentJarLeatherDyingRecipe extends CustomRecipe {
 		var pigmentAmount = 0;
 
 		for (var stack : container.items()) {
-			if (stack.getItem() instanceof DyeableLeatherItem item && VALID_ITEMS.containsKey(item)) {
+			Item item = stack.getItem();
+			if (VALID_ITEMS.containsKey(item)) {
 				if (!leatherItem.isEmpty()) return false;
 				leatherItem = stack;
 			} else if (stack.is(ItemRegistry.PIGMENT_JAR.get())) {
 				hasPigment = true;
 				pigmentAmount += PigmentJarItem.getColorAmount(stack);
-			} else if (stack.getItem() instanceof DyeItem dye) {
+			} else if (item instanceof DyeItem) {
 				pigmentAmount += PigmentJarItem.DYE_AMOUNT;
 			} else if (!stack.isEmpty()) {
 				return false;
@@ -60,15 +64,19 @@ public class PigmentJarLeatherDyingRecipe extends CustomRecipe {
 	public ItemStack assemble(CraftingInput container, HolderLookup.Provider reg) {
 		// output should be the dyed leather armour
 		var leatherItem = ItemStack.EMPTY;
+		var showsInTooltip = true;
 		var output = Pigment.EMPTY; // use an empty pigment to start with
 
 		for (var stack : container.items()) {
-			if (stack.getItem() instanceof DyeableLeatherItem item && VALID_ITEMS.containsKey(item)) {
+			var item = stack.getItem();
+			if (VALID_ITEMS.containsKey(item)) {
 				if (!leatherItem.isEmpty()) return ItemStack.EMPTY;
 				leatherItem = stack.copy();
 
-				if (item.hasCustomColor(stack)) {
-					var leatherPigment = Pigment.ofRgb(item.getColor(stack), VALID_ITEMS.get(item));
+				if (stack.has(DataComponents.DYED_COLOR)) {
+					var color = Objects.requireNonNull(stack.get(DataComponents.DYED_COLOR));
+					showsInTooltip = color.showInTooltip();
+					var leatherPigment = Pigment.ofRgb(color.rgb(), VALID_ITEMS.get(item));
 					output = output.mix(leatherPigment);
 				}
 			} else if (stack.is(ItemRegistry.PIGMENT_JAR.get())) {
@@ -83,7 +91,8 @@ public class PigmentJarLeatherDyingRecipe extends CustomRecipe {
 		if (leatherItem.isEmpty() || output.isEmpty()) return ItemStack.EMPTY;
 
 		// set the color of the leather item
-		((DyeableLeatherItem) leatherItem.getItem()).setColor(leatherItem, output.rgb());
+		// todo: redo this
+		leatherItem.set(DataComponents.DYED_COLOR, new DyedItemColor(output.rgb(), showsInTooltip));
 		return leatherItem;
 	}
 

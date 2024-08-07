@@ -1,39 +1,29 @@
 package ky.someone.mods.gag.misc;
 
-import net.minecraft.Util;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.Nullable;
 
-public record TeleportPos(ResourceLocation level, Vec3 pos, float yaw) {
+public record TeleportPos(ResourceKey<Level> level, Vec3 pos, float yaw) {
+	public static final Codec<TeleportPos> CODEC = RecordCodecBuilder.create(builder -> builder.group(
+			Level.RESOURCE_KEY_CODEC.fieldOf("level").forGetter(TeleportPos::level),
+			Vec3.CODEC.fieldOf("pos").forGetter(TeleportPos::pos),
+			Codec.FLOAT.fieldOf("yaw").forGetter(TeleportPos::yaw)
+	).apply(builder, TeleportPos::new));
 
-	@Nullable
-	public static TeleportPos fromNbt(@Nullable CompoundTag nbt) {
-		if (nbt == null) return null;
-		var level = ResourceLocation.parse(nbt.getString("dim"));
-		var x = nbt.getDouble("x");
-		var y = nbt.getDouble("y");
-		var z = nbt.getDouble("z");
-		return new TeleportPos(level, new Vec3(x, y, z), nbt.getFloat("yaw"));
-	}
-
-	public CompoundTag toNbt() {
-		return Util.make(new CompoundTag(), nbt -> {
-			nbt.putString("dim", level.toString());
-			nbt.putDouble("x", pos.x);
-			nbt.putDouble("y", pos.y);
-			nbt.putDouble("z", pos.z);
-			nbt.putFloat("yaw", yaw);
-		});
-	}
-
-	@Nullable
-	public ServerLevel getLevel(MinecraftServer server) {
-		return server.getLevel(ResourceKey.create(Registries.DIMENSION, level));
-	}
+	public static final StreamCodec<RegistryFriendlyByteBuf, TeleportPos> STREAM_CODEC = StreamCodec.composite(
+			ResourceKey.streamCodec(Registries.DIMENSION),
+			TeleportPos::level,
+			ByteBufCodecs.fromCodec(Vec3.CODEC),
+			TeleportPos::pos,
+			ByteBufCodecs.FLOAT,
+			TeleportPos::yaw,
+			TeleportPos::new
+	);
 }

@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "E": {
+      "item": "minecraft:ender_eye"
+    },
+    "G": {
+      "tag": "c:storage_blocks/raw_gold"
+    },
+    "L": {
+      "item": "minecraft:leather"
+    },
+    "N": {
+      "item": "minecraft:nautilus_shell"
+    }
+  },
+  "pattern": [
+    "GNG",
+    "LEL",
+    "LLL"
+  ],
+  "result": {
+    "count": 1,
+    "id": "gag:time_sand_pouch"
+  }
+}

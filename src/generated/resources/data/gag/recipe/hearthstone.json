@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": {
+      "item": "minecraft:amethyst_shard"
+    },
+    "D": {
+      "item": "minecraft:polished_deepslate"
+    }
+  },
+  "pattern": [
+    " D ",
+    "DAD",
+    " D "
+  ],
+  "result": {
+    "count": 1,
+    "id": "gag:hearthstone"
+  }
+}

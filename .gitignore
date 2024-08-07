@@ -1,6 +1,5 @@
 build/
 *.ipr
-run/
 *.iws
 out/
 *.iml
@@ -17,3 +16,6 @@ classes/
 .vscode
 .settings
 *.launch
+
+run/
+run_server/

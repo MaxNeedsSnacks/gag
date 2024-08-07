@@ -1,20 +1,19 @@
 package ky.someone.mods.gag.item;
 
 import dev.architectury.hooks.level.entity.PlayerHooks;
-import dev.architectury.platform.Platform;
+import dev.shadowsoffire.placebo.color.GradientColor;
 import ky.someone.mods.gag.GAGUtil;
 import ky.someone.mods.gag.entity.EntityTypeRegistry;
 import ky.someone.mods.gag.entity.TimeAcceleratorEntity;
+import ky.someone.mods.gag.item.data.DataComponentRegistry;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
-import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -37,12 +36,6 @@ import static ky.someone.mods.gag.config.GAGConfig.SandsOfTime;
 
 public class TemporalPouchItem extends GAGItem {
 
-	public static final String GRAINS_NBT_KEY = "grains";
-
-	// This is the key for stored time used by TIAB Standalone,
-	//  which we want to remap to our own if the mod is not loaded
-	public static final String TIAB_STORED_KEY = "storedTime";
-
 	public static final TagKey<BlockEntityType<?>> DO_NOT_ACCELERATE = TagKey.create(Registries.BLOCK_ENTITY_TYPE, GAGUtil.id("do_not_accelerate"));
 
 	public TemporalPouchItem() {
@@ -50,21 +43,17 @@ public class TemporalPouchItem extends GAGItem {
 	}
 
 	public static int getStoredGrains(ItemStack stack) {
-		return stack.getOrCreateTag().getInt("grains");
+		return stack.getOrDefault(DataComponentRegistry.GRAINS_OF_TIME, 0);
 	}
 
 	public static void setStoredGrains(ItemStack stack, int time) {
 		int newStoredTime = Math.min(time, SandsOfTime.POUCH_CAPACITY.get());
-		stack.getOrCreateTag().putInt("grains", newStoredTime);
+		stack.set(DataComponentRegistry.GRAINS_OF_TIME, newStoredTime);
 	}
 
 	@Override
-	public void verifyTagAfterLoad(CompoundTag tag) {
-		super.verifyTagAfterLoad(tag);
-		if (!Platform.isModLoaded("tiab") && tag.contains(TIAB_STORED_KEY)) {
-			tag.putInt(GRAINS_NBT_KEY, tag.getInt(TIAB_STORED_KEY));
-			tag.remove(TIAB_STORED_KEY);
-		}
+	public void verifyComponentsAfterLoad(ItemStack stack) {
+		// TODO: maybe? reintroduce tiab migration??
 	}
 
 	public MutableComponent getTimeForDisplay(ItemStack stack) {
@@ -206,9 +195,8 @@ public class TemporalPouchItem extends GAGItem {
 				Component.translatable("item.gag.time_sand_pouch.info.2").withStyle(TOOLTIP_MAIN)
 		));
 
-		float hue = level == null ? 0.0F : level.getGameTime() % 1200F;
 		//   "item.gag.time_sand_pouch.info.stored_grains": "Contains %1$s Grains of Time (worth %2$s)",
-		tooltip.add(getTimeForDisplay(stack).withStyle(style -> style.withColor(Mth.hsvToRgb(hue / 1200F, 1.0F, 1.0F))));
+		tooltip.add(getTimeForDisplay(stack).withStyle(style -> style.withColor(GradientColor.RAINBOW)));
 	}
 
 	@Override

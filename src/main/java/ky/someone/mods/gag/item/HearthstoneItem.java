@@ -21,6 +21,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.portal.DimensionTransition;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
@@ -92,12 +93,9 @@ public class HearthstoneItem extends GAGItem {
 			var respawnDim = server.getLevel(serverPlayer.getRespawnDimension());
 
 			if (respawnDim != null) {
-				var respawnPos = serverPlayer.getRespawnPosition();
-				if (respawnPos != null) {
-					var actualPos = Player.findRespawnPositionAndUseSpawnBlock(respawnDim, respawnPos, serverPlayer.getRespawnAngle(), ignoreSpawnBlock, useAnchorCharge);
-					if (actualPos.isPresent()) {
-						return new TeleportPos(respawnDim.dimension().location(), actualPos.get(), serverPlayer.getRespawnAngle());
-					}
+				var actualPos = serverPlayer.findRespawnPositionAndUseSpawnBlock(!useAnchorCharge, DimensionTransition.DO_NOTHING);
+				if (!actualPos.missingRespawnBlock()) {
+					return new TeleportPos(actualPos.newLevel().dimension(), actualPos.pos(), actualPos.yRot());
 				}
 			} else {
 				respawnDim = server.overworld();
@@ -105,7 +103,7 @@ public class HearthstoneItem extends GAGItem {
 
 			if (allowSpawn) {
 				var spawnPos = Vec3.atBottomCenterOf(respawnDim.getSharedSpawnPos());
-				return new TeleportPos(respawnDim.dimension().location(), spawnPos, serverPlayer.getRespawnAngle());
+				return new TeleportPos(respawnDim.dimension(), spawnPos, serverPlayer.getRespawnAngle());
 			}
 
 		}
@@ -118,7 +116,7 @@ public class HearthstoneItem extends GAGItem {
 		if (!level.isClientSide && entity instanceof ServerPlayer player) {
 			var target = getTeleportPos(player, stack);
 			if (target != null) {
-				var targetLevel = target.getLevel(player.server);
+				var targetLevel = player.server.getLevel(target.level());
 				if (targetLevel != null) {
 					return tryTeleport(stack, targetLevel, player, target.pos(), target.yaw());
 				}

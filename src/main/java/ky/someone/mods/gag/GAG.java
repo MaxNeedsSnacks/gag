@@ -17,6 +17,7 @@ import ky.someone.mods.gag.effect.RepellingEffect;
 import ky.someone.mods.gag.entity.EntityTypeRegistry;
 import ky.someone.mods.gag.item.EnergizedHearthstoneItem;
 import ky.someone.mods.gag.item.ItemRegistry;
+import ky.someone.mods.gag.item.data.DataComponentRegistry;
 import ky.someone.mods.gag.menu.MenuTypeRegistry;
 import ky.someone.mods.gag.network.GAGNetwork;
 import ky.someone.mods.gag.particle.ParticleTypeRegistry;
@@ -44,6 +45,7 @@ public class GAG {
 	public GAG(IEventBus bus) {
 		BlockRegistry.BLOCKS.register(bus);
 		ItemRegistry.ITEMS.register(bus);
+		DataComponentRegistry.COMPONENTS.register(bus);
 		EntityTypeRegistry.ENTITIES.register(bus);
 		EffectRegistry.EFFECTS.register(bus);
 		ParticleTypeRegistry.PARTICLE_TYPES.register(bus);

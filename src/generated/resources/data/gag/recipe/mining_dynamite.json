@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "D": {
+      "tag": "c:cobblestones/deepslate"
+    },
+    "F": {
+      "item": "minecraft:firework_rocket"
+    },
+    "T": {
+      "item": "minecraft:tnt"
+    }
+  },
+  "pattern": [
+    "DDD",
+    "DTD",
+    "DFD"
+  ],
+  "result": {
+    "count": 1,
+    "id": "gag:mining_dynamite"
+  }
+}

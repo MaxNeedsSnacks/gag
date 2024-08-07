@@ -10,6 +10,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FastColor;
@@ -164,7 +165,7 @@ public class LabelingMenuScreen extends AbstractContainerScreen<LabelingMenu> im
 			String s = name;
 			Slot slot = this.menu.getSlot(0);
 
-			if (slot.hasItem() && !slot.getItem().hasCustomHoverName()
+			if (slot.hasItem() && !slot.getItem().has(DataComponents.CUSTOM_NAME)
 					&& name.equals(slot.getItem().getHoverName().getString())
 					&& !this.menu.getSlot(1).hasItem()) {
 				s = "";
