@@ -1,11 +1,10 @@
-package ky.someone.mods.gag.misc;
+package ky.someone.mods.gag.item.data;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import dev.architectury.hooks.DyeColorHooks;
-import ky.someone.mods.gag.item.ItemRegistry;
+import dev.architectury.hooks.forge.DyeColorHooksImpl;
+import ky.someone.mods.gag.GAGRegistry;
 import ky.someone.mods.gag.item.PigmentJarItem;
-import ky.someone.mods.gag.item.data.DataComponentRegistry;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -105,9 +104,9 @@ public final class Pigment {
 	}
 
 	public ItemStack asJar() {
-		var stack = ItemRegistry.PIGMENT_JAR.get().getDefaultInstance();
+		var stack = GAGRegistry.PIGMENT_JAR.get().getDefaultInstance();
 		if (this.isEmpty()) return stack;
-		stack.set(DataComponentRegistry.PIGMENT, this);
+		stack.set(GAGRegistry.PIGMENT_DATA, this);
 		return stack;
 	}
 
@@ -116,7 +115,7 @@ public final class Pigment {
 	}
 
 	public static Pigment forLeather(DyeColor dye) {
-		return new Pigment(DyeColorHooks.getColorValue(dye), PigmentJarItem.DYE_AMOUNT);
+		return new Pigment(DyeColorHooksImpl.getColorValue(dye), PigmentJarItem.DYE_AMOUNT);
 	}
 
 	public int color() {

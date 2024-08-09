@@ -1,9 +1,8 @@
 package ky.someone.mods.gag.recipe.pigment;
 
-import ky.someone.mods.gag.item.ItemRegistry;
+import ky.someone.mods.gag.GAGRegistry;
 import ky.someone.mods.gag.item.PigmentJarItem;
-import ky.someone.mods.gag.misc.Pigment;
-import ky.someone.mods.gag.recipe.GAGRecipeSerializers;
+import ky.someone.mods.gag.item.data.Pigment;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.DyeItem;
@@ -41,7 +40,7 @@ public class PigmentJarFromDyeRecipe extends CustomRecipe {
 		var dyeAmount = 0;
 
 		for (var stack : container.items()) {
-			if (!emptyJar && stack.is(ItemRegistry.PIGMENT_JAR.get()) && PigmentJarItem.isEmpty(stack)) {
+			if (!emptyJar && stack.is(GAGRegistry.PIGMENT_JAR.get()) && PigmentJarItem.isEmpty(stack)) {
 				emptyJar = true;
 			} else if (!flint && stack.is(Items.FLINT)) {
 				flint = true;
@@ -100,6 +99,6 @@ public class PigmentJarFromDyeRecipe extends CustomRecipe {
 
 	@Override
 	public RecipeSerializer<?> getSerializer() {
-		return GAGRecipeSerializers.PIGMENT_JAR_FROM_DYE.get();
+		return GAGRegistry.PIGMENT_JAR_FROM_DYE.get();
 	}
 }

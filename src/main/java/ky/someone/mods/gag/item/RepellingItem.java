@@ -1,8 +1,7 @@
 package ky.someone.mods.gag.item;
 
+import ky.someone.mods.gag.GAGRegistry;
 import ky.someone.mods.gag.GAGUtil;
-import ky.someone.mods.gag.effect.EffectRegistry;
-import ky.someone.mods.gag.sound.GAGSounds;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -45,11 +44,11 @@ public class RepellingItem extends GAGItem {
 
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
-		var hasEffect = player.hasEffect(EffectRegistry.REPELLING);
+		var hasEffect = player.hasEffect(GAGRegistry.REPELLING);
 		var stack = player.getItemInHand(hand);
 		if (!hasEffect) {
-			level.playSound(null, player.blockPosition(), GAGSounds.REPELLING_APPLY.get(), SoundSource.PLAYERS, 1.5f, 1);
-			player.addEffect(new MobEffectInstance(EffectRegistry.REPELLING, duration, amplifier));
+			level.playSound(null, player.blockPosition(), GAGRegistry.REPELLING_APPLY.get(), SoundSource.PLAYERS, 1.5f, 1);
+			player.addEffect(new MobEffectInstance(GAGRegistry.REPELLING, duration, amplifier));
 			stack.shrink(1);
 		}
 		return hasEffect ? InteractionResultHolder.fail(stack) : InteractionResultHolder.sidedSuccess(stack, level.isClientSide);

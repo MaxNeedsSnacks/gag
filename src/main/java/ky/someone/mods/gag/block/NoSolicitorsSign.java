@@ -2,6 +2,7 @@ package ky.someone.mods.gag.block;
 
 import dev.architectury.event.EventResult;
 import ky.someone.mods.gag.GAG;
+import ky.someone.mods.gag.GAGRegistry;
 import ky.someone.mods.gag.GAGUtil;
 import ky.someone.mods.gag.config.GAGConfig;
 import ky.someone.mods.gag.world.GAGPointOfInterestStorage;
@@ -197,7 +198,7 @@ public class NoSolicitorsSign extends Block {
 
 	public static boolean blockWandererSpawn(ServerLevel serverLevel, BlockPos pos) {
 		var ward = GAGPointOfInterestStorage.get(serverLevel)
-				.checkNearbyPOIs(BlockRegistry.NO_SOLICITORS_SIGN, pos, GAGConfig.Miscellaneous.NO_SOLICITORS_RADIUS.get());
+				.checkNearbyPOIs(GAGRegistry.NO_SOLICITORS_SIGN.block(), pos, GAGConfig.Miscellaneous.NO_SOLICITORS_RADIUS.get());
 
 		GAG.LOGGER.debug("Wanderer spawn check at {} returned {}", pos, ward.isPresent());
 
@@ -209,7 +210,7 @@ public class NoSolicitorsSign extends Block {
 			if (!serverLevel.isLoaded(wardPos)) return false;
 			var state = serverLevel.getBlockState(wardPos);
 
-			if (state.getBlock() != BlockRegistry.NO_SOLICITORS_SIGN.get()) {
+			if (state.getBlock() != GAGRegistry.NO_SOLICITORS_SIGN.get()) {
 				GAG.LOGGER.warn("No Solicitors Sign at {} does not exist, has it been removed?", wardPos);
 				GAGPointOfInterestStorage.get(serverLevel).removeIfPresent(wardPos);
 				return false;

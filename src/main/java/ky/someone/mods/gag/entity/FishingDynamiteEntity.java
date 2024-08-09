@@ -1,8 +1,8 @@
 package ky.someone.mods.gag.entity;
 
+import ky.someone.mods.gag.GAGRegistry;
 import ky.someone.mods.gag.GAGUtil;
 import ky.someone.mods.gag.config.GAGConfig;
-import ky.someone.mods.gag.item.ItemRegistry;
 import ky.someone.mods.gag.network.FishsplosionPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -44,11 +44,11 @@ public class FishingDynamiteEntity extends AbstractDynamiteEntity {
 	}
 
 	public FishingDynamiteEntity(double x, double y, double z, Level level) {
-		super(EntityTypeRegistry.FISHING_DYNAMITE.get(), x, y, z, level);
+		super(GAGRegistry.FISHING_DYNAMITE.get(), x, y, z, level);
 	}
 
 	public FishingDynamiteEntity(LivingEntity owner, Level level) {
-		super(EntityTypeRegistry.FISHING_DYNAMITE.get(), owner, level);
+		super(GAGRegistry.FISHING_DYNAMITE.get(), owner, level);
 	}
 
 	@Override
@@ -87,7 +87,7 @@ public class FishingDynamiteEntity extends AbstractDynamiteEntity {
 
 	@Override
 	protected Item getDefaultItem() {
-		return ItemRegistry.FISHING_DYNAMITE.get();
+		return GAGRegistry.FISHING_DYNAMITE_ITEM.get();
 	}
 
 	public static class Fishsplosion extends Explosion {

@@ -1,10 +1,10 @@
 package ky.someone.mods.gag.item;
 
 import dev.ftb.mods.ftblibrary.snbt.config.IntValue;
+import ky.someone.mods.gag.GAGRegistry;
 import ky.someone.mods.gag.GAGUtil;
 import ky.someone.mods.gag.config.GAGConfig;
-import ky.someone.mods.gag.misc.TeleportPos;
-import ky.someone.mods.gag.sound.GAGSounds;
+import ky.someone.mods.gag.item.data.TeleportPos;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
@@ -123,7 +123,7 @@ public class HearthstoneItem extends GAGItem {
 			}
 
 			player.sendSystemMessage(getTranslation("no_target").withStyle(ChatFormatting.RED));
-			level.playSound(null, player.blockPosition(), GAGSounds.TELEPORT_FAIL.get(), SoundSource.PLAYERS, 0.6f, 1f);
+			level.playSound(null, player.blockPosition(), GAGRegistry.TELEPORT_FAIL.get(), SoundSource.PLAYERS, 0.6f, 1f);
 		}
 		return stack;
 	}
@@ -140,18 +140,18 @@ public class HearthstoneItem extends GAGItem {
 				var hand = player.getUsedItemHand();
 				stack.hurtAndBreak(durabilityUsed, player, hand == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);
 				player.teleportTo(level, pos.x, pos.y, pos.z, yaw, 0f);
-				level.playSound(null, player.blockPosition(), GAGSounds.TELEPORT.get(), SoundSource.PLAYERS, 0.5f, 0.5f);
+				level.playSound(null, player.blockPosition(), GAGRegistry.TELEPORT.get(), SoundSource.PLAYERS, 0.5f, 0.5f);
 
 				if (!stack.isEmpty() && !creative) {
 					player.getCooldowns().addCooldown(stack.getItem(), GAGConfig.Hearthstone.COOLDOWN.get());
 				}
 			} else {
 				player.sendSystemMessage(getTranslation("too_weak").withStyle(ChatFormatting.RED));
-				level.playSound(null, player.blockPosition(), GAGSounds.TELEPORT_FAIL.get(), SoundSource.PLAYERS, 0.6f, 1f);
+				level.playSound(null, player.blockPosition(), GAGRegistry.TELEPORT_FAIL.get(), SoundSource.PLAYERS, 0.6f, 1f);
 			}
 		} else {
 			player.sendSystemMessage(getTranslation("too_weak").withStyle(ChatFormatting.RED));
-			level.playSound(null, player.blockPosition(), GAGSounds.TELEPORT_FAIL.get(), SoundSource.PLAYERS, 0.6f, 1f);
+			level.playSound(null, player.blockPosition(), GAGRegistry.TELEPORT_FAIL.get(), SoundSource.PLAYERS, 0.6f, 1f);
 		}
 		return stack;
 	}

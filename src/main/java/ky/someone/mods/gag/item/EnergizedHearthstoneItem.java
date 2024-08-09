@@ -1,10 +1,9 @@
 package ky.someone.mods.gag.item;
 
+import ky.someone.mods.gag.GAGRegistry;
 import ky.someone.mods.gag.GAGUtil;
 import ky.someone.mods.gag.config.GAGConfig;
-import ky.someone.mods.gag.item.data.DataComponentRegistry;
-import ky.someone.mods.gag.misc.TeleportPos;
-import ky.someone.mods.gag.sound.GAGSounds;
+import ky.someone.mods.gag.item.data.TeleportPos;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
@@ -30,12 +29,12 @@ public class EnergizedHearthstoneItem extends HearthstoneItem {
 	}
 
 	public boolean isBound(ItemStack stack) {
-		return stack.has(DataComponentRegistry.TELEPORT_TARGET);
+		return stack.has(GAGRegistry.TELEPORT_TARGET_DATA);
 	}
 
 	@Override
 	public TeleportPos getTeleportPos(@Nullable Player player, ItemStack stack) {
-		return stack.get(DataComponentRegistry.TELEPORT_TARGET);
+		return stack.get(GAGRegistry.TELEPORT_TARGET_DATA);
 	}
 
 	@Override
@@ -74,9 +73,9 @@ public class EnergizedHearthstoneItem extends HearthstoneItem {
 		if (!isBound(stack)) {
 			if (player.isShiftKeyDown()) {
 				var pos = new TeleportPos(player.level().dimension(), player.position(), player.getYRot());
-				stack.set(DataComponentRegistry.TELEPORT_TARGET, pos);
+				stack.set(GAGRegistry.TELEPORT_TARGET_DATA, pos);
 
-				player.playSound(GAGSounds.HEARTHSTONE_THUNDER.get(), 0.5f, 1.25f);
+				player.playSound(GAGRegistry.HEARTHSTONE_THUNDER.get(), 0.5f, 1.25f);
 				return InteractionResultHolder.success(stack);
 			} else {
 				return InteractionResultHolder.fail(stack);
@@ -95,8 +94,8 @@ public class EnergizedHearthstoneItem extends HearthstoneItem {
 			Entity entity = iter.next();
 			if (entity instanceof ItemEntity itemEntity) {
 				var stack = itemEntity.getItem();
-				if (stack.is(ItemRegistry.HEARTHSTONE.get())) {
-					var newStack = new ItemStack(ItemRegistry.ENERGIZED_HEARTHSTONE.get());
+				if (stack.is(GAGRegistry.HEARTHSTONE.get())) {
+					var newStack = new ItemStack(GAGRegistry.ENERGIZED_HEARTHSTONE.get());
 					// damage the new stack relative to the old one
 					var damage = stack.getDamageValue() / (float) stack.getMaxDamage();
 					newStack.setDamageValue((int) (newStack.getMaxDamage() * damage));
@@ -105,11 +104,11 @@ public class EnergizedHearthstoneItem extends HearthstoneItem {
 					itemEntity.setItem(newStack);
 					bolt.hitEntities.add(entity);
 					iter.remove();
-				} else if (stack.is(ItemRegistry.ENERGIZED_HEARTHSTONE.get())) {
+				} else if (stack.is(GAGRegistry.ENERGIZED_HEARTHSTONE.get())) {
 					// why are lightning bolts like this mojang...
 					if (!bolt.hitEntities.contains(entity)) {
 						// unbind the hearthstone first
-						stack.remove(DataComponentRegistry.TELEPORT_TARGET);
+						stack.remove(GAGRegistry.TELEPORT_TARGET_DATA);
 						// and repair it by up to 25% of its durability on hit
 						var damage = stack.getDamageValue() / (float) stack.getMaxDamage();
 						stack.setDamageValue((int) (stack.getMaxDamage() * Math.max(0, damage - 0.25)));

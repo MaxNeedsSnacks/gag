@@ -1,9 +1,9 @@
 package ky.someone.mods.gag.entity;
 
 import com.google.common.collect.Sets;
+import ky.someone.mods.gag.GAGRegistry;
 import ky.someone.mods.gag.GAGUtil;
 import ky.someone.mods.gag.config.GAGConfig;
-import ky.someone.mods.gag.item.ItemRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
@@ -43,11 +43,11 @@ public class MiningDynamiteEntity extends AbstractDynamiteEntity {
 	}
 
 	public MiningDynamiteEntity(double x, double y, double z, Level level) {
-		super(EntityTypeRegistry.MINING_DYNAMITE.get(), x, y, z, level);
+		super(GAGRegistry.MINING_DYNAMITE.get(), x, y, z, level);
 	}
 
 	public MiningDynamiteEntity(LivingEntity owner, Level level) {
-		super(EntityTypeRegistry.MINING_DYNAMITE.get(), owner, level);
+		super(GAGRegistry.MINING_DYNAMITE.get(), owner, level);
 	}
 
 	@Override
@@ -99,7 +99,7 @@ public class MiningDynamiteEntity extends AbstractDynamiteEntity {
 
 	@Override
 	protected Item getDefaultItem() {
-		return ItemRegistry.MINING_DYNAMITE.get();
+		return GAGRegistry.MINING_DYNAMITE_ITEM.get();
 	}
 
 	private static class BlockMiningExplosion extends Explosion {

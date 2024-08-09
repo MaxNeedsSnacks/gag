@@ -1,5 +1,6 @@
 package ky.someone.mods.gag.item;
 
+import ky.someone.mods.gag.GAGRegistry;
 import ky.someone.mods.gag.config.GAGConfig;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -18,7 +19,7 @@ public class TimeSandItem extends GAGItem {
 			var inv = player.getInventory();
 			for (int i = 0; i < inv.getContainerSize(); ++i) {
 				ItemStack maybePouch = inv.getItem(i);
-				if (maybePouch.is(ItemRegistry.TIME_SAND_POUCH.get())) {
+				if (maybePouch.is(GAGRegistry.TIME_SAND_POUCH.get())) {
 					// add the sand to the pouch, and remove it from the player's inventory
 					var oldCount = TemporalPouchItem.getStoredGrains(maybePouch);
 					var toAdd = Math.min(GAGConfig.SandsOfTime.POUCH_CAPACITY.get() - oldCount, sand.getCount());

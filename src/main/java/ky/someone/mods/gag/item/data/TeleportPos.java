@@ -1,4 +1,4 @@
-package ky.someone.mods.gag.misc;
+package ky.someone.mods.gag.item.data;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;

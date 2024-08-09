@@ -1,9 +1,8 @@
 package ky.someone.mods.gag.recipe.pigment;
 
-import ky.someone.mods.gag.item.ItemRegistry;
+import ky.someone.mods.gag.GAGRegistry;
 import ky.someone.mods.gag.item.PigmentJarItem;
-import ky.someone.mods.gag.misc.Pigment;
-import ky.someone.mods.gag.recipe.GAGRecipeSerializers;
+import ky.someone.mods.gag.item.data.Pigment;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.component.DataComponents;
@@ -47,7 +46,7 @@ public class PigmentJarLeatherDyingRecipe extends CustomRecipe {
 			if (VALID_ITEMS.containsKey(item)) {
 				if (!leatherItem.isEmpty()) return false;
 				leatherItem = stack;
-			} else if (stack.is(ItemRegistry.PIGMENT_JAR.get())) {
+			} else if (stack.is(GAGRegistry.PIGMENT_JAR.get())) {
 				hasPigment = true;
 				pigmentAmount += PigmentJarItem.getColorAmount(stack);
 			} else if (item instanceof DyeItem) {
@@ -79,7 +78,7 @@ public class PigmentJarLeatherDyingRecipe extends CustomRecipe {
 					var leatherPigment = Pigment.ofRgb(color.rgb(), VALID_ITEMS.get(item));
 					output = output.mix(leatherPigment);
 				}
-			} else if (stack.is(ItemRegistry.PIGMENT_JAR.get())) {
+			} else if (stack.is(GAGRegistry.PIGMENT_JAR.get())) {
 				var pigment = PigmentJarItem.getPigment(stack);
 				output = output.mix(pigment);
 			} else if (stack.getItem() instanceof DyeItem dye) {
@@ -104,7 +103,7 @@ public class PigmentJarLeatherDyingRecipe extends CustomRecipe {
 		for (int i = 0; i < remaining.size(); i++) {
 			var stack = container.getItem(i);
 			if (PigmentJarItem.isNonEmptyJar(stack)) {
-				remaining.set(i, ItemRegistry.PIGMENT_JAR.get().getDefaultInstance());
+				remaining.set(i, GAGRegistry.PIGMENT_JAR.get().getDefaultInstance());
 			}
 		}
 
@@ -118,6 +117,6 @@ public class PigmentJarLeatherDyingRecipe extends CustomRecipe {
 
 	@Override
 	public RecipeSerializer<?> getSerializer() {
-		return GAGRecipeSerializers.PIGMENT_JAR_MIXING.get();
+		return GAGRegistry.PIGMENT_JAR_MIXING.get();
 	}
 }

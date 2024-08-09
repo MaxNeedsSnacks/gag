@@ -1,9 +1,8 @@
 package ky.someone.mods.gag.recipe.pigment;
 
-import ky.someone.mods.gag.item.ItemRegistry;
+import ky.someone.mods.gag.GAGRegistry;
 import ky.someone.mods.gag.item.PigmentJarItem;
-import ky.someone.mods.gag.misc.Pigment;
-import ky.someone.mods.gag.recipe.GAGRecipeSerializers;
+import ky.someone.mods.gag.item.data.Pigment;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
@@ -24,7 +23,7 @@ public class PigmentJarMixingRecipe extends CustomRecipe {
 		int found = 0;
 
 		for (var stack : container.items()) {
-			if (stack.is(ItemRegistry.PIGMENT_JAR.get())) {
+			if (stack.is(GAGRegistry.PIGMENT_JAR.get())) {
 				if (!PigmentJarItem.isEmpty(stack)) {
 					found++;
 				}
@@ -62,11 +61,11 @@ public class PigmentJarMixingRecipe extends CustomRecipe {
 		var first = true;
 		for (int i = 0; i < container.size(); i++) {
 			var stack = container.getItem(i);
-			if (stack.is(ItemRegistry.PIGMENT_JAR.get())) {
+			if (stack.is(GAGRegistry.PIGMENT_JAR.get())) {
 				if (first) {
 					first = false;
 				} else {
-					list.set(i, ItemRegistry.PIGMENT_JAR.get().getDefaultInstance());
+					list.set(i, GAGRegistry.PIGMENT_JAR.get().getDefaultInstance());
 				}
 			}
 		}
@@ -81,6 +80,6 @@ public class PigmentJarMixingRecipe extends CustomRecipe {
 
 	@Override
 	public RecipeSerializer<?> getSerializer() {
-		return GAGRecipeSerializers.PIGMENT_JAR_MIXING.get();
+		return GAGRegistry.PIGMENT_JAR_MIXING.get();
 	}
 }

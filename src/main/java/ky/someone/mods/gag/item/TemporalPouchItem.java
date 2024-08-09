@@ -2,10 +2,9 @@ package ky.someone.mods.gag.item;
 
 import dev.architectury.hooks.level.entity.PlayerHooks;
 import dev.shadowsoffire.placebo.color.GradientColor;
+import ky.someone.mods.gag.GAGRegistry;
 import ky.someone.mods.gag.GAGUtil;
-import ky.someone.mods.gag.entity.EntityTypeRegistry;
 import ky.someone.mods.gag.entity.TimeAcceleratorEntity;
-import ky.someone.mods.gag.item.data.DataComponentRegistry;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
@@ -43,12 +42,12 @@ public class TemporalPouchItem extends GAGItem {
 	}
 
 	public static int getStoredGrains(ItemStack stack) {
-		return stack.getOrDefault(DataComponentRegistry.GRAINS_OF_TIME, 0);
+		return stack.getOrDefault(GAGRegistry.GRAINS_OF_TIME_DATA, 0);
 	}
 
 	public static void setStoredGrains(ItemStack stack, int time) {
 		int newStoredTime = Math.min(time, SandsOfTime.POUCH_CAPACITY.get());
-		stack.set(DataComponentRegistry.GRAINS_OF_TIME, newStoredTime);
+		stack.set(GAGRegistry.GRAINS_OF_TIME_DATA, newStoredTime);
 	}
 
 	@Override
@@ -148,7 +147,7 @@ public class TemporalPouchItem extends GAGItem {
 				return InteractionResult.SUCCESS;
 			}
 
-			accelerator = Objects.requireNonNull(EntityTypeRegistry.TIME_ACCELERATOR.get().create(level));
+			accelerator = Objects.requireNonNull(GAGRegistry.TIME_ACCELERATOR.get().create(level));
 			accelerator.setPos(Vec3.atCenterOf(pos));
 			accelerator.setTicksRemaining(baseDuration);
 			level.addFreshEntity(accelerator);

@@ -7,23 +7,13 @@ import dev.architectury.event.events.common.LifecycleEvent;
 import dev.architectury.event.events.common.LightningEvent;
 import dev.architectury.event.events.common.PlayerEvent;
 import dev.ftb.mods.ftblibrary.snbt.config.ConfigUtil;
-import ky.someone.mods.gag.block.BlockRegistry;
 import ky.someone.mods.gag.block.NoSolicitorsSign;
 import ky.someone.mods.gag.client.GAGClient;
 import ky.someone.mods.gag.command.GAGCommands;
 import ky.someone.mods.gag.config.GAGConfig;
-import ky.someone.mods.gag.effect.EffectRegistry;
 import ky.someone.mods.gag.effect.RepellingEffect;
-import ky.someone.mods.gag.entity.EntityTypeRegistry;
 import ky.someone.mods.gag.item.EnergizedHearthstoneItem;
-import ky.someone.mods.gag.item.ItemRegistry;
-import ky.someone.mods.gag.item.data.DataComponentRegistry;
-import ky.someone.mods.gag.menu.MenuTypeRegistry;
 import ky.someone.mods.gag.network.GAGNetwork;
-import ky.someone.mods.gag.particle.ParticleTypeRegistry;
-import ky.someone.mods.gag.recipe.GAGRecipeSerializers;
-import ky.someone.mods.gag.sound.GAGSounds;
-import ky.someone.mods.gag.tab.GAGCreativeTabs;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;
@@ -43,17 +33,6 @@ public class GAG {
 	public static final Logger LOGGER = LogUtils.getLogger();
 
 	public GAG(IEventBus bus) {
-		BlockRegistry.BLOCKS.register(bus);
-		ItemRegistry.ITEMS.register(bus);
-		DataComponentRegistry.COMPONENTS.register(bus);
-		EntityTypeRegistry.ENTITIES.register(bus);
-		EffectRegistry.EFFECTS.register(bus);
-		ParticleTypeRegistry.PARTICLE_TYPES.register(bus);
-		MenuTypeRegistry.MENUS.register(bus);
-		GAGSounds.SOUND_EVENTS.register(bus);
-		GAGCreativeTabs.TABS.register(bus);
-		GAGRecipeSerializers.RECIPE_SERIALIZERS.register(bus);
-
 		GAGConfig.init();
 		LifecycleEvent.SERVER_BEFORE_START.register((server) -> ConfigUtil.loadDefaulted(GAGConfig.CONFIG, CONFIG_DIR, GAGUtil.MOD_ID));
 		PlayerEvent.PLAYER_JOIN.register(GAGConfig::syncConfigTo);
@@ -74,10 +53,13 @@ public class GAG {
 
 	@SubscribeEvent
 	public static void replaceTiabMapping(RegisterEvent event) {
+		// register all elements from the registry helper
+		GAGRegistry.HELPER.register(event);
+
 		var reg = event.getRegistry(Registries.ITEM);
 		if (reg == null) return;
 		// remap "tiab:time_in_a_bottle" to "gag:temporal_pouch" if TIAB Standalone is missing
 		//  (requested by people wanting to transition from TIAB Standalone to GAG)
-		reg.addAlias(ResourceLocation.parse("tiab:time_in_a_bottle"), ItemRegistry.TIME_SAND_POUCH.getId());
+		reg.addAlias(ResourceLocation.parse("tiab:time_in_a_bottle"), GAGRegistry.TIME_SAND_POUCH.getId());
 	}
 }

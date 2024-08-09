@@ -8,18 +8,14 @@ import dev.architectury.registry.client.rendering.ColorHandlerRegistry;
 import dev.architectury.registry.client.rendering.RenderTypeRegistry;
 import dev.architectury.registry.item.ItemPropertiesRegistry;
 import dev.architectury.registry.menu.MenuRegistry;
+import ky.someone.mods.gag.GAGRegistry;
 import ky.someone.mods.gag.GAGUtil;
-import ky.someone.mods.gag.block.BlockRegistry;
 import ky.someone.mods.gag.client.render.TimeAcceleratorEntityRenderer;
 import ky.someone.mods.gag.client.screen.LabelingMenuScreen;
 import ky.someone.mods.gag.config.GAGConfig;
-import ky.someone.mods.gag.entity.EntityTypeRegistry;
 import ky.someone.mods.gag.entity.TimeAcceleratorEntity;
 import ky.someone.mods.gag.item.GAGItem;
-import ky.someone.mods.gag.item.ItemRegistry;
 import ky.someone.mods.gag.item.PigmentJarItem;
-import ky.someone.mods.gag.menu.MenuTypeRegistry;
-import ky.someone.mods.gag.particle.ParticleTypeRegistry;
 import ky.someone.mods.gag.particle.client.MagicParticle;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
@@ -50,13 +46,13 @@ public interface GAGClient {
 	}
 
 	static void registerParticles(RegisterParticleProvidersEvent event) {
-		event.registerSpriteSet(ParticleTypeRegistry.MAGIC.get(), MagicParticle.Provider::new);
+		event.registerSpriteSet(GAGRegistry.MAGIC_PARTICLE.get(), MagicParticle.Provider::new);
 	}
 
 	static void registerEntityRenderers() {
-		EntityRendererRegistry.register(EntityTypeRegistry.TIME_ACCELERATOR, TimeAcceleratorEntityRenderer::new);
-		EntityRendererRegistry.register(EntityTypeRegistry.MINING_DYNAMITE, ThrownItemRenderer::new);
-		EntityRendererRegistry.register(EntityTypeRegistry.FISHING_DYNAMITE, ThrownItemRenderer::new);
+		EntityRendererRegistry.register(GAGRegistry.TIME_ACCELERATOR, TimeAcceleratorEntityRenderer::new);
+		EntityRendererRegistry.register(GAGRegistry.MINING_DYNAMITE, ThrownItemRenderer::new);
+		EntityRendererRegistry.register(GAGRegistry.FISHING_DYNAMITE, ThrownItemRenderer::new);
 	}
 
 	static void renderHUD(GuiGraphics graphics, DeltaTracker partialTicks) {
@@ -120,12 +116,12 @@ public interface GAGClient {
 	}
 
 	static void setup(Minecraft minecraft) {
-		RenderTypeRegistry.register(RenderType.cutoutMipped(), BlockRegistry.NO_SOLICITORS_SIGN.get());
-		MenuRegistry.registerScreenFactory(MenuTypeRegistry.LABELING.get(), LabelingMenuScreen::new);
+		RenderTypeRegistry.register(RenderType.cutoutMipped(), GAGRegistry.NO_SOLICITORS_SIGN.get());
+		MenuRegistry.registerScreenFactory(GAGRegistry.LABELING_MENU.get(), LabelingMenuScreen::new);
 
-		ColorHandlerRegistry.registerItemColors((stack, index) -> index == 0 ? PigmentJarItem.getRgbColor(stack) : -1, ItemRegistry.PIGMENT_JAR.get());
+		ColorHandlerRegistry.registerItemColors((stack, index) -> index == 0 ? PigmentJarItem.getRgbColor(stack) : -1, GAGRegistry.PIGMENT_JAR.get());
 
-		ItemPropertiesRegistry.register(ItemRegistry.PIGMENT_JAR.get(), GAGUtil.id("pigment_amount"),
+		ItemPropertiesRegistry.register(GAGRegistry.PIGMENT_JAR.get(), GAGUtil.id("pigment_amount"),
 				(stack, level, entity, seed) -> PigmentJarItem.getColorAmount(stack) / (float) PigmentJarItem.MAX_AMOUNT);
 	}
 }

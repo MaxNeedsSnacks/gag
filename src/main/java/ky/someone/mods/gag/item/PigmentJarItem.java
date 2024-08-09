@@ -1,8 +1,8 @@
 package ky.someone.mods.gag.item;
 
+import ky.someone.mods.gag.GAGRegistry;
 import ky.someone.mods.gag.GAGUtil;
-import ky.someone.mods.gag.item.data.DataComponentRegistry;
-import ky.someone.mods.gag.misc.Pigment;
+import ky.someone.mods.gag.item.data.Pigment;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.network.chat.Component;
@@ -29,7 +29,7 @@ public class PigmentJarItem extends GAGItem {
 
 	@Nullable
 	public static Pigment getPigment(ItemStack stack) {
-		return stack.get(DataComponentRegistry.PIGMENT);
+		return stack.get(GAGRegistry.PIGMENT_DATA);
 	}
 
 	public static boolean isEmpty(ItemStack stack) {
@@ -48,7 +48,7 @@ public class PigmentJarItem extends GAGItem {
 	}
 
 	public static boolean isNonEmptyJar(ItemStack stack) {
-		return stack.is(ItemRegistry.PIGMENT_JAR.get()) && !isEmpty(stack);
+		return stack.is(GAGRegistry.PIGMENT_JAR.get()) && !isEmpty(stack);
 	}
 
 	@Override

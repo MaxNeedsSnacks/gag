@@ -1,8 +1,8 @@
 package ky.someone.mods.gag.entity;
 
 import dev.architectury.networking.NetworkManager;
+import ky.someone.mods.gag.GAGRegistry;
 import ky.someone.mods.gag.config.GAGConfig;
-import ky.someone.mods.gag.particle.ParticleTypeRegistry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -78,7 +78,7 @@ public class TimeAcceleratorEntity extends Entity {
 				(double) getTicksRemaining() / (GAGConfig.SandsOfTime.DURATION_PER_USE.get() * 20);
 
 		if (random.nextDouble() < particleChance) {
-			var magic = ParticleTypeRegistry.MAGIC.get();
+			var magic = GAGRegistry.MAGIC_PARTICLE.get();
 			level.addParticle(magic, x, y + 0.05D + random.nextFloat(), z + random.nextFloat(), 0D, 0D, 0D);
 			level.addParticle(magic, x + 1D, y + 0.05D + random.nextFloat(), z + random.nextFloat(), 0D, 0D, 0D);
 			level.addParticle(magic, x + random.nextFloat(), y + 0.05D + random.nextFloat(), z, 0D, 0D, 0D);

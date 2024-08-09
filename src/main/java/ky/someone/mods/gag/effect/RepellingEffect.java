@@ -1,6 +1,7 @@
 package ky.someone.mods.gag.effect;
 
 import dev.architectury.event.EventResult;
+import ky.someone.mods.gag.GAGRegistry;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
@@ -19,7 +20,7 @@ public class RepellingEffect extends MobEffect {
 		if (entity instanceof Enemy) {
 			var pos = new Vec3(x, y, z);
 			for (var player : level.players()) {
-				var repel = player.getEffect(EffectRegistry.REPELLING);
+				var repel = player.getEffect(GAGRegistry.REPELLING);
 				if (repel != null) {
 					var distance = pos.distanceToSqr(player.position());
 					var repelRange = 16 * (repel.getAmplifier() + 1); // TODO: make configurable

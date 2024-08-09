@@ -1,8 +1,8 @@
 package ky.someone.mods.gag.data;
 
 import com.google.common.collect.Collections2;
+import ky.someone.mods.gag.GAGRegistry;
 import ky.someone.mods.gag.GAGUtil;
-import ky.someone.mods.gag.item.ItemRegistry;
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -16,7 +16,7 @@ import java.util.Set;
 public class GAGItemModelProvider extends ItemModelProvider {
 
 	public static final Collection<Item> NON_TRIVIAL = Collections2.transform(Set.of(
-			ItemRegistry.PIGMENT_JAR
+			GAGRegistry.PIGMENT_JAR
 	), ItemLike::asItem);
 
 	public GAGItemModelProvider(PackOutput output, ExistingFileHelper existingFileHelper) {
@@ -25,7 +25,7 @@ public class GAGItemModelProvider extends ItemModelProvider {
 
 	@Override
 	protected void registerModels() {
-		for (var holder : ItemRegistry.ITEMS.getEntries()) {
+		for (var holder : GAGRegistry.ITEMS) {
 			if (!NON_TRIVIAL.contains(holder.value())) {
 				Item item = holder.value();
 				if (item instanceof BlockItem) {

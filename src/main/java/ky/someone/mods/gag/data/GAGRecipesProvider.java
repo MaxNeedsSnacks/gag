@@ -1,8 +1,7 @@
 package ky.someone.mods.gag.data;
 
+import ky.someone.mods.gag.GAGRegistry;
 import ky.someone.mods.gag.GAGUtil;
-import ky.someone.mods.gag.block.BlockRegistry;
-import ky.someone.mods.gag.item.ItemRegistry;
 import ky.someone.mods.gag.recipe.pigment.PigmentJarFromDyeRecipe;
 import ky.someone.mods.gag.recipe.pigment.PigmentJarLeatherDyingRecipe;
 import ky.someone.mods.gag.recipe.pigment.PigmentJarMixingRecipe;
@@ -31,7 +30,7 @@ public class GAGRecipesProvider extends RecipeProvider {
 
 	@Override
 	protected void buildRecipes(RecipeOutput output) {
-		shaped(RecipeCategory.MISC, ItemRegistry.ESCAPE_ROPE)
+		shaped(RecipeCategory.MISC, GAGRegistry.ESCAPE_ROPE)
 				.pattern("#T").pattern("# ").pattern("#L")
 				.define('#', Items.CHAIN)
 				.define('T', Items.TRIPWIRE_HOOK)
@@ -39,7 +38,7 @@ public class GAGRecipesProvider extends RecipeProvider {
 				.unlockedBy("has_iron_ingot", has(Items.IRON_INGOT))
 				.save(output);
 
-		shaped(RecipeCategory.MISC, ItemRegistry.FISHING_DYNAMITE)
+		shaped(RecipeCategory.MISC, GAGRegistry.FISHING_DYNAMITE_ITEM)
 				.pattern("GKG").pattern("KTK").pattern("GFG")
 				.define('G', Ingredient.of(Items.GRAVEL, Items.SAND))
 				.define('K', Items.DRIED_KELP)
@@ -48,14 +47,14 @@ public class GAGRecipesProvider extends RecipeProvider {
 				.unlockedBy("has_tnt", has(Items.TNT))
 				.save(output);
 
-		shaped(RecipeCategory.MISC, ItemRegistry.HEARTHSTONE)
+		shaped(RecipeCategory.MISC, GAGRegistry.HEARTHSTONE)
 				.pattern(" D ").pattern("DAD").pattern(" D ")
 				.define('D', Items.POLISHED_DEEPSLATE)
 				.define('A', Items.AMETHYST_SHARD)
 				.unlockedBy("has_amethyst", has(Items.AMETHYST_SHARD))
 				.save(output);
 
-		shaped(RecipeCategory.MISC, ItemRegistry.LABELING_TOOL)
+		shaped(RecipeCategory.MISC, GAGRegistry.LABELING_TOOL)
 				.pattern(" ##").pattern("#SI").pattern(" IC")
 				.define('#', Items.PAPER)
 				.define('I', Tags.Items.INGOTS_IRON)
@@ -64,7 +63,7 @@ public class GAGRecipesProvider extends RecipeProvider {
 				.unlockedBy("has_iron_ingot", has(Items.IRON_INGOT))
 				.save(output);
 
-		shaped(RecipeCategory.MISC, ItemRegistry.MINING_DYNAMITE)
+		shaped(RecipeCategory.MISC, GAGRegistry.MINING_DYNAMITE_ITEM)
 				.pattern("DDD").pattern("DTD").pattern("DFD")
 				.define('D', Tags.Items.COBBLESTONES_DEEPSLATE)
 				.define('T', Items.TNT)
@@ -72,14 +71,14 @@ public class GAGRecipesProvider extends RecipeProvider {
 				.unlockedBy("has_tnt", has(Items.TNT))
 				.save(output);
 
-		shapeless(RecipeCategory.MISC, BlockRegistry.NO_SOLICITORS_SIGN)
+		shapeless(RecipeCategory.MISC, GAGRegistry.NO_SOLICITORS_SIGN)
 				.requires(ItemTags.SIGNS)
 				.requires(Items.EMERALD)
 				.requires(Items.FLINT)
 				.unlockedBy("has_emerald", has(Items.EMERALD))
 				.save(output);
 
-		shapeless(RecipeCategory.MISC, ItemRegistry.PIGMENT_JAR)
+		shapeless(RecipeCategory.MISC, GAGRegistry.PIGMENT_JAR)
 				.requires(Items.GLASS_BOTTLE)
 				.requires(Items.GLOWSTONE_DUST)
 				.requires(ItemTags.WOODEN_BUTTONS)
@@ -92,41 +91,41 @@ public class GAGRecipesProvider extends RecipeProvider {
 		special(PigmentJarSplittingRecipe::new).save(output, GAGUtil.id("pigment_jar_splitting"));
 
 		shapeless(RecipeCategory.MISC, Items.GLASS_BOTTLE)
-				.requires(ItemRegistry.PIGMENT_JAR)
-				.unlockedBy("has_pigment", has(ItemRegistry.PIGMENT_JAR))
+				.requires(GAGRegistry.PIGMENT_JAR)
+				.unlockedBy("has_pigment", has(GAGRegistry.PIGMENT_JAR))
 				.save(output, GAGUtil.id("pigment_jar_to_regular_bottle"));
 
-		shapeless(RecipeCategory.MISC, ItemRegistry.SACRED_BALM)
+		shapeless(RecipeCategory.MISC, GAGRegistry.SACRED_BALM)
 				.requires(Items.HONEYCOMB)
 				.requires(Items.PHANTOM_MEMBRANE)
-				.requires(ItemRegistry.SACRED_SALT, 4)
+				.requires(GAGRegistry.SACRED_SALT, 4)
 				.requires(Items.BOWL)
 				.unlockedBy("has_honey", has(Items.HONEYCOMB))
 				.save(output);
 
-		shapeless(RecipeCategory.MISC, ItemRegistry.SACRED_BALM)
+		shapeless(RecipeCategory.MISC, GAGRegistry.SACRED_BALM)
 				.requires(Items.PHANTOM_MEMBRANE)
-				.requires(ItemRegistry.SACRED_SALVE)
+				.requires(GAGRegistry.SACRED_SALVE)
 				.requires(Items.BOWL)
-				.unlockedBy("has_salve", has(ItemRegistry.SACRED_SALVE))
-				.save(output, getDefaultRecipeId(ItemRegistry.SACRED_BALM).withSuffix("_from_salve"));
+				.unlockedBy("has_salve", has(GAGRegistry.SACRED_SALVE))
+				.save(output, getDefaultRecipeId(GAGRegistry.SACRED_BALM).withSuffix("_from_salve"));
 
-		shapeless(RecipeCategory.MISC, ItemRegistry.SACRED_SALT, 4)
+		shapeless(RecipeCategory.MISC, GAGRegistry.SACRED_SALT, 4)
 				.requires(Ingredient.of(Items.GUNPOWDER, Items.REDSTONE, Items.GLOWSTONE_DUST))
 				.requires(Ingredient.of(Items.FERMENTED_SPIDER_EYE, Items.POISONOUS_POTATO))
 				.requires(Ingredient.of(Items.GLOW_BERRIES))
 				.unlockedBy("has_glow_berries", has(Items.GLOW_BERRIES))
 				.save(output);
 
-		shapeless(RecipeCategory.MISC, ItemRegistry.SACRED_SALVE)
+		shapeless(RecipeCategory.MISC, GAGRegistry.SACRED_SALVE)
 				.requires(Items.GLOW_INK_SAC)
 				.requires(Items.HONEY_BOTTLE)
 				.requires(ItemTags.SMALL_FLOWERS)
-				.requires(ItemRegistry.SACRED_SALT, 3)
-				.unlockedBy("has_salt", has(ItemRegistry.SACRED_SALT))
+				.requires(GAGRegistry.SACRED_SALT, 3)
+				.unlockedBy("has_salt", has(GAGRegistry.SACRED_SALT))
 				.save(output);
 
-		shaped(RecipeCategory.MISC, ItemRegistry.TIME_SAND_POUCH)
+		shaped(RecipeCategory.MISC, GAGRegistry.TIME_SAND_POUCH)
 				.pattern("GNG").pattern("LEL").pattern("LLL")
 				.define('G', Tags.Items.STORAGE_BLOCKS_RAW_GOLD)
 				.define('N', Items.NAUTILUS_SHELL)

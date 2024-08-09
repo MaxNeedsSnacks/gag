@@ -1,5 +1,6 @@
 package ky.someone.mods.gag.menu;
 
+import ky.someone.mods.gag.GAGRegistry;
 import ky.someone.mods.gag.item.PigmentJarItem;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
@@ -85,7 +86,7 @@ public class LabelingMenu extends BasicMenu {
 	}
 
 	public LabelingMenu(int i, Inventory inventory) {
-		this(MenuTypeRegistry.LABELING.get(), i, inventory, inventory.player);
+		this(GAGRegistry.LABELING_MENU.get(), i, inventory, inventory.player);
 	}
 
 	@Override

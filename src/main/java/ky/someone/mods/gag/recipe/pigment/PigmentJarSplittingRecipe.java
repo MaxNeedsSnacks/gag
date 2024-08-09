@@ -1,8 +1,7 @@
 package ky.someone.mods.gag.recipe.pigment;
 
-import ky.someone.mods.gag.item.ItemRegistry;
+import ky.someone.mods.gag.GAGRegistry;
 import ky.someone.mods.gag.item.PigmentJarItem;
-import ky.someone.mods.gag.recipe.GAGRecipeSerializers;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
@@ -23,7 +22,7 @@ public class PigmentJarSplittingRecipe extends CustomRecipe {
 		var empty = false;
 
 		for (var stack : container.items()) {
-			if (stack.is(ItemRegistry.PIGMENT_JAR.get())) {
+			if (stack.is(GAGRegistry.PIGMENT_JAR.get())) {
 				if (PigmentJarItem.isEmpty(stack)) {
 					if (empty) return false;
 					empty = true;
@@ -41,7 +40,7 @@ public class PigmentJarSplittingRecipe extends CustomRecipe {
 	public ItemStack assemble(CraftingInput container, HolderLookup.Provider reg) {
 		// find the filled jar, and return two jars with half the pigment each (rounded down)
 		for (var stack : container.items()) {
-			if (stack.is(ItemRegistry.PIGMENT_JAR.get())) {
+			if (stack.is(GAGRegistry.PIGMENT_JAR.get())) {
 				var pigment = PigmentJarItem.getPigment(stack);
 				if (pigment != null && !pigment.isEmpty()) {
 					var newStack = pigment.withAmount(pigment.amount() / 2);
@@ -60,6 +59,6 @@ public class PigmentJarSplittingRecipe extends CustomRecipe {
 
 	@Override
 	public RecipeSerializer<?> getSerializer() {
-		return GAGRecipeSerializers.PIGMENT_JAR_SPLITTING.get();
+		return GAGRegistry.PIGMENT_JAR_SPLITTING.get();
 	}
 }

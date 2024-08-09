@@ -7,7 +7,7 @@ import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import ky.someone.mods.gag.config.GAGConfig;
 import ky.someone.mods.gag.item.PigmentJarItem;
 import ky.someone.mods.gag.item.TemporalPouchItem;
-import ky.someone.mods.gag.misc.Pigment;
+import ky.someone.mods.gag.item.data.Pigment;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
