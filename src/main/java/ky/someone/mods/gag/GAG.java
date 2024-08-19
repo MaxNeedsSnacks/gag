@@ -13,19 +13,13 @@ import ky.someone.mods.gag.config.GAGConfig;
 import ky.someone.mods.gag.effect.RepellingEffect;
 import ky.someone.mods.gag.item.EnergizedHearthstoneItem;
 import ky.someone.mods.gag.network.GAGNetwork;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.loading.FMLEnvironment;
-import net.neoforged.neoforge.registries.RegisterEvent;
 import org.slf4j.Logger;
 
 @Mod(GAGUtil.MOD_ID)
-@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD)
 public class GAG {
 	public static final Logger LOGGER = LogUtils.getLogger();
 
@@ -45,17 +39,5 @@ public class GAG {
 		if (FMLEnvironment.dist == Dist.CLIENT) {
 			GAGClient.init(bus);
 		}
-	}
-
-	@SubscribeEvent
-	public static void replaceTiabMapping(RegisterEvent event) {
-		// register all elements from the registry helper
-		GAGRegistry.HELPER.register(event);
-
-		var reg = event.getRegistry(Registries.ITEM);
-		if (reg == null) return;
-		// remap "tiab:time_in_a_bottle" to "gag:temporal_pouch" if TIAB Standalone is missing
-		//  (requested by people wanting to transition from TIAB Standalone to GAG)
-		reg.addAlias(ResourceLocation.parse("tiab:time_in_a_bottle"), GAGRegistry.TIME_SAND_POUCH.getId());
 	}
 }
