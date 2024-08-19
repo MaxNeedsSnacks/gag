@@ -30,6 +30,10 @@ repositories {
 		name = "FTB Library"
 		url = "https://maven.saps.dev/minecraft"
 	}
+	maven {
+		name = "TerraformersMC"
+		url = "https://maven.terraformersmc.com"
+	}
 	mavenCentral()
 }
 
@@ -82,10 +86,10 @@ neoForge {
 		}
 	}
 
-	parchment {
+	/*parchment {
 		minecraftVersion = minecraft_version
 		mappingsVersion = parchment_version
-	}
+	}*/
 }
 
 sourceSets.main.resources {
@@ -99,14 +103,14 @@ configurations {
 
 dependencies {
 	api "dev.architectury:architectury-neoforge:${architectury_version}"
-	implementation("dev.ftb.mods:ftb-library-neoforge:${config_version}")
 
-	localRuntime(compileOnly("me.shedaniel:RoughlyEnoughItems-neoforge:${rei_version}"))
+	compileOnly "dev.emi:emi-neoforge:${emi_version}:api"
+	localRuntime "dev.emi:emi-neoforge:${emi_version}"
 
 	jarJar(implementation("dev.shadowsoffire:Placebo")) {
 		version {
-			strictly '[1.21-9.3.0,)'
-			prefer '1.21-9.3.5'
+			strictly '[1.21.1-9.4.0,)'
+			prefer '1.21.1-9.4.1'
 		}
 	}
 }

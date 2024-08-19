@@ -70,7 +70,7 @@ public class FishingDynamiteEntity extends AbstractDynamiteEntity {
 
 	@Override
 	public void detonate(Vec3 pos) {
-		var r = GAGConfig.Dynamite.FISHING_RADIUS.get();
+		var r = GAGConfig.dynamite.fishingRadius();
 		var level = level();
 		var explosion = new Fishsplosion(level, this, pos.x, pos.y, pos.z, r);
 		if (!EventHooks.onExplosionStart(level, explosion)) {
@@ -122,8 +122,8 @@ public class FishingDynamiteEntity extends AbstractDynamiteEntity {
 				double distSqr = entity.distanceToSqr(pos);
 				if (distSqr > radius * radius) continue;
 				if (entity.isInWater() && !entity.ignoreExplosion(this)) {
-					var filter = GAGConfig.Dynamite.FISHING_TARGET_FILTER.get();
-					if (GAGConfig.Dynamite.FISHING_INSTAKILL_FISH.get() && filter.isFish(entity)) {
+					var filter = GAGConfig.dynamite.fishingTargets();
+					if (GAGConfig.dynamite.fishingInstakill() && filter.isFish(entity)) {
 						fishHit++;
 						entity.hurt(this.damageSource, Float.MAX_VALUE);
 					} else {
@@ -136,7 +136,7 @@ public class FishingDynamiteEntity extends AbstractDynamiteEntity {
 						if (filter.isFish(entity)) {
 							fishHit++;
 							entity.hurt(this.damageSource, damage * 2);
-						} else if (GAGConfig.Dynamite.FISHING_DAMAGE_ALL.get()) {
+						} else if (GAGConfig.dynamite.fishingDamageAll()) {
 							entity.hurt(this.damageSource, damage / 2);
 						}
 					}
@@ -197,7 +197,7 @@ public class FishingDynamiteEntity extends AbstractDynamiteEntity {
 				level.playSound(null, pos.x, pos.y, pos.z, SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS, 0.6F, 1.0F);
 
 				if (!isClient) {
-					var add = GAGConfig.Dynamite.ADDITIONAL_FISHING_LOOT.get();
+					var add = GAGConfig.dynamite.fishingAdditionalLoot();
 					var fishDropped = fishHit;
 					List<ItemStack> itemsToDrop = new ArrayList<>();
 

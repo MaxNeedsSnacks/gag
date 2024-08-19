@@ -198,7 +198,7 @@ public class NoSolicitorsSign extends Block {
 
 	public static boolean blockWandererSpawn(ServerLevel serverLevel, BlockPos pos) {
 		var ward = GAGPointOfInterestStorage.get(serverLevel)
-				.checkNearbyPOIs(GAGRegistry.NO_SOLICITORS_SIGN.block(), pos, GAGConfig.Miscellaneous.NO_SOLICITORS_RADIUS.get());
+				.checkNearbyPOIs(GAGRegistry.NO_SOLICITORS_SIGN.block(), pos, GAGConfig.noSolicitorsRadius);
 
 		GAG.LOGGER.debug("Wanderer spawn check at {} returned {}", pos, ward.isPresent());
 

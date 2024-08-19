@@ -7,8 +7,8 @@ pluginManagement {
 
 	plugins {
 		// latest @ https://projects.neoforged.net/neoforged/ModDevGradle
-		id 'net.neoforged.moddev' version '1.0.13'
-		id 'net.neoforged.moddev.repositories' version '1.0.13'
+		id 'net.neoforged.moddev' version '2.0.16-beta'
+		id 'net.neoforged.moddev.repositories' version '2.0.16-beta'
 	}
 }
 

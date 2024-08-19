@@ -66,7 +66,7 @@ public class MiningDynamiteEntity extends AbstractDynamiteEntity {
 	@Override
 	protected void onHitEntity(EntityHitResult hitEntity) {
 		super.onHitEntity(hitEntity);
-		if (GAGConfig.Dynamite.MINING_GIVES_HASTE.get() && hitEntity.getEntity() instanceof LivingEntity entity) {
+		if (GAGConfig.dynamite.miningGivesHaste() && hitEntity.getEntity() instanceof LivingEntity entity) {
 			entity.addEffect(new MobEffectInstance(MobEffects.DIG_SPEED, 160, 1, false, false));
 			entity.addEffect(new MobEffectInstance(MobEffects.GLOWING, 60, 1, false, false));
 		}
@@ -74,7 +74,7 @@ public class MiningDynamiteEntity extends AbstractDynamiteEntity {
 
 	@Override
 	public void detonate(Vec3 pos) {
-		var r = GAGConfig.Dynamite.MINING_RADIUS.get();
+		var r = GAGConfig.dynamite.miningRadius();
 		var level = level();
 		var explosion = new BlockMiningExplosion(level, this, pos.x, pos.y, pos.z, r);
 		if (!EventHooks.onExplosionStart(level, explosion)) {

@@ -2,10 +2,13 @@ package ky.someone.mods.gag;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.level.Level;
 
 import java.util.List;
 import java.util.function.UnaryOperator;
@@ -56,6 +59,10 @@ public interface GAGUtil {
 
 	static ResourceLocation id(String path) {
 		return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
+	}
+
+	static ResourceKey<Level> dimension(ResourceLocation id) {
+		return ResourceKey.create(Registries.DIMENSION, id);
 	}
 
 	static <U> U TODO() {

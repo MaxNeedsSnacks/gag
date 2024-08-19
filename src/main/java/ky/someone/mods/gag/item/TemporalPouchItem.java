@@ -4,6 +4,7 @@ import dev.architectury.hooks.level.entity.PlayerHooks;
 import dev.shadowsoffire.placebo.color.GradientColor;
 import ky.someone.mods.gag.GAGRegistry;
 import ky.someone.mods.gag.GAGUtil;
+import ky.someone.mods.gag.config.GAGConfig;
 import ky.someone.mods.gag.entity.TimeAcceleratorEntity;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -31,7 +32,6 @@ import java.util.Objects;
 import java.util.Optional;
 
 import static ky.someone.mods.gag.GAGUtil.TOOLTIP_MAIN;
-import static ky.someone.mods.gag.config.GAGConfig.SandsOfTime;
 
 public class TemporalPouchItem extends GAGItem {
 
@@ -46,7 +46,7 @@ public class TemporalPouchItem extends GAGItem {
 	}
 
 	public static void setStoredGrains(ItemStack stack, int time) {
-		int newStoredTime = Math.min(time, SandsOfTime.POUCH_CAPACITY.get());
+		int newStoredTime = Math.min(time, GAGConfig.temporalPouch.capacity());
 		stack.set(GAGRegistry.GRAINS_OF_TIME_DATA, newStoredTime);
 	}
 
@@ -57,7 +57,7 @@ public class TemporalPouchItem extends GAGItem {
 
 	public MutableComponent getTimeForDisplay(ItemStack stack) {
 		int storedGrains = getStoredGrains(stack);
-		int seconds = storedGrains * SandsOfTime.DURATION_PER_USE.get() / SandsOfTime.GRAINS_USED.get();
+		int seconds = storedGrains * GAGConfig.temporalPouch.durationPerUse() / GAGConfig.temporalPouch.grainsUsed();
 		int minutes = seconds / 60;
 		int hours = seconds / 3600;
 
@@ -83,7 +83,7 @@ public class TemporalPouchItem extends GAGItem {
 
 		if (level.getGameTime() % 20 == 0) {
 			int storedGrains = getStoredGrains(stack);
-			if (storedGrains + 20 < SandsOfTime.POUCH_CAPACITY.get()) {
+			if (storedGrains + 20 < GAGConfig.temporalPouch.capacity()) {
 				setStoredGrains(stack, storedGrains + 20);
 			}
 		}
@@ -133,11 +133,11 @@ public class TemporalPouchItem extends GAGItem {
 
 		var randomTickingState = level.getBlockState(pos).isRandomlyTicking();
 
-		if (!(SandsOfTime.isLevelAllowed(level) && (validBlockEntity || SandsOfTime.ALLOW_RANDOM_TICKS.get() && randomTickingState))) {
+		if (!(GAGConfig.temporalPouch.isLevelAllowed(level) && (validBlockEntity || GAGConfig.temporalPouch.allowRandomTicks() && randomTickingState))) {
 			return InteractionResult.FAIL;
 		}
 
-		var baseDuration = 20 * SandsOfTime.DURATION_PER_USE.get();
+		var baseDuration = 20 * GAGConfig.temporalPouch.durationPerUse();
 
 		var accelerator = level.getEntitiesOfClass(TimeAcceleratorEntity.class, new AABB(pos)).stream().findFirst().orElse(null);
 
@@ -154,7 +154,7 @@ public class TemporalPouchItem extends GAGItem {
 		}
 
 		int clicks = accelerator.getTimesAccelerated();
-		if (clicks++ >= SandsOfTime.MAX_RATE.get() || shouldDamage(player, stack) && getStoredGrains(stack) < grainsRequired(clicks)) {
+		if (clicks++ >= GAGConfig.temporalPouch.maxRate() || shouldDamage(player, stack) && getStoredGrains(stack) < grainsRequired(clicks)) {
 			return InteractionResult.SUCCESS;
 		}
 
@@ -171,7 +171,7 @@ public class TemporalPouchItem extends GAGItem {
 	}
 
 	public int grainsRequired(int level) {
-		return (1 << Math.max(0, level - 1)) * SandsOfTime.GRAINS_USED.get();
+		return (1 << Math.max(0, level - 1)) * GAGConfig.temporalPouch.grainsUsed();
 	}
 
 	private void playNote(Level level, BlockPos pos, int rate) {

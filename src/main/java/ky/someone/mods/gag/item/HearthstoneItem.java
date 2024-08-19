@@ -1,6 +1,5 @@
 package ky.someone.mods.gag.item;
 
-import dev.ftb.mods.ftblibrary.snbt.config.IntValue;
 import ky.someone.mods.gag.GAGRegistry;
 import ky.someone.mods.gag.GAGUtil;
 import ky.someone.mods.gag.config.GAGConfig;
@@ -26,16 +25,17 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.function.IntSupplier;
 
 public class HearthstoneItem extends GAGItem {
 
-	private final IntValue durability;
+	private final IntSupplier durability;
 
 	public HearthstoneItem() {
-		this(GAGConfig.Hearthstone.DURABILITY);
+		this(() -> GAGConfig.hearthstone.durability());
 	}
 
-	public HearthstoneItem(IntValue durability) {
+	public HearthstoneItem(IntSupplier durability) {
 		super(new Properties().stacksTo(1));
 		this.durability = durability;
 	}
@@ -74,19 +74,19 @@ public class HearthstoneItem extends GAGItem {
 
 	@Override
 	public int getMaxDamage(ItemStack stack) {
-		return durability.get();
+		return durability.getAsInt();
 	}
 
 	@Override
 	public int getUseDuration(ItemStack stack, LivingEntity entity) {
-		return GAGConfig.Hearthstone.WARMUP.get();
+		return GAGConfig.hearthstone.warmup();
 	}
 
 	@Nullable
 	public TeleportPos getTeleportPos(@Nullable Player player, ItemStack stack) {
-		boolean allowSpawn = GAGConfig.Hearthstone.ALLOW_SPAWN.get();
-		boolean ignoreSpawnBlock = GAGConfig.Hearthstone.IGNORE_SPAWN_BLOCK.get();
-		boolean useAnchorCharge = GAGConfig.Hearthstone.USE_ANCHOR_CHARGE.get();
+		boolean allowSpawn = GAGConfig.hearthstone.allowWorldSpawn();
+		boolean ignoreSpawnBlock = GAGConfig.hearthstone.ignoreSpawnBlock();
+		boolean useAnchorCharge = GAGConfig.hearthstone.useAnchorCharge();
 
 		if (player instanceof ServerPlayer serverPlayer) {
 			var server = serverPlayer.server;
@@ -131,9 +131,9 @@ public class HearthstoneItem extends GAGItem {
 	private ItemStack tryTeleport(ItemStack stack, ServerLevel level, ServerPlayer player, Vec3 pos, float yaw) {
 		var creative = player.isCreative();
 
-		var durabilityUsed = level.equals(player.serverLevel()) ? 1 : GAGConfig.Hearthstone.DIMENSION_MULTIPLIER.get();
+		var durabilityUsed = level.equals(player.serverLevel()) ? 1 : GAGConfig.hearthstone.dimensionMultiplier();
 		var distance = player.position().distanceTo(pos) * durabilityUsed;
-		var range = GAGConfig.Hearthstone.RANGE.get();
+		var range = GAGConfig.hearthstone.range();
 
 		if (durabilityUsed > 0) {
 			if (range < 0 || distance < range) {
@@ -143,7 +143,7 @@ public class HearthstoneItem extends GAGItem {
 				level.playSound(null, player.blockPosition(), GAGRegistry.TELEPORT.get(), SoundSource.PLAYERS, 0.5f, 0.5f);
 
 				if (!stack.isEmpty() && !creative) {
-					player.getCooldowns().addCooldown(stack.getItem(), GAGConfig.Hearthstone.COOLDOWN.get());
+					player.getCooldowns().addCooldown(stack.getItem(), GAGConfig.hearthstone.cooldown());
 				}
 			} else {
 				player.sendSystemMessage(getTranslation("too_weak").withStyle(ChatFormatting.RED));

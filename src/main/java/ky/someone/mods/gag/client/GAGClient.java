@@ -4,10 +4,7 @@ import com.google.common.collect.Iterables;
 import dev.architectury.event.events.client.ClientGuiEvent;
 import dev.architectury.event.events.client.ClientLifecycleEvent;
 import dev.architectury.registry.client.level.entity.EntityRendererRegistry;
-import dev.architectury.registry.client.rendering.ColorHandlerRegistry;
-import dev.architectury.registry.client.rendering.RenderTypeRegistry;
-import dev.architectury.registry.item.ItemPropertiesRegistry;
-import dev.architectury.registry.menu.MenuRegistry;
+import dev.architectury.registry.menu.forge.MenuRegistryImpl;
 import ky.someone.mods.gag.GAGRegistry;
 import ky.someone.mods.gag.GAGUtil;
 import ky.someone.mods.gag.client.render.TimeAcceleratorEntityRenderer;
@@ -20,8 +17,8 @@ import ky.someone.mods.gag.particle.client.MagicParticle;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
+import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.phys.AABB;
@@ -29,6 +26,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
 
 import java.util.List;
@@ -43,6 +41,11 @@ public interface GAGClient {
 		ClientGuiEvent.RENDER_HUD.register(GAGClient::renderHUD);
 
 		bus.addListener(GAGClient::registerParticles);
+		bus.addListener(GAGClient::registerColors);
+	}
+
+	static void registerColors(RegisterColorHandlersEvent.Item event) {
+		event.register((stack, index) -> index == 0 ? 0xFF000000 | PigmentJarItem.getRgbColor(stack) : -1, GAGRegistry.PIGMENT_JAR);
 	}
 
 	static void registerParticles(RegisterParticleProvidersEvent event) {
@@ -83,9 +86,9 @@ public interface GAGClient {
 				renderHudTooltip(mc, graphics, List.of(
 						block.getName(),
 						Component.translatable("info.gag.time_sand_tooltip_mult",
-								GAGUtil.asStyledValue(accelSpeed, GAGConfig.SandsOfTime.MAX_RATE.get(), Integer.toString(1 << accelSpeed))),
+								GAGUtil.asStyledValue(accelSpeed, GAGConfig.temporalPouch.maxRate(), Integer.toString(1 << accelSpeed))),
 						Component.translatable("info.gag.time_sand_tooltip_time",
-								GAGUtil.asStyledValue(timeLeft, GAGConfig.SandsOfTime.DURATION_PER_USE.get(), String.format("%.2f", timeLeft)))
+								GAGUtil.asStyledValue(timeLeft, GAGConfig.temporalPouch.durationPerUse(), String.format("%.2f", timeLeft)))
 				));
 
 				return;
@@ -116,12 +119,9 @@ public interface GAGClient {
 	}
 
 	static void setup(Minecraft minecraft) {
-		RenderTypeRegistry.register(RenderType.cutoutMipped(), GAGRegistry.NO_SOLICITORS_SIGN.get());
-		MenuRegistry.registerScreenFactory(GAGRegistry.LABELING_MENU.get(), LabelingMenuScreen::new);
+		MenuRegistryImpl.registerScreenFactory(GAGRegistry.LABELING_MENU.get(), LabelingMenuScreen::new);
 
-		ColorHandlerRegistry.registerItemColors((stack, index) -> index == 0 ? PigmentJarItem.getRgbColor(stack) : -1, GAGRegistry.PIGMENT_JAR.get());
-
-		ItemPropertiesRegistry.register(GAGRegistry.PIGMENT_JAR.get(), GAGUtil.id("pigment_amount"),
+		ItemProperties.register(GAGRegistry.PIGMENT_JAR.asItem(), GAGUtil.id("pigment_amount"),
 				(stack, level, entity, seed) -> PigmentJarItem.getColorAmount(stack) / (float) PigmentJarItem.MAX_AMOUNT);
 	}
 }

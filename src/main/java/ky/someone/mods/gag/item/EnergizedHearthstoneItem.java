@@ -25,7 +25,7 @@ import java.util.List;
 public class EnergizedHearthstoneItem extends HearthstoneItem {
 
 	public EnergizedHearthstoneItem() {
-		super(GAGConfig.Hearthstone.ENERGIZED_DURABILITY);
+		super(() -> GAGConfig.hearthstone.energizedDurability());
 	}
 
 	public boolean isBound(ItemStack stack) {

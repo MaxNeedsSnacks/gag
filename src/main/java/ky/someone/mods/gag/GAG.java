@@ -6,7 +6,6 @@ import dev.architectury.event.events.common.EntityEvent;
 import dev.architectury.event.events.common.LifecycleEvent;
 import dev.architectury.event.events.common.LightningEvent;
 import dev.architectury.event.events.common.PlayerEvent;
-import dev.ftb.mods.ftblibrary.snbt.config.ConfigUtil;
 import ky.someone.mods.gag.block.NoSolicitorsSign;
 import ky.someone.mods.gag.client.GAGClient;
 import ky.someone.mods.gag.command.GAGCommands;
@@ -25,16 +24,13 @@ import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.registries.RegisterEvent;
 import org.slf4j.Logger;
 
-import static dev.ftb.mods.ftblibrary.snbt.config.ConfigUtil.CONFIG_DIR;
-
 @Mod(GAGUtil.MOD_ID)
 @EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD)
 public class GAG {
 	public static final Logger LOGGER = LogUtils.getLogger();
 
 	public GAG(IEventBus bus) {
-		GAGConfig.init();
-		LifecycleEvent.SERVER_BEFORE_START.register((server) -> ConfigUtil.loadDefaulted(GAGConfig.CONFIG, CONFIG_DIR, GAGUtil.MOD_ID));
+		LifecycleEvent.SERVER_BEFORE_START.register(GAGConfig::load);
 		PlayerEvent.PLAYER_JOIN.register(GAGConfig::syncConfigTo);
 
 		EntityEvent.LIVING_CHECK_SPAWN.register(RepellingEffect::applyRepel);

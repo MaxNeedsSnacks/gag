@@ -66,7 +66,7 @@ public class GAGCommands {
 												ItemStack stack = player.getInventory().getItem(i);
 												if (stack.getItem() instanceof TemporalPouchItem) {
 													var storedGrains = getStoredGrains(stack);
-													var newTime = Math.min(storedGrains + time, GAGConfig.SandsOfTime.POUCH_CAPACITY.get());
+													var newTime = Math.min(storedGrains + time, GAGConfig.temporalPouch.capacity());
 													setStoredGrains(stack, newTime);
 													player.inventoryMenu.broadcastChanges();
 

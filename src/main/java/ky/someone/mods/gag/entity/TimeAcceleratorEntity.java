@@ -62,7 +62,7 @@ public class TimeAcceleratorEntity extends Entity {
 				// if it's a random ticking block, try to tick it
 				if (!level.isClientSide()) {
 					// this might be 0 if people increase randomTickSpeed with cheats, so be careful
-					var randomChance = GAGConfig.SandsOfTime.RANDOM_TICK_CHANCE.get() / level.getGameRules().getInt(GameRules.RULE_RANDOMTICKING);
+					var randomChance = GAGConfig.temporalPouch.randomTickChance() / level.getGameRules().getInt(GameRules.RULE_RANDOMTICKING);
 					if (randomChance == 0 || level.random.nextInt(randomChance) == 0) {
 						state.randomTick((ServerLevel) level, pos, level.random);
 					}
@@ -74,8 +74,8 @@ public class TimeAcceleratorEntity extends Entity {
 			}
 		}
 
-		var particleChance = (double) getTimesAccelerated() / GAGConfig.SandsOfTime.MAX_RATE.get() *
-				(double) getTicksRemaining() / (GAGConfig.SandsOfTime.DURATION_PER_USE.get() * 20);
+		var particleChance = (double) getTimesAccelerated() / GAGConfig.temporalPouch.maxRate() *
+		                     (double) getTicksRemaining() / (GAGConfig.temporalPouch.durationPerUse() * 20);
 
 		if (random.nextDouble() < particleChance) {
 			var magic = GAGRegistry.MAGIC_PARTICLE.get();

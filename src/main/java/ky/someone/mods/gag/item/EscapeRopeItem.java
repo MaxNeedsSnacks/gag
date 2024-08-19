@@ -39,7 +39,7 @@ public class EscapeRopeItem extends GAGItem {
 
 	@Override
 	public int getMaxDamage(ItemStack stack) {
-		return GAGConfig.EscapeRope.DURABILITY.get();
+		return GAGConfig.escapeRope.durability();
 	}
 
 	@Override
@@ -56,7 +56,7 @@ public class EscapeRopeItem extends GAGItem {
 
 	@Override
 	public int getUseDuration(ItemStack stack, LivingEntity entity) {
-		return GAGConfig.EscapeRope.WARMUP.get();
+		return GAGConfig.escapeRope.warmup();
 	}
 
 	@Override
@@ -97,7 +97,7 @@ public class EscapeRopeItem extends GAGItem {
 			}
 
 			if (!stack.isEmpty() && !creative) {
-				player.getCooldowns().addCooldown(stack.getItem(), GAGConfig.EscapeRope.COOLDOWN.get());
+				player.getCooldowns().addCooldown(stack.getItem(), GAGConfig.escapeRope.cooldown());
 			}
 		}
 		return stack;
