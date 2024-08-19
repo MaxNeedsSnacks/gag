@@ -4,6 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
+import ky.someone.mods.gag.GAGUtil;
 import ky.someone.mods.gag.config.GAGConfig;
 import ky.someone.mods.gag.item.PigmentJarItem;
 import ky.someone.mods.gag.item.TemporalPouchItem;
@@ -14,11 +15,20 @@ import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.RegisterCommandsEvent;
 
 import static ky.someone.mods.gag.item.TemporalPouchItem.getStoredGrains;
 import static ky.someone.mods.gag.item.TemporalPouchItem.setStoredGrains;
 
+@EventBusSubscriber(modid = GAGUtil.MOD_ID)
 public class GAGCommands {
+
+	@SubscribeEvent
+	public void onRegisterCommands(RegisterCommandsEvent event) {
+		register(event.getDispatcher(), event.getBuildContext(), event.getCommandSelection());
+	}
 
 	public static final SimpleCommandExceptionType INVALID_COLOR = new SimpleCommandExceptionType(Component.literal("Invalid rgb!"));
 

@@ -1,13 +1,10 @@
 package ky.someone.mods.gag.effect;
 
-import dev.architectury.event.EventResult;
 import ky.someone.mods.gag.GAGRegistry;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.monster.Enemy;
-import net.minecraft.world.level.BaseSpawner;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.Vec3;
 
@@ -16,7 +13,7 @@ public class RepellingEffect extends MobEffect {
 		super(MobEffectCategory.BENEFICIAL, 0xefc648);
 	}
 
-	public static EventResult applyRepel(LivingEntity entity, LevelAccessor level, double x, double y, double z, MobSpawnType type, BaseSpawner spawner) {
+	public static boolean applyRepel(LivingEntity entity, LevelAccessor level, double x, double y, double z) {
 		if (entity instanceof Enemy) {
 			var pos = new Vec3(x, y, z);
 			for (var player : level.players()) {
@@ -25,11 +22,11 @@ public class RepellingEffect extends MobEffect {
 					var distance = pos.distanceToSqr(player.position());
 					var repelRange = 16 * (repel.getAmplifier() + 1); // TODO: make configurable
 					if (distance < repelRange * repelRange) {
-						return EventResult.interruptFalse();
+						return true;
 					}
 				}
 			}
 		}
-		return EventResult.pass();
+		return false;
 	}
 }

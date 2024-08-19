@@ -2,7 +2,6 @@ package ky.someone.mods.gag.item.data;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import dev.architectury.hooks.forge.DyeColorHooksImpl;
 import ky.someone.mods.gag.GAGRegistry;
 import ky.someone.mods.gag.item.PigmentJarItem;
 import net.minecraft.network.FriendlyByteBuf;
@@ -115,7 +114,7 @@ public final class Pigment {
 	}
 
 	public static Pigment forLeather(DyeColor dye) {
-		return new Pigment(DyeColorHooksImpl.getColorValue(dye), PigmentJarItem.DYE_AMOUNT);
+		return new Pigment(dye.getTextureDiffuseColor(), PigmentJarItem.DYE_AMOUNT);
 	}
 
 	public int color() {
@@ -131,7 +130,7 @@ public final class Pigment {
 		if (other == this) return true;
 		if (other instanceof Pigment pigment) {
 			return pigment.color == this.color
-					&& pigment.amount == this.amount;
+			       && pigment.amount == this.amount;
 		}
 		return false;
 	}

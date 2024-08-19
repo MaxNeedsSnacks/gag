@@ -1,6 +1,5 @@
 package ky.someone.mods.gag.block;
 
-import dev.architectury.event.EventResult;
 import ky.someone.mods.gag.GAG;
 import ky.someone.mods.gag.GAGRegistry;
 import ky.someone.mods.gag.GAGUtil;
@@ -16,8 +15,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -187,13 +184,6 @@ public class NoSolicitorsSign extends Block {
 			GAGPointOfInterestStorage.get(serverLevel).add(pos, builtInRegistryHolder());
 		}
 		super.setPlacedBy(level, pos, state, entity, stack);
-	}
-
-	public static EventResult notBuyingYourStuff(Entity entity, Level level) {
-		if (entity.getType() == EntityType.WANDERING_TRADER && level instanceof ServerLevel serverLevel && blockWandererSpawn(serverLevel, entity.blockPosition())) {
-			return EventResult.interruptFalse();
-		}
-		return EventResult.pass();
 	}
 
 	public static boolean blockWandererSpawn(ServerLevel serverLevel, BlockPos pos) {

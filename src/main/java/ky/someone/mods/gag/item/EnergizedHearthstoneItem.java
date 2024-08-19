@@ -17,7 +17,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -89,35 +88,33 @@ public class EnergizedHearthstoneItem extends HearthstoneItem {
 		return isBound(stack) ? super.getUseDuration(stack, entity) : 0;
 	}
 
-	public static void lightningStrike(LightningBolt bolt, Level level, Vec3 pos, List<Entity> toStrike) {
-		for (var iter = toStrike.iterator(); iter.hasNext(); ) {
-			Entity entity = iter.next();
-			if (entity instanceof ItemEntity itemEntity) {
-				var stack = itemEntity.getItem();
-				if (stack.is(GAGRegistry.HEARTHSTONE.get())) {
-					var newStack = new ItemStack(GAGRegistry.ENERGIZED_HEARTHSTONE.get());
-					// damage the new stack relative to the old one
+	public static boolean lightningStrike(LightningBolt bolt, Entity entity) {
+		if (entity instanceof ItemEntity itemEntity) {
+			var stack = itemEntity.getItem();
+			if (stack.is(GAGRegistry.HEARTHSTONE.get())) {
+				var newStack = new ItemStack(GAGRegistry.ENERGIZED_HEARTHSTONE.get());
+				// damage the new stack relative to the old one
+				var damage = stack.getDamageValue() / (float) stack.getMaxDamage();
+				newStack.setDamageValue((int) (newStack.getMaxDamage() * damage));
+				// copy enchantments over to the new stack
+				EnchantmentHelper.setEnchantments(newStack, EnchantmentHelper.getEnchantmentsForCrafting(stack));
+				itemEntity.setItem(newStack);
+				bolt.hitEntities.add(entity);
+				return true;
+			} else if (stack.is(GAGRegistry.ENERGIZED_HEARTHSTONE.get())) {
+				// why are lightning bolts like this mojang...
+				if (!bolt.hitEntities.contains(entity)) {
+					// unbind the hearthstone first
+					stack.remove(GAGRegistry.TELEPORT_TARGET_DATA);
+					// and repair it by up to 25% of its durability on hit
 					var damage = stack.getDamageValue() / (float) stack.getMaxDamage();
-					newStack.setDamageValue((int) (newStack.getMaxDamage() * damage));
-					// copy enchantments over to the new stack
-					EnchantmentHelper.setEnchantments(newStack, EnchantmentHelper.getEnchantmentsForCrafting(stack));
-					itemEntity.setItem(newStack);
-					bolt.hitEntities.add(entity);
-					iter.remove();
-				} else if (stack.is(GAGRegistry.ENERGIZED_HEARTHSTONE.get())) {
-					// why are lightning bolts like this mojang...
-					if (!bolt.hitEntities.contains(entity)) {
-						// unbind the hearthstone first
-						stack.remove(GAGRegistry.TELEPORT_TARGET_DATA);
-						// and repair it by up to 25% of its durability on hit
-						var damage = stack.getDamageValue() / (float) stack.getMaxDamage();
-						stack.setDamageValue((int) (stack.getMaxDamage() * Math.max(0, damage - 0.25)));
-					}
-					itemEntity.setInvulnerable(true);
-					bolt.hitEntities.add(entity);
-					iter.remove();
+					stack.setDamageValue((int) (stack.getMaxDamage() * Math.max(0, damage - 0.25)));
 				}
+				itemEntity.setInvulnerable(true);
+				bolt.hitEntities.add(entity);
+				return true;
 			}
 		}
+		return false;
 	}
 }

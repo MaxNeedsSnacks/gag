@@ -14,9 +14,12 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.server.ServerAboutToStartEvent;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -24,6 +27,7 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+@EventBusSubscriber(modid = GAGUtil.MOD_ID)
 public class GAGConfig {
 	public static PouchConfig temporalPouch;
 
@@ -33,7 +37,7 @@ public class GAGConfig {
 
 	public static DynamiteConfig dynamite;
 
-	public static void load(MinecraftServer server) {
+	public static void load() {
 		Configuration config = new Configuration(GAGUtil.MOD_ID);
 		config.setTitle("Config for Gadgets Against Grind");
 
@@ -271,5 +275,15 @@ public class GAGConfig {
 	public static void handleSync(FriendlyByteBuf buf) {
 		hearthstone = HearthstoneConfig.CODEC.decode(buf);
 		escapeRope = RopeConfig.CODEC.decode(buf);
+	}
+
+	@SubscribeEvent
+	public static void loadConfig(ServerAboutToStartEvent event) {
+		load();
+	}
+
+	@SubscribeEvent
+	public static void syncConfigOnLogin(PlayerEvent.PlayerLoggedInEvent event) {
+		GAGConfig.syncConfigTo(((ServerPlayer) event.getEntity()));
 	}
 }
