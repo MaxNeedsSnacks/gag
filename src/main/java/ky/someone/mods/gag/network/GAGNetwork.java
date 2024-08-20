@@ -1,18 +1,30 @@
 package ky.someone.mods.gag.network;
 
-import dev.architectury.networking.simple.MessageType;
-import dev.architectury.networking.simple.SimpleNetworkManager;
 import ky.someone.mods.gag.GAGUtil;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload.Type;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 
-public class GAGNetwork {
-	public static final SimpleNetworkManager CHANNEL = SimpleNetworkManager.create(GAGUtil.MOD_ID);
+public interface GAGNetwork {
+	private static <T extends CustomPacketPayload> Type<T> type(String id) {
+		return new Type<>(GAGUtil.id(id));
+	}
 
-	public static final MessageType LABELER_TRY_RENAME = CHANNEL.registerC2S("rename_item", LabelerTryRenamePacket::new);
+	Type<RenameItemPayload> LABELER_TRY_RENAME = type("rename_item");
 
-	public static final MessageType FISHSPLOSION = CHANNEL.registerS2C("fishsplosion", FishsplosionPacket::new);
+	Type<FishsplosionPayload> FISHSPLOSION = type("fishsplosion");
 
-	public static final MessageType SERVER_CONFIG_SYNC = CHANNEL.registerS2C("server_config_sync", ServerConfigSyncPacket::new);
+	Type<ServerConfigPayload> SERVER_CONFIG_SYNC = type("server_config_sync");
 
-	public static void init() {
+	@SubscribeEvent
+	static void onRegisterPayloadHandlers(RegisterPayloadHandlersEvent event) {
+		var reg = event.registrar("1");
+
+		reg.playToServer(LABELER_TRY_RENAME, RenameItemPayload.CODEC, RenameItemPayload::handle);
+
+		reg.playToClient(FISHSPLOSION, FishsplosionPayload.CODEC, FishsplosionPayload::handle);
+
+		reg.configurationToClient(SERVER_CONFIG_SYNC, ServerConfigPayload.CODEC, ServerConfigPayload::handle);
 	}
 }

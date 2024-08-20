@@ -3,12 +3,11 @@ package ky.someone.mods.gag.entity;
 import ky.someone.mods.gag.GAGRegistry;
 import ky.someone.mods.gag.GAGUtil;
 import ky.someone.mods.gag.config.GAGConfig;
-import ky.someone.mods.gag.network.FishsplosionPacket;
+import ky.someone.mods.gag.network.FishsplosionPayload;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
@@ -17,7 +16,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Explosion;
@@ -30,6 +28,7 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.event.EventHooks;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -77,11 +76,7 @@ public class FishingDynamiteEntity extends AbstractDynamiteEntity {
 			explosion.explode();
 
 			explosion.finalizeExplosion(false);
-			for (Player player : level.players()) {
-				if (player.distanceToSqr(this) < 4096.0D) {
-					new FishsplosionPacket(explosion).sendTo((ServerPlayer) player);
-				}
-			}
+			PacketDistributor.sendToPlayersTrackingEntity(this, new FishsplosionPayload(explosion));
 		}
 	}
 

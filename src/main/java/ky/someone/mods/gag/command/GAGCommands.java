@@ -26,7 +26,7 @@ import static ky.someone.mods.gag.item.TemporalPouchItem.setStoredGrains;
 public class GAGCommands {
 
 	@SubscribeEvent
-	public void onRegisterCommands(RegisterCommandsEvent event) {
+	public static void onRegisterCommands(RegisterCommandsEvent event) {
 		register(event.getDispatcher(), event.getBuildContext(), event.getCommandSelection());
 	}
 

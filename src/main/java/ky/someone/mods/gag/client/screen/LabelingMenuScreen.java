@@ -5,7 +5,7 @@ import ky.someone.mods.gag.GAGUtil;
 import ky.someone.mods.gag.item.LabelingToolItem;
 import ky.someone.mods.gag.item.PigmentJarItem;
 import ky.someone.mods.gag.menu.LabelingMenu;
-import ky.someone.mods.gag.network.LabelerTryRenamePacket;
+import ky.someone.mods.gag.network.RenameItemPayload;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
@@ -21,6 +21,7 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.Objects;
 
@@ -166,13 +167,13 @@ public class LabelingMenuScreen extends AbstractContainerScreen<LabelingMenu> im
 			Slot slot = this.menu.getSlot(0);
 
 			if (slot.hasItem() && !slot.getItem().has(DataComponents.CUSTOM_NAME)
-					&& name.equals(slot.getItem().getHoverName().getString())
-					&& !this.menu.getSlot(1).hasItem()) {
+			    && name.equals(slot.getItem().getHoverName().getString())
+			    && !this.menu.getSlot(1).hasItem()) {
 				s = "";
 			}
 
 			this.menu.setName(s);
-			new LabelerTryRenamePacket(s).sendToServer();
+			PacketDistributor.sendToServer(new RenameItemPayload(s));
 		}
 	}
 

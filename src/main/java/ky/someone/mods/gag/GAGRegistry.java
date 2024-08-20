@@ -43,9 +43,11 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
+import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
+import net.neoforged.neoforge.registries.RegisterEvent;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -54,6 +56,7 @@ import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
 public interface GAGRegistry {
+	// TODO: remove once shadow updates Placebo
 	DeferredHelper HELPER = new DeferredHelper(GAGUtil.MOD_ID) {
 		@Override
 		public <T extends Item> DeferredItem<T> item(String path, Supplier<T> factory) {
@@ -64,6 +67,11 @@ public interface GAGRegistry {
 	};
 
 	Collection<DeferredItem<?>> ITEMS = new HashSet<>();
+
+	@SubscribeEvent
+	static void register(RegisterEvent event) {
+		HELPER.register(event);
+	}
 
 	DeferredItem<Item> HEARTHSTONE = HELPER.item("hearthstone", () -> new HearthstoneItem());
 	DeferredHolder<CreativeModeTab, ?> CREATIVE_TAB = HELPER.creativeTab("gag", (builder) -> builder

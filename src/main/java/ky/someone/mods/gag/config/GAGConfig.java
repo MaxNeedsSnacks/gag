@@ -4,21 +4,16 @@ import dev.shadowsoffire.placebo.config.ConfigCategory;
 import dev.shadowsoffire.placebo.config.Configuration;
 import dev.shadowsoffire.placebo.config.Property;
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import ky.someone.mods.gag.GAG;
 import ky.someone.mods.gag.GAGUtil;
-import ky.someone.mods.gag.network.ServerConfigSyncPacket;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.VarInt;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.server.ServerAboutToStartEvent;
 
 import java.util.Arrays;
@@ -264,26 +259,13 @@ public class GAGConfig {
 	public record DynamiteConfig(int miningRadius, boolean miningGivesHaste, int fishingRadius, boolean fishingInstakill, boolean fishingDamageAll, TargetFilter fishingTargets, int fishingAdditionalLoot) {
 	}
 
-	public static void syncConfigTo(ServerPlayer player) {
-		var buf = new FriendlyByteBuf(Unpooled.buffer());
-		HearthstoneConfig.CODEC.encode(buf, hearthstone);
-		RopeConfig.CODEC.encode(buf, escapeRope);
-
-		new ServerConfigSyncPacket(buf).sendTo(player);
-	}
-
-	public static void handleSync(FriendlyByteBuf buf) {
-		hearthstone = HearthstoneConfig.CODEC.decode(buf);
-		escapeRope = RopeConfig.CODEC.decode(buf);
+	public static void handleSync(HearthstoneConfig hearthstone, RopeConfig escapeRope) {
+		GAGConfig.hearthstone = hearthstone;
+		GAGConfig.escapeRope = escapeRope;
 	}
 
 	@SubscribeEvent
 	public static void loadConfig(ServerAboutToStartEvent event) {
 		load();
-	}
-
-	@SubscribeEvent
-	public static void syncConfigOnLogin(PlayerEvent.PlayerLoggedInEvent event) {
-		GAGConfig.syncConfigTo(((ServerPlayer) event.getEntity()));
 	}
 }
