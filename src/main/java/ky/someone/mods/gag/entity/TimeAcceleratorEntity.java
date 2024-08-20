@@ -1,15 +1,11 @@
 package ky.someone.mods.gag.entity;
 
-import dev.architectury.networking.NetworkManager;
 import ky.someone.mods.gag.GAGRegistry;
 import ky.someone.mods.gag.config.GAGConfig;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.server.level.ServerEntity;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -104,11 +100,6 @@ public class TimeAcceleratorEntity extends Entity {
 	protected void addAdditionalSaveData(CompoundTag compound) {
 		compound.putInt(TIMES_ACCELERATED, getTimesAccelerated());
 		compound.putInt(TICKS_REMAINING, getTicksRemaining());
-	}
-
-	@Override
-	public Packet<ClientGamePacketListener> getAddEntityPacket(ServerEntity entity) {
-		return NetworkManager.createAddEntityPacket(this, entity);
 	}
 
 	public int getSpeedMultiplier() {

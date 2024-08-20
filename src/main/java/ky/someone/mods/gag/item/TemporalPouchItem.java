@@ -1,6 +1,5 @@
 package ky.someone.mods.gag.item;
 
-import dev.architectury.hooks.level.entity.PlayerHooks;
 import dev.shadowsoffire.placebo.color.GradientColor;
 import ky.someone.mods.gag.GAGRegistry;
 import ky.someone.mods.gag.GAGUtil;
@@ -77,7 +76,7 @@ public class TemporalPouchItem extends GAGItem {
 	@Override
 	public void inventoryTick(ItemStack stack, Level level, Entity entity, int itemSlot, boolean isSelected) {
 		super.inventoryTick(stack, level, entity, itemSlot, isSelected);
-		if (level.isClientSide || !(entity instanceof Player player) || PlayerHooks.isFake(player)) {
+		if (level.isClientSide || !(entity instanceof Player player) || player.isFakePlayer()) {
 			return;
 		}
 
