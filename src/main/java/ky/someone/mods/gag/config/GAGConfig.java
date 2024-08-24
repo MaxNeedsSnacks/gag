@@ -14,7 +14,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.event.server.ServerAboutToStartEvent;
+import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -265,7 +265,11 @@ public class GAGConfig {
 	}
 
 	@SubscribeEvent
-	public static void loadConfig(ServerAboutToStartEvent event) {
+	public void onClientPlayerDisconnect(ClientPlayerNetworkEvent.LoggingOut event) {
+		// restore local configuration when disconnecting from a server by reloading from disk
+		// this isn't *great* as it reloads the *entire* configuration, but for now it works well enough
+		// also, since LoggingOut is fired on integrated server creation, this means the config
+		// reloads whenever someone creates a new world, which is... actually a plus!
 		load();
 	}
 }

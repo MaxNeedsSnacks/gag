@@ -3,6 +3,7 @@ package ky.someone.mods.gag;
 import com.mojang.logging.LogUtils;
 import ky.someone.mods.gag.block.NoSolicitorsSign;
 import ky.someone.mods.gag.client.GAGClient;
+import ky.someone.mods.gag.config.GAGConfig;
 import ky.someone.mods.gag.effect.RepellingEffect;
 import ky.someone.mods.gag.item.EnergizedHearthstoneItem;
 import ky.someone.mods.gag.network.GAGConfigPhase;
@@ -14,6 +15,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.EntityStruckByLightningEvent;
@@ -26,10 +28,14 @@ public class GAG {
 	public static final Logger LOGGER = LogUtils.getLogger();
 
 	public GAG(IEventBus bus) {
-
 		bus.register(GAGRegistry.class);
 		bus.register(GAGNetwork.class);
 		bus.register(GAGConfigPhase.class);
+
+		// initially load config during common setup;
+		// this ensures dedicated clients and servers will have their own config loaded when needed
+		// note some values are temporarily overridden by the server on the client side
+		bus.addListener(FMLCommonSetupEvent.class, event -> GAGConfig.load());
 
 		if (FMLEnvironment.dist == Dist.CLIENT) {
 			GAGClient.init(bus);
