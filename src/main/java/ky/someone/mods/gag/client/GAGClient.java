@@ -28,6 +28,7 @@ import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
 import net.neoforged.neoforge.client.event.RenderGuiEvent;
+import net.neoforged.neoforge.common.NeoForge;
 
 import java.util.List;
 
@@ -35,6 +36,7 @@ import java.util.List;
 public interface GAGClient {
 	static void init(IEventBus bus) {
 		bus.register(GAGClient.class);
+		NeoForge.EVENT_BUS.register(GAGClientEvents.class);
 	}
 
 	@SubscribeEvent
@@ -63,66 +65,5 @@ public interface GAGClient {
 		event.registerEntityRenderer(GAGRegistry.TIME_ACCELERATOR.get(), TimeAcceleratorEntityRenderer::new);
 		event.registerEntityRenderer(GAGRegistry.MINING_DYNAMITE.get(), ThrownItemRenderer::new);
 		event.registerEntityRenderer(GAGRegistry.FISHING_DYNAMITE.get(), ThrownItemRenderer::new);
-	}
-
-	static void renderHUD(RenderGuiEvent.Post event) {
-		var graphics = event.getGuiGraphics();
-		var mc = Minecraft.getInstance();
-
-		if (mc.options.hideGui || mc.gameMode.getPlayerMode() == GameType.SPECTATOR) {
-			return;
-		}
-
-		var level = mc.level;
-		var player = mc.player;
-
-		if (level == null || player == null) {
-			return;
-		}
-
-		if (mc.hitResult instanceof BlockHitResult blockHit) {
-			var pos = blockHit.getBlockPos();
-			var block = level.getBlockState(pos).getBlock();
-
-			var accelerator = Iterables.getFirst(level.getEntitiesOfClass(TimeAcceleratorEntity.class, new AABB(pos)), null);
-			if (accelerator != null) {
-				var accelSpeed = accelerator.getTimesAccelerated();
-				var timeLeft = accelerator.getTicksRemaining() / 20d;
-
-				if (accelSpeed == 0) return;
-
-				renderHudTooltip(mc, graphics, List.of(
-						block.getName(),
-						Component.translatable("info.gag.time_sand_tooltip_mult",
-								GAGUtil.asStyledValue(accelSpeed, GAGConfig.temporalPouch.maxRate(), Integer.toString(1 << accelSpeed))),
-						Component.translatable("info.gag.time_sand_tooltip_time",
-								GAGUtil.asStyledValue(timeLeft, GAGConfig.temporalPouch.durationPerUse(), String.format("%.2f", timeLeft)))
-				));
-
-				return;
-			}
-		}
-
-		var stack = player.getUseItem();
-		List<Component> tooltip = List.of();
-
-		if (!stack.isEmpty() && stack.getItem() instanceof GAGItem item) {
-			tooltip = item.getUsingTooltip(player, stack, player.getTicksUsingItem());
-		} else if ((stack = player.getMainHandItem()).getItem() instanceof GAGItem item) {
-			tooltip = item.getHoldingTooltip(player, stack);
-		} else if ((stack = player.getOffhandItem()).getItem() instanceof GAGItem item) {
-			tooltip = item.getHoldingTooltip(player, stack);
-		}
-
-		if (!tooltip.isEmpty()) {
-			renderHudTooltip(mc, graphics, tooltip);
-		}
-	}
-
-	private static void renderHudTooltip(Minecraft mc, GuiGraphics graphics, List<Component> text) {
-		if (mc.screen != null) return;
-		var x = mc.getWindow().getGuiScaledWidth() / 2;
-		var y = mc.getWindow().getGuiScaledHeight() / 2;
-		graphics.renderComponentTooltip(mc.font, text, x + 10, y);
 	}
 }

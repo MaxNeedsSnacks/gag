@@ -265,7 +265,7 @@ public class GAGConfig {
 	}
 
 	@SubscribeEvent
-	public void onClientPlayerDisconnect(ClientPlayerNetworkEvent.LoggingOut event) {
+	public static void onClientPlayerDisconnect(ClientPlayerNetworkEvent.LoggingOut event) {
 		// restore local configuration when disconnecting from a server by reloading from disk
 		// this isn't *great* as it reloads the *entire* configuration, but for now it works well enough
 		// also, since LoggingOut is fired on integrated server creation, this means the config
