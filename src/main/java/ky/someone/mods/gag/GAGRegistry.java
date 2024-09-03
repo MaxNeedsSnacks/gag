@@ -26,6 +26,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.sounds.SoundEvent;
@@ -49,24 +50,13 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.RegisterEvent;
 
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
+import java.util.stream.Stream;
 
 public interface GAGRegistry {
-	// TODO: remove once shadow updates Placebo
-	DeferredHelper HELPER = new DeferredHelper(GAGUtil.MOD_ID) {
-		@Override
-		public <T extends Item> DeferredItem<T> item(String path, Supplier<T> factory) {
-			var item = super.item(path, factory);
-			ITEMS.add(item);
-			return item;
-		}
-	};
-
-	Collection<DeferredItem<?>> ITEMS = new HashSet<>();
+	DeferredHelper HELPER = DeferredHelper.create(GAGUtil.MOD_ID);
 
 	@SubscribeEvent
 	static void register(RegisterEvent event) {
@@ -74,11 +64,11 @@ public interface GAGRegistry {
 	}
 
 	DeferredItem<Item> HEARTHSTONE = HELPER.item("hearthstone", () -> new HearthstoneItem());
+
 	DeferredHolder<CreativeModeTab, ?> CREATIVE_TAB = HELPER.creativeTab("gag", (builder) -> builder
 			.icon(() -> HEARTHSTONE.get().getDefaultInstance())
 			.title(Component.literal("Gadgets against Grind"))
-			.displayItems((params, output) -> ITEMS.stream()
-					.map(Holder::value)
+			.displayItems((params, output) -> getItems()
 					.<ItemStack>mapMulti((item, sink) -> {
 						sink.accept(item.getDefaultInstance());
 						if (item instanceof ItemWithSubsets subsets) {
@@ -178,14 +168,13 @@ public interface GAGRegistry {
 	}
 
 	// menus
-	DeferredHolder<MenuType<?>, MenuType<LabelingMenu>> LABELING_MENU = HELPER.menu("labeling", LabelingMenu::new);
+	MenuType<LabelingMenu> LABELING_MENU = HELPER.menu("labeling", LabelingMenu::new);
 
 	// particles
 	DeferredHolder<ParticleType<?>, SimpleParticleType> MAGIC_PARTICLE = HELPER.simpleParticle("magic", true);
 
 	// effects
 	DeferredHolder<MobEffect, RepellingEffect> REPELLING = HELPER.effect("repelling", RepellingEffect::new);
-
 
 	record BlockAndItem<B extends Block, I extends Item>(
 			DeferredBlock<B> block,
@@ -206,5 +195,10 @@ public interface GAGRegistry {
 		public Item asItem() {
 			return item.asItem();
 		}
+	}
+
+	@SuppressWarnings("UnstableApiUsage")
+	static Stream<Item> getItems() {
+		return HELPER.getRegisteredObjects(Registries.ITEM).stream().map(Holder::value);
 	}
 }

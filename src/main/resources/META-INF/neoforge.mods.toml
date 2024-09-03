@@ -27,5 +27,12 @@ versionRange = "[1.21,)"
 ordering = "NONE"
 side = "BOTH"
 
+[[dependencies.gag]]
+modId = "placebo"
+type = "required"
+versionRange = "[9.5.0,)"
+ordering = "NONE"
+side = "BOTH"
+
 [[mixins]]
 config = "gag.mixins.json"

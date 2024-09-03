@@ -86,7 +86,7 @@ public class LabelingMenu extends BasicMenu {
 	}
 
 	public LabelingMenu(int i, Inventory inventory) {
-		this(GAGRegistry.LABELING_MENU.get(), i, inventory, inventory.player);
+		this(GAGRegistry.LABELING_MENU, i, inventory, inventory.player);
 	}
 
 	@Override
