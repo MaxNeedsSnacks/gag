@@ -2,6 +2,7 @@ package ky.someone.mods.gag.item;
 
 import ky.someone.mods.gag.GAGRegistry;
 import ky.someone.mods.gag.GAGUtil;
+import ky.someone.mods.gag.config.GAGClientConfig;
 import ky.someone.mods.gag.config.GAGConfig;
 import ky.someone.mods.gag.item.data.TeleportPos;
 import net.minecraft.ChatFormatting;
@@ -51,13 +52,18 @@ public class EnergizedHearthstoneItem extends HearthstoneItem {
 		var target = getTeleportPos(player, stack);
 
 		if (target != null) {
+			if (GAGClientConfig.hearthstoneHidePosition) {
+				return getTranslation("target.bound", getTranslation("target.hidden").withStyle(GAGUtil.TOOLTIP_FLAVOUR))
+						.withStyle(GAGUtil.COLOUR_INFO);
+			}
+
 			var pos = target.pos();
 			var level = target.level();
 
 			var text = Component.translatable(String.format("(%.1f %.1f %.1f)", pos.x, pos.y, pos.z)).withStyle(GAGUtil.COLOUR_TRUE);
 
 			if (player == null || !level.equals(player.level().dimension())) {
-				text.append(" @ ").append(Component.translatable(level.toString()).withStyle(ChatFormatting.GRAY));
+				text.append(" @ ").append(Component.translatable(level.location().toString()).withStyle(ChatFormatting.GRAY));
 			}
 
 			return getTranslation("target.bound", text).withStyle(GAGUtil.COLOUR_INFO);

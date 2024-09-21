@@ -22,6 +22,7 @@
 	"item.gag.hearthstone.info_adv_2": "and can now be used to teleport to any one bound location! (use while sneaking to bind)",
 	"item.gag.hearthstone.info_adv_3": "Note that to reset the stone later, you will need to hit it with lightning again.",
 	"item.gag.hearthstone.target.bound": "Currently bound to %s",
+	"item.gag.hearthstone.target.hidden": "[hidden target]",
 	"item.gag.hearthstone.target.unbound": "Currently unbound",
 	"item.gag.hearthstone.target.respawn": "your respawn point",
 	"item.gag.hearthstone.warmup": "Teleporting in %s seconds...",
