@@ -1,10 +1,12 @@
 package ky.someone.mods.gag.recipe.pigment;
 
 import ky.someone.mods.gag.GAGRegistry;
+import ky.someone.mods.gag.GAGUtil;
 import ky.someone.mods.gag.item.PigmentJarItem;
 import ky.someone.mods.gag.item.data.Pigment;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CraftingInput;
@@ -13,6 +15,9 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 
 public class PigmentJarMixingRecipe extends CustomRecipe {
+
+	public static final ResourceLocation ID = GAGUtil.id("pigment_jar_mixing");
+
 	public PigmentJarMixingRecipe(CraftingBookCategory category) {
 		super(category);
 	}

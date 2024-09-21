@@ -85,10 +85,10 @@ public class GAGRecipesProvider extends RecipeProvider {
 				.unlockedBy("has_glowstone", has(Items.GLOWSTONE_DUST))
 				.save(output);
 
-		special(PigmentJarMixingRecipe::new).save(output, GAGUtil.id("pigment_jar_mixing"));
-		special(PigmentJarFromDyeRecipe::new).save(output, GAGUtil.id("pigment_jar_from_dye"));
-		special(PigmentJarLeatherDyingRecipe::new).save(output, GAGUtil.id("pigment_jar_leather_dying"));
-		special(PigmentJarSplittingRecipe::new).save(output, GAGUtil.id("pigment_jar_splitting"));
+		special(PigmentJarMixingRecipe::new).save(output, PigmentJarMixingRecipe.ID);
+		special(PigmentJarFromDyeRecipe::new).save(output, PigmentJarFromDyeRecipe.ID);
+		special(PigmentJarLeatherDyingRecipe::new).save(output, PigmentJarLeatherDyingRecipe.ID);
+		special(PigmentJarSplittingRecipe::new).save(output, PigmentJarSplittingRecipe.ID);
 
 		shapeless(RecipeCategory.MISC, Items.GLASS_BOTTLE)
 				.requires(GAGRegistry.PIGMENT_JAR)

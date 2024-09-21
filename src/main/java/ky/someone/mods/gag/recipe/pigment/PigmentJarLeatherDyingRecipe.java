@@ -1,11 +1,13 @@
 package ky.someone.mods.gag.recipe.pigment;
 
 import ky.someone.mods.gag.GAGRegistry;
+import ky.someone.mods.gag.GAGUtil;
 import ky.someone.mods.gag.item.PigmentJarItem;
 import ky.someone.mods.gag.item.data.Pigment;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -21,6 +23,8 @@ import java.util.Map;
 import java.util.Objects;
 
 public class PigmentJarLeatherDyingRecipe extends CustomRecipe {
+
+	public static final ResourceLocation ID = GAGUtil.id("pigment_jar_leather_dying");
 
 	private static final Map<Item, Integer> VALID_ITEMS = Map.of(
 			Items.LEATHER_HELMET, 5,

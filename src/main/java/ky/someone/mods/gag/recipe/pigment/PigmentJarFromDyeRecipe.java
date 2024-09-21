@@ -1,9 +1,11 @@
 package ky.someone.mods.gag.recipe.pigment;
 
 import ky.someone.mods.gag.GAGRegistry;
+import ky.someone.mods.gag.GAGUtil;
 import ky.someone.mods.gag.item.PigmentJarItem;
 import ky.someone.mods.gag.item.data.Pigment;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.ItemStack;
@@ -26,6 +28,9 @@ import net.minecraft.world.level.Level;
  * - Pigment Jar with color of dye and amount = 4 * amount of dye
  */
 public class PigmentJarFromDyeRecipe extends CustomRecipe {
+
+	public static final ResourceLocation ID = GAGUtil.id("pigment_jar_from_dye");
+
 	public PigmentJarFromDyeRecipe(CraftingBookCategory category) {
 		super(category);
 	}

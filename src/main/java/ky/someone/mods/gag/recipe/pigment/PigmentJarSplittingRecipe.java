@@ -1,8 +1,10 @@
 package ky.someone.mods.gag.recipe.pigment;
 
 import ky.someone.mods.gag.GAGRegistry;
+import ky.someone.mods.gag.GAGUtil;
 import ky.someone.mods.gag.item.PigmentJarItem;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CraftingInput;
@@ -11,6 +13,9 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 
 public class PigmentJarSplittingRecipe extends CustomRecipe {
+
+	public static final ResourceLocation ID = GAGUtil.id("pigment_jar_splitting");
+
 	public PigmentJarSplittingRecipe(CraftingBookCategory category) {
 		super(category);
 	}
