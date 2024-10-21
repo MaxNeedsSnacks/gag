@@ -204,6 +204,7 @@ public class FishingDynamiteEntity extends AbstractDynamiteEntity {
 					LootParams lootParams = new LootParams.Builder((ServerLevel) level)
 							.withParameter(LootContextParams.ORIGIN, pos)
 							.withParameter(LootContextParams.TOOL, ItemStack.EMPTY)
+							.withParameter(LootContextParams.KILLER_ENTITY, getIndirectSourceEntity())
 							.withOptionalParameter(LootContextParams.THIS_ENTITY, getDirectSourceEntity())
 							.create(LootContextParamSets.FISHING);
 					LootTable lootTable = level.getServer().getLootData().getLootTable(BuiltInLootTables.FISHING_FISH);
