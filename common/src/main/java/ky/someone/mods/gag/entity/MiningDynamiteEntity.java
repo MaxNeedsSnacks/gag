@@ -30,6 +30,7 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -170,6 +171,7 @@ public class MiningDynamiteEntity extends AbstractDynamiteEntity {
 			}
 
 			this.getToBlow().addAll(set);
+			PlatformInvokers.explosionPost(level, this, List.of(), radius * 2);
 		}
 	}
 }
