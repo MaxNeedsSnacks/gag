@@ -1,6 +1,5 @@
 package ky.someone.mods.gag.entity;
 
-import com.google.common.collect.Sets;
 import ky.someone.mods.gag.GAGRegistry;
 import ky.someone.mods.gag.GAGUtil;
 import ky.someone.mods.gag.config.GAGConfig;
@@ -24,7 +23,6 @@ import net.minecraft.world.level.ExplosionDamageCalculator;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -32,7 +30,6 @@ import net.neoforged.neoforge.event.EventHooks;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
-import java.util.Set;
 
 public class MiningDynamiteEntity extends AbstractDynamiteEntity {
 
@@ -125,61 +122,12 @@ public class MiningDynamiteEntity extends AbstractDynamiteEntity {
 				public boolean shouldBlockExplode(Explosion explosion, BlockGetter blockGetter, BlockPos blockPos, BlockState blockState, float f) {
 					return blockState.getFluidState().isEmpty() && super.shouldBlockExplode(explosion, blockGetter, blockPos, blockState, f);
 				}
-			}, x, y, z, radius, false, BlockInteraction.DESTROY, ParticleTypes.EXPLOSION, ParticleTypes.EXPLOSION_EMITTER, SoundEvents.GENERIC_EXPLODE);
-		}
 
-		/**
-		 * Does the first part of the explosion (destroy blocks)
-		 * <p>
-		 * Note: For now, this is just a copy of the vanilla method, but with entity damage removed
-		 */
-		@Override
-		public void explode() {
-			this.level.gameEvent(getDirectSourceEntity(), GameEvent.EXPLODE, BlockPos.containing(this.x, this.y, this.z));
-			Set<BlockPos> set = Sets.newHashSet();
-			for (int j = 0; j < 16; ++j) {
-				for (int k = 0; k < 16; ++k) {
-					for (int l = 0; l < 16; ++l) {
-						if (j == 0 || j == 15 || k == 0 || k == 15 || l == 0 || l == 15) {
-							double d = (float) j / 15.0F * 2.0F - 1.0F;
-							double e = (float) k / 15.0F * 2.0F - 1.0F;
-							double f = (float) l / 15.0F * 2.0F - 1.0F;
-							double g = Math.sqrt(d * d + e * e + f * f);
-							d /= g;
-							e /= g;
-							f /= g;
-							float h = this.radius() * (0.7F + this.level.random.nextFloat() * 0.6F);
-							double m = this.x;
-							double n = this.y;
-							double o = this.z;
-
-							for (float p = 0.3F; h > 0.0F; h -= 0.22500001F) {
-								BlockPos blockPos = BlockPos.containing(m, n, o);
-								BlockState blockState = this.level.getBlockState(blockPos);
-								FluidState fluidState = this.level.getFluidState(blockPos);
-								if (!this.level.isInWorldBounds(blockPos)) {
-									break;
-								}
-
-								Optional<Float> optional = this.damageCalculator.getBlockExplosionResistance(this, this.level, blockPos, blockState, fluidState);
-								if (optional.isPresent()) {
-									h -= (optional.get() + 0.3F) * 0.3F;
-								}
-
-								if (h > 0.0F && this.damageCalculator.shouldBlockExplode(this, this.level, blockPos, blockState, h)) {
-									set.add(blockPos);
-								}
-
-								m += d * 0.3F;
-								n += e * 0.3F;
-								o += f * 0.3F;
-							}
-						}
-					}
+				@Override
+				public boolean shouldDamageEntity(Explosion arg, Entity arg2) {
+					return false;
 				}
-			}
-
-			this.getToBlow().addAll(set);
+			}, x, y, z, radius, false, BlockInteraction.DESTROY, ParticleTypes.EXPLOSION, ParticleTypes.EXPLOSION_EMITTER, SoundEvents.GENERIC_EXPLODE);
 		}
 	}
 }
