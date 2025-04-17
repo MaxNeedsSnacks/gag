@@ -115,8 +115,7 @@ dependencies {
 
 processResources {
 	def toReplace = [
-			"version"             : project.version,
-			"architectury_version": architectury_version
+			"version"             : project.version
 	]
 
 	inputs.properties toReplace
