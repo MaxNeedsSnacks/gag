@@ -44,7 +44,7 @@ public interface GAGClient {
 
 	@SubscribeEvent
 	static void registerParticles(RegisterParticleProvidersEvent event) {
-		event.registerSpriteSet(GAGRegistry.MAGIC_PARTICLE.get(), MagicParticle.Provider::new);
+		event.registerSpriteSet(GAGRegistry.MAGIC_PARTICLE, MagicParticle.Provider::new);
 	}
 
 	@SubscribeEvent

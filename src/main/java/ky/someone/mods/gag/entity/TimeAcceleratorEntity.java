@@ -74,7 +74,7 @@ public class TimeAcceleratorEntity extends Entity {
 		                     (double) getTicksRemaining() / (GAGConfig.temporalPouch.durationPerUse() * 20);
 
 		if (random.nextDouble() < particleChance) {
-			var magic = GAGRegistry.MAGIC_PARTICLE.get();
+			var magic = GAGRegistry.MAGIC_PARTICLE;
 			level.addParticle(magic, x, y + 0.05D + random.nextFloat(), z + random.nextFloat(), 0D, 0D, 0D);
 			level.addParticle(magic, x + 1D, y + 0.05D + random.nextFloat(), z + random.nextFloat(), 0D, 0D, 0D);
 			level.addParticle(magic, x + random.nextFloat(), y + 0.05D + random.nextFloat(), z, 0D, 0D, 0D);

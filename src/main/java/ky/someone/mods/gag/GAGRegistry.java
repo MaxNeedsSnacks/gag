@@ -24,7 +24,6 @@ import ky.someone.mods.gag.recipe.pigment.PigmentJarMixingRecipe;
 import ky.someone.mods.gag.recipe.pigment.PigmentJarSplittingRecipe;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentType;
-import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -171,7 +170,7 @@ public interface GAGRegistry {
 	MenuType<LabelingMenu> LABELING_MENU = HELPER.menu("labeling", LabelingMenu::new);
 
 	// particles
-	DeferredHolder<ParticleType<?>, SimpleParticleType> MAGIC_PARTICLE = HELPER.simpleParticle("magic", true);
+	SimpleParticleType MAGIC_PARTICLE = HELPER.simpleParticle("magic", true);
 
 	// effects
 	DeferredHolder<MobEffect, RepellingEffect> REPELLING = HELPER.effect("repelling", RepellingEffect::new);
