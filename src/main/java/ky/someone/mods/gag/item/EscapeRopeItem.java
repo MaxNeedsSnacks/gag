@@ -29,17 +29,12 @@ import static ky.someone.mods.gag.GAGUtil.TOOLTIP_MAIN;
 
 public class EscapeRopeItem extends GAGItem {
 	public EscapeRopeItem() {
-		super(new Item.Properties().stacksTo(1));
+		super(new Item.Properties().stacksTo(1).durability(GAGConfig.escapeRope.durability()));
 	}
 
 	@Override
 	public int getEnchantmentValue() {
 		return 1;
-	}
-
-	@Override
-	public int getMaxDamage(ItemStack stack) {
-		return GAGConfig.escapeRope.durability();
 	}
 
 	@Override

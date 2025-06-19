@@ -25,19 +25,15 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.function.IntSupplier;
 
 public class HearthstoneItem extends GAGItem {
 
-	private final IntSupplier durability;
-
 	public HearthstoneItem() {
-		this(() -> GAGConfig.hearthstone.durability());
+		this(GAGConfig.hearthstone.durability());
 	}
 
-	public HearthstoneItem(IntSupplier durability) {
-		super(new Properties().stacksTo(1));
-		this.durability = durability;
+	public HearthstoneItem(int durability) {
+		super(new Properties().stacksTo(1).durability(durability));
 	}
 
 	@Override
@@ -70,11 +66,6 @@ public class HearthstoneItem extends GAGItem {
 		var stack = player.getItemInHand(interactionHand);
 		player.startUsingItem(interactionHand);
 		return InteractionResultHolder.success(stack);
-	}
-
-	@Override
-	public int getMaxDamage(ItemStack stack) {
-		return durability.getAsInt();
 	}
 
 	@Override

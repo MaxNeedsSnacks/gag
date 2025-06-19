@@ -35,7 +35,7 @@ public class GAG {
 		// initially load config during common setup;
 		// this ensures dedicated clients and servers will have their own config loaded when needed
 		// note some values are temporarily overridden by the server on the client side
-		bus.addListener(FMLCommonSetupEvent.class, event -> GAGConfig.load());
+		GAGConfig.load();
 
 		if (FMLEnvironment.dist == Dist.CLIENT) {
 			GAGClient.init(bus);
