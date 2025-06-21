@@ -1,9 +1,9 @@
 package ky.someone.mods.gag.item;
 
 import ky.someone.mods.gag.GAGRegistry;
-import ky.someone.mods.gag.GAGUtil;
 import ky.someone.mods.gag.config.GAGConfig;
-import net.minecraft.ChatFormatting;
+import ky.someone.mods.gag.util.GAGUtil;
+import ky.someone.mods.gag.util.Tooltips;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -23,9 +23,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 
 import java.util.List;
-
-import static ky.someone.mods.gag.GAGUtil.TOOLTIP_EXTRA;
-import static ky.someone.mods.gag.GAGUtil.TOOLTIP_MAIN;
 
 public class EscapeRopeItem extends GAGItem {
 	public EscapeRopeItem() {
@@ -87,7 +84,7 @@ public class EscapeRopeItem extends GAGItem {
 					level.playSound(null, teleportPos, GAGRegistry.TELEPORT.get(), SoundSource.PLAYERS, 0.5f, 1f);
 				}
 			} else {
-				player.sendSystemMessage(Component.translatable("item.gag.escape_rope.no_space").withStyle(ChatFormatting.RED));
+				player.sendSystemMessage(Tooltips.FAIL.lang("item.gag.escape_rope.no_space"));
 				level.playSound(null, player.blockPosition(), GAGRegistry.TELEPORT_FAIL.get(), SoundSource.PLAYERS, 0.6f, 1f);
 			}
 
@@ -101,8 +98,8 @@ public class EscapeRopeItem extends GAGItem {
 	@Override
 	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
 		GAGUtil.appendInfoTooltip(tooltip, List.of(
-				Component.translatable("item.gag.escape_rope.info").withStyle(TOOLTIP_MAIN),
-				Component.translatable("info.gag.supports_unbreaking").withStyle(TOOLTIP_EXTRA)
+				Tooltips.MAIN.lang("item.gag.escape_rope.info"),
+				Tooltips.EXTRA.lang("info.gag.supports_unbreaking")
 		));
 	}
 }

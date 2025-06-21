@@ -5,7 +5,7 @@ import dev.shadowsoffire.placebo.config.Configuration;
 import dev.shadowsoffire.placebo.config.Property;
 import io.netty.buffer.ByteBuf;
 import ky.someone.mods.gag.GAG;
-import ky.someone.mods.gag.GAGUtil;
+import ky.someone.mods.gag.util.GAGUtil;
 import net.minecraft.network.VarInt;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;

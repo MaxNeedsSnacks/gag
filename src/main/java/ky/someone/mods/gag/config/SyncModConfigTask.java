@@ -1,7 +1,7 @@
 package ky.someone.mods.gag.config;
 
-import ky.someone.mods.gag.GAGUtil;
 import ky.someone.mods.gag.network.ServerConfigPayload;
+import ky.someone.mods.gag.util.GAGUtil;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.network.protocol.configuration.ServerConfigurationPacketListener;
 import net.minecraft.server.network.ConfigurationTask;

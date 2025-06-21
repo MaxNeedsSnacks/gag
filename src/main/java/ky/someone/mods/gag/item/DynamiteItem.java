@@ -1,8 +1,8 @@
 package ky.someone.mods.gag.item;
 
 import ky.someone.mods.gag.GAGRegistry;
-import ky.someone.mods.gag.GAGUtil;
 import ky.someone.mods.gag.entity.AbstractDynamiteEntity;
+import ky.someone.mods.gag.util.GAGUtil;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;

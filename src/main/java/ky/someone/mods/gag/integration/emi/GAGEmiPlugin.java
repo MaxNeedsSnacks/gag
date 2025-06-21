@@ -7,7 +7,7 @@ import dev.emi.emi.api.recipe.EmiWorldInteractionRecipe;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import ky.someone.mods.gag.GAGRegistry;
-import ky.someone.mods.gag.GAGUtil;
+import ky.someone.mods.gag.util.GAGUtil;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;

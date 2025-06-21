@@ -1,6 +1,6 @@
 package ky.someone.mods.gag.data;
 
-import ky.someone.mods.gag.GAGUtil;
+import ky.someone.mods.gag.util.GAGUtil;
 import net.minecraft.data.PackOutput;
 import net.neoforged.neoforge.common.data.LanguageProvider;
 

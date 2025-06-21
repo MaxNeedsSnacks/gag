@@ -165,7 +165,7 @@ public class LabelingMenu extends BasicMenu {
 			if (StringUtils.isBlank(name)) {
 				itemStack.resetHoverName();
 			} else {
-				itemStack.setHoverName(Component.literal(this.name).withStyle(this::applyPigment));
+				itemStack.setHoverName(Component.wrapped(this.name).withStyle(this::applyPigment));
 			}
 		}*/
 
@@ -195,7 +195,7 @@ public class LabelingMenu extends BasicMenu {
 
 					// if there is a pigment jar in the slot, and the input name is not already colored
 					// with the same color as the pigment jar, then apply the pigment jar's color
-					if (PigmentJarItem.isNonEmptyJar(pigmentJar) && (inputColor == null || inputColor.getValue() != PigmentJarItem.getRgbColor(pigmentJar))) {
+					if (PigmentJarItem.isNonEmptyJar(pigmentJar) && (inputColor == null || inputColor.getValue() != PigmentJarItem.getPigment(pigmentJar).rgb())) {
 						ret.set(DataComponents.CUSTOM_NAME, Component.literal(this.name).withStyle(this::applyPigment));
 					}
 				}
@@ -207,7 +207,7 @@ public class LabelingMenu extends BasicMenu {
 	}
 
 	private Style applyPigment(Style input) {
-		var color = PigmentJarItem.getRgbColor(this.input.getItem(1));
+		var color = PigmentJarItem.getPigment(this.input.getItem(1)).rgb();
 		if (color != -1) {
 			didApplyPigment = true;
 			return input.withColor(color).withItalic(false);

@@ -1,9 +1,10 @@
 package ky.someone.mods.gag.item;
 
 import ky.someone.mods.gag.GAGRegistry;
-import ky.someone.mods.gag.GAGUtil;
 import ky.someone.mods.gag.config.GAGConfig;
 import ky.someone.mods.gag.item.data.TeleportPos;
+import ky.someone.mods.gag.util.GAGUtil;
+import ky.someone.mods.gag.util.Tooltips;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
@@ -137,11 +138,11 @@ public class HearthstoneItem extends GAGItem {
 					player.getCooldowns().addCooldown(stack.getItem(), GAGConfig.hearthstone.cooldown());
 				}
 			} else {
-				player.sendSystemMessage(getTranslation("too_weak").withStyle(ChatFormatting.RED));
+				player.sendSystemMessage(Tooltips.FAIL.apply(getTranslation("too_weak")));
 				level.playSound(null, player.blockPosition(), GAGRegistry.TELEPORT_FAIL.get(), SoundSource.PLAYERS, 0.6f, 1f);
 			}
 		} else {
-			player.sendSystemMessage(getTranslation("too_weak").withStyle(ChatFormatting.RED));
+			player.sendSystemMessage(Tooltips.FAIL.apply(getTranslation("too_weak")));
 			level.playSound(null, player.blockPosition(), GAGRegistry.TELEPORT_FAIL.get(), SoundSource.PLAYERS, 0.6f, 1f);
 		}
 		return stack;
@@ -150,13 +151,13 @@ public class HearthstoneItem extends GAGItem {
 	@Override
 	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
 		GAGUtil.appendInfoTooltip(tooltip, List.of(
-				getTranslation("info").withStyle(GAGUtil.TOOLTIP_MAIN),
-				Component.translatable("info.gag.supports_unbreaking").withStyle(GAGUtil.TOOLTIP_EXTRA)
+				Tooltips.MAIN.apply(getTranslation("info")),
+				Tooltips.EXTRA.apply(Component.translatable("info.gag.supports_unbreaking"))
 		));
 	}
 
 	public Component getTargetText(Player player, ItemStack stack) {
-		return getTranslation("target.bound", getTranslation("target.respawn").withStyle(GAGUtil.COLOUR_TRUE)).withStyle(GAGUtil.COLOUR_INFO);
+		return Tooltips.INFO.apply(getTranslation("target.bound", Tooltips.SUCCESS.apply(getTranslation("target.respawn"))));
 	}
 
 	@Override
@@ -171,11 +172,11 @@ public class HearthstoneItem extends GAGItem {
 	public List<Component> getUsingTooltip(Player player, ItemStack stack, int useTicks) {
 		var totalUseTicks = getUseDuration(stack, player);
 		useTicks = Math.min(useTicks, totalUseTicks);
-		var warmupText = GAGUtil.asStyledValue(useTicks, totalUseTicks, String.format("%.2f", (totalUseTicks - useTicks) / 20d));
+		var warmupText = Tooltips.asStyledValue(useTicks, totalUseTicks, String.format("%.2f", (totalUseTicks - useTicks) / 20d));
 		return List.of(
 				stack.getHoverName(),
 				getTargetText(player, stack),
-				getTranslation("warmup", warmupText).withStyle(GAGUtil.TOOLTIP_MAIN)
+				Tooltips.MAIN.apply(getTranslation("warmup", warmupText))
 		);
 	}
 

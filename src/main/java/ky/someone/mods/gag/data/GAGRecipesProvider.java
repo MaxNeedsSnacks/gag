@@ -1,11 +1,11 @@
 package ky.someone.mods.gag.data;
 
 import ky.someone.mods.gag.GAGRegistry;
-import ky.someone.mods.gag.GAGUtil;
 import ky.someone.mods.gag.recipe.pigment.PigmentJarFromDyeRecipe;
 import ky.someone.mods.gag.recipe.pigment.PigmentJarLeatherDyingRecipe;
 import ky.someone.mods.gag.recipe.pigment.PigmentJarMixingRecipe;
 import ky.someone.mods.gag.recipe.pigment.PigmentJarSplittingRecipe;
+import ky.someone.mods.gag.util.GAGUtil;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.RecipeCategory;

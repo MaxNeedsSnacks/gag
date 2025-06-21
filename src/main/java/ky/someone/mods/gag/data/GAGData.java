@@ -1,12 +1,12 @@
 package ky.someone.mods.gag.data;
 
-import ky.someone.mods.gag.GAGUtil;
 import ky.someone.mods.gag.data.loot.GAGLootTableProvider;
+import ky.someone.mods.gag.util.GAGUtil;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 
-@EventBusSubscriber(modid = GAGUtil.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = GAGUtil.MOD_ID)
 public class GAGData {
 	@SubscribeEvent
 	public static void onGatherData(GatherDataEvent event) {

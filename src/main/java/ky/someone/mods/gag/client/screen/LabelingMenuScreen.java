@@ -1,11 +1,11 @@
 package ky.someone.mods.gag.client.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import ky.someone.mods.gag.GAGUtil;
 import ky.someone.mods.gag.item.LabelingToolItem;
 import ky.someone.mods.gag.item.PigmentJarItem;
 import ky.someone.mods.gag.menu.LabelingMenu;
 import ky.someone.mods.gag.network.RenameItemPayload;
+import ky.someone.mods.gag.util.GAGUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;

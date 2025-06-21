@@ -1,6 +1,6 @@
 package ky.someone.mods.gag.network;
 
-import ky.someone.mods.gag.GAGUtil;
+import ky.someone.mods.gag.util.GAGUtil;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload.Type;
 import net.neoforged.bus.api.SubscribeEvent;

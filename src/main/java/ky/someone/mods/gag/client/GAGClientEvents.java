@@ -1,10 +1,10 @@
 package ky.someone.mods.gag.client;
 
 import com.google.common.collect.Iterables;
-import ky.someone.mods.gag.GAGUtil;
 import ky.someone.mods.gag.config.GAGConfig;
 import ky.someone.mods.gag.entity.TimeAcceleratorEntity;
 import ky.someone.mods.gag.item.GAGItem;
+import ky.someone.mods.gag.util.Tooltips;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
@@ -47,9 +47,9 @@ public interface GAGClientEvents {
 				renderHudTooltip(mc, graphics, List.of(
 						block.getName(),
 						Component.translatable("info.gag.time_sand_tooltip_mult",
-								GAGUtil.asStyledValue(accelSpeed, GAGConfig.temporalPouch.maxRate(), Integer.toString(1 << accelSpeed))),
+								Tooltips.asStyledValue(accelSpeed, GAGConfig.temporalPouch.maxRate(), Integer.toString(1 << accelSpeed))),
 						Component.translatable("info.gag.time_sand_tooltip_time",
-								GAGUtil.asStyledValue(timeLeft, GAGConfig.temporalPouch.durationPerUse(), String.format("%.2f", timeLeft)))
+								Tooltips.asStyledValue(timeLeft, GAGConfig.temporalPouch.durationPerUse(), String.format("%.2f", timeLeft)))
 				));
 
 				return;

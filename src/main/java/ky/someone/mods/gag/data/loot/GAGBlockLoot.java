@@ -1,6 +1,6 @@
 package ky.someone.mods.gag.data.loot;
 
-import ky.someone.mods.gag.GAGUtil;
+import ky.someone.mods.gag.util.GAGUtil;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.loot.BlockLootSubProvider;

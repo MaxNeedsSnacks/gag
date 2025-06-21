@@ -1,9 +1,9 @@
 package ky.someone.mods.gag.entity;
 
 import ky.someone.mods.gag.GAGRegistry;
-import ky.someone.mods.gag.GAGUtil;
 import ky.someone.mods.gag.config.GAGConfig;
 import ky.someone.mods.gag.network.FishsplosionPayload;
+import ky.someone.mods.gag.util.GAGUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;

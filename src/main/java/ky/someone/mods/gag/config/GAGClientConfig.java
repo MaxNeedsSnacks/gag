@@ -3,7 +3,7 @@ package ky.someone.mods.gag.config;
 import dev.shadowsoffire.placebo.config.ConfigCategory;
 import dev.shadowsoffire.placebo.config.Configuration;
 import dev.shadowsoffire.placebo.events.ResourceReloadEvent;
-import ky.someone.mods.gag.GAGUtil;
+import ky.someone.mods.gag.util.GAGUtil;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 

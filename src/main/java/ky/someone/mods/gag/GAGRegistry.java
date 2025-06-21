@@ -22,6 +22,8 @@ import ky.someone.mods.gag.recipe.pigment.PigmentJarFromDyeRecipe;
 import ky.someone.mods.gag.recipe.pigment.PigmentJarLeatherDyingRecipe;
 import ky.someone.mods.gag.recipe.pigment.PigmentJarMixingRecipe;
 import ky.someone.mods.gag.recipe.pigment.PigmentJarSplittingRecipe;
+import ky.someone.mods.gag.util.GAGUtil;
+import ky.someone.mods.gag.util.Tooltips;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.particles.SimpleParticleType;
@@ -93,12 +95,8 @@ public interface GAGRegistry {
 	DeferredItem<Item> SACRED_BALM = repelling("sacred_balm", p -> p.stacksTo(4).rarity(Rarity.RARE), 360 * 20, 0, true);
 
 	// TODO: only downward throwing speed should be accelerated
-	DeferredItem<Item> MINING_DYNAMITE_ITEM = dynamite("mining_dynamite", MiningDynamiteEntity::new, List.of(
-			Component.translatable("item.gag.mining_dynamite.info").withStyle(GAGUtil.TOOLTIP_MAIN)
-	), 1.5);
-	DeferredItem<Item> FISHING_DYNAMITE_ITEM = dynamite("fishing_dynamite", FishingDynamiteEntity::new, List.of(
-			Component.translatable("item.gag.fishing_dynamite.info").withStyle(GAGUtil.TOOLTIP_MAIN)
-	), 1.5);
+	DeferredItem<Item> MINING_DYNAMITE_ITEM = dynamite("mining_dynamite", MiningDynamiteEntity::new, List.of(Tooltips.MAIN.lang("item.gag.mining_dynamite.info")), 1.5);
+	DeferredItem<Item> FISHING_DYNAMITE_ITEM = dynamite("fishing_dynamite", FishingDynamiteEntity::new, List.of(Tooltips.MAIN.lang("item.gag.fishing_dynamite.info")), 1.5);
 
 	DeferredItem<Item> LABELING_TOOL = HELPER.item("labeling_tool", LabelingToolItem::new);
 	DeferredItem<Item> PIGMENT_JAR = HELPER.item("pigment_jar", PigmentJarItem::new);

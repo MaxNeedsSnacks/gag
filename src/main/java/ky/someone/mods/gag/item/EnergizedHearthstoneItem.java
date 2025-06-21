@@ -1,10 +1,11 @@
 package ky.someone.mods.gag.item;
 
 import ky.someone.mods.gag.GAGRegistry;
-import ky.someone.mods.gag.GAGUtil;
 import ky.someone.mods.gag.config.GAGClientConfig;
 import ky.someone.mods.gag.config.GAGConfig;
 import ky.someone.mods.gag.item.data.TeleportPos;
+import ky.someone.mods.gag.util.GAGUtil;
+import ky.someone.mods.gag.util.Tooltips;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
@@ -41,10 +42,10 @@ public class EnergizedHearthstoneItem extends HearthstoneItem {
 	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
 		tooltip.add(getTargetText(null, stack));
 		GAGUtil.appendInfoTooltip(tooltip, List.of(
-				getTranslation("info_adv").withStyle(GAGUtil.TOOLTIP_MAIN),
-				getTranslation("info_adv_2").withStyle(GAGUtil.TOOLTIP_MAIN),
-				getTranslation("info_adv_3").withStyle(GAGUtil.TOOLTIP_MAIN),
-				Component.translatable("info.gag.supports_unbreaking").withStyle(GAGUtil.TOOLTIP_EXTRA)
+				Tooltips.MAIN.apply(getTranslation("info_adv")),
+				Tooltips.MAIN.apply(getTranslation("info_adv_2")),
+				Tooltips.MAIN.apply(getTranslation("info_adv_3")),
+				Tooltips.EXTRA.lang("info.gag.supports_unbreaking")
 		));
 	}
 
@@ -53,23 +54,22 @@ public class EnergizedHearthstoneItem extends HearthstoneItem {
 
 		if (target != null) {
 			if (GAGClientConfig.hearthstoneHidePosition) {
-				return getTranslation("target.bound", getTranslation("target.hidden").withStyle(GAGUtil.TOOLTIP_FLAVOUR))
-						.withStyle(GAGUtil.COLOUR_INFO);
+				return Tooltips.INFO.apply(getTranslation("target.bound", Tooltips.FLAVOUR.apply(getTranslation("target.hidden"))));
 			}
 
 			var pos = target.pos();
 			var level = target.level();
 
-			var text = Component.translatable(String.format("(%.1f %.1f %.1f)", pos.x, pos.y, pos.z)).withStyle(GAGUtil.COLOUR_TRUE);
+			var text = Tooltips.SUCCESS.apply(String.format("(%.1f %.1f %.1f)", pos.x, pos.y, pos.z));
 
 			if (player == null || !level.equals(player.level().dimension())) {
 				text.append(" @ ").append(Component.translatable(level.location().toString()).withStyle(ChatFormatting.GRAY));
 			}
 
-			return getTranslation("target.bound", text).withStyle(GAGUtil.COLOUR_INFO);
+			return Tooltips.INFO.apply(getTranslation("target.bound", text));
 		}
 
-		return getTranslation("target.unbound").withStyle(GAGUtil.COLOUR_FALSE);
+		return Tooltips.FAIL.apply(getTranslation("target.unbound"));
 	}
 
 	@Override

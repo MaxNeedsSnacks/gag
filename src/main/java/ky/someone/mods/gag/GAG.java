@@ -8,6 +8,7 @@ import ky.someone.mods.gag.effect.RepellingEffect;
 import ky.someone.mods.gag.item.EnergizedHearthstoneItem;
 import ky.someone.mods.gag.network.GAGConfigPhase;
 import ky.someone.mods.gag.network.GAGNetwork;
+import ky.someone.mods.gag.util.GAGUtil;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
 import net.neoforged.api.distmarker.Dist;

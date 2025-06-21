@@ -1,9 +1,9 @@
 package ky.someone.mods.gag.recipe.pigment;
 
 import ky.someone.mods.gag.GAGRegistry;
-import ky.someone.mods.gag.GAGUtil;
 import ky.someone.mods.gag.item.PigmentJarItem;
 import ky.someone.mods.gag.item.data.Pigment;
+import ky.someone.mods.gag.util.GAGUtil;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.component.DataComponents;
@@ -52,7 +52,7 @@ public class PigmentJarLeatherDyingRecipe extends CustomRecipe {
 				leatherItem = stack;
 			} else if (stack.is(GAGRegistry.PIGMENT_JAR.get())) {
 				hasPigment = true;
-				pigmentAmount += PigmentJarItem.getColorAmount(stack);
+				pigmentAmount += PigmentJarItem.getPigment(stack).amount();
 			} else if (item instanceof DyeItem) {
 				pigmentAmount += PigmentJarItem.DYE_AMOUNT;
 			} else if (!stack.isEmpty()) {

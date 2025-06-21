@@ -1,11 +1,11 @@
 package ky.someone.mods.gag.client;
 
 import ky.someone.mods.gag.GAGRegistry;
-import ky.someone.mods.gag.GAGUtil;
 import ky.someone.mods.gag.client.render.TimeAcceleratorEntityRenderer;
 import ky.someone.mods.gag.client.screen.LabelingMenuScreen;
 import ky.someone.mods.gag.item.PigmentJarItem;
 import ky.someone.mods.gag.particle.client.MagicParticle;
+import ky.someone.mods.gag.util.GAGUtil;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.neoforged.api.distmarker.Dist;
@@ -29,7 +29,7 @@ public interface GAGClient {
 	@SubscribeEvent
 	static void setup(FMLClientSetupEvent event) {
 		event.enqueueWork(() -> ItemProperties.register(GAGRegistry.PIGMENT_JAR.asItem(), GAGUtil.id("pigment_amount"),
-				(stack, level, entity, seed) -> PigmentJarItem.getColorAmount(stack) / (float) PigmentJarItem.MAX_AMOUNT));
+				(stack, level, entity, seed) -> PigmentJarItem.getPigment(stack).amount() / (float) PigmentJarItem.MAX_AMOUNT));
 	}
 
 	@SubscribeEvent
@@ -39,7 +39,7 @@ public interface GAGClient {
 
 	@SubscribeEvent
 	static void registerColors(RegisterColorHandlersEvent.Item event) {
-		event.register((stack, index) -> index == 0 ? 0xFF000000 | PigmentJarItem.getRgbColor(stack) : -1, GAGRegistry.PIGMENT_JAR);
+		event.register((stack, index) -> index == 0 ? 0xFF000000 | PigmentJarItem.getPigment(stack).rgb() : -1, GAGRegistry.PIGMENT_JAR);
 	}
 
 	@SubscribeEvent

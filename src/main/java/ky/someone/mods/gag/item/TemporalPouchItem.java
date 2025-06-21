@@ -2,9 +2,10 @@ package ky.someone.mods.gag.item;
 
 import dev.shadowsoffire.placebo.color.GradientColor;
 import ky.someone.mods.gag.GAGRegistry;
-import ky.someone.mods.gag.GAGUtil;
 import ky.someone.mods.gag.config.GAGConfig;
 import ky.someone.mods.gag.entity.TimeAcceleratorEntity;
+import ky.someone.mods.gag.util.GAGUtil;
+import ky.someone.mods.gag.util.Tooltips;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
@@ -29,8 +30,6 @@ import net.minecraft.world.phys.Vec3;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-
-import static ky.someone.mods.gag.GAGUtil.TOOLTIP_MAIN;
 
 public class TemporalPouchItem extends GAGItem {
 
@@ -185,12 +184,12 @@ public class TemporalPouchItem extends GAGItem {
 		tooltip.add(Component.literal("If I could save time in a ")
 				.append(Component.literal("bottle").withStyle(ChatFormatting.STRIKETHROUGH))
 				.append(Component.literal(" bundle..."))
-				.withStyle(GAGUtil.TOOLTIP_FLAVOUR)
+				.withStyle(Tooltips.FLAVOUR)
 				.withStyle(ChatFormatting.ITALIC));
 
 		GAGUtil.appendInfoTooltip(tooltip, List.of(
-				Component.translatable("item.gag.time_sand_pouch.info.1").withStyle(TOOLTIP_MAIN),
-				Component.translatable("item.gag.time_sand_pouch.info.2").withStyle(TOOLTIP_MAIN)
+				Tooltips.MAIN.lang("item.gag.time_sand_pouch.info.1"),
+				Tooltips.MAIN.lang("item.gag.time_sand_pouch.info.2")
 		));
 
 		//   "item.gag.time_sand_pouch.info.stored_grains": "Contains %1$s Grains of Time (worth %2$s)",

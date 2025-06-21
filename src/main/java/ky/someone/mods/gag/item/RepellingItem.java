@@ -1,7 +1,8 @@
 package ky.someone.mods.gag.item;
 
 import ky.someone.mods.gag.GAGRegistry;
-import ky.someone.mods.gag.GAGUtil;
+import ky.someone.mods.gag.util.GAGUtil;
+import ky.someone.mods.gag.util.Tooltips;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -34,10 +35,10 @@ public class RepellingItem extends GAGItem {
 	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
 		var infoTooltips = new ArrayList<Component>();
 		// generic info tooltip
-		infoTooltips.add(Component.translatable("info.gag.repelling_item").withStyle(GAGUtil.TOOLTIP_MAIN));
+		infoTooltips.add(Tooltips.MAIN.lang("info.gag.repelling_item"));
 		// optional item-specific tooltip
 		if (addExtraTooltip) {
-			infoTooltips.add(Component.translatable(getDescriptionId() + ".extra").withStyle(GAGUtil.TOOLTIP_EXTRA));
+			infoTooltips.add(Tooltips.EXTRA.lang(getDescriptionId() + ".extra"));
 		}
 		GAGUtil.appendInfoTooltip(tooltip, infoTooltips);
 	}

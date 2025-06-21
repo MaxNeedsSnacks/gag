@@ -1,7 +1,8 @@
 package ky.someone.mods.gag.item;
 
-import ky.someone.mods.gag.GAGUtil;
 import ky.someone.mods.gag.menu.LabelingMenu;
+import ky.someone.mods.gag.util.GAGUtil;
+import ky.someone.mods.gag.util.Tooltips;
 import net.minecraft.network.chat.Component;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
@@ -16,8 +17,6 @@ import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-
-import static ky.someone.mods.gag.GAGUtil.TOOLTIP_MAIN;
 
 public class LabelingToolItem extends GAGItem implements MenuProvider {
 
@@ -41,7 +40,7 @@ public class LabelingToolItem extends GAGItem implements MenuProvider {
 
 	@Override
 	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-		GAGUtil.appendInfoTooltip(tooltip, List.of(Component.translatable("item.gag.labeling_tool.info").withStyle(TOOLTIP_MAIN)));
+		GAGUtil.appendInfoTooltip(tooltip, List.of(Tooltips.MAIN.lang("item.gag.labeling_tool.info")));
 	}
 
 	@Override

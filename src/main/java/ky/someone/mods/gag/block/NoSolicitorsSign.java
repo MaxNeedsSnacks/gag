@@ -2,8 +2,9 @@ package ky.someone.mods.gag.block;
 
 import ky.someone.mods.gag.GAG;
 import ky.someone.mods.gag.GAGRegistry;
-import ky.someone.mods.gag.GAGUtil;
 import ky.someone.mods.gag.config.GAGConfig;
+import ky.someone.mods.gag.util.GAGUtil;
+import ky.someone.mods.gag.util.Tooltips;
 import ky.someone.mods.gag.world.GAGPointOfInterestStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -48,9 +49,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
-
-import static ky.someone.mods.gag.GAGUtil.TOOLTIP_EXTRA;
-import static ky.someone.mods.gag.GAGUtil.TOOLTIP_MAIN;
 
 public class NoSolicitorsSign extends Block {
 
@@ -109,8 +107,8 @@ public class NoSolicitorsSign extends Block {
 	@Override
 	public void appendHoverText(ItemStack stack, @Nullable Item.TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
 		GAGUtil.appendInfoTooltip(tooltip, List.of(
-				Component.translatable("block.gag.no_solicitors.info.1").withStyle(TOOLTIP_MAIN),
-				Component.translatable("block.gag.no_solicitors.info.2").withStyle(TOOLTIP_EXTRA)
+				Tooltips.MAIN.lang("block.gag.no_solicitors.info.1"),
+				Tooltips.EXTRA.lang("block.gag.no_solicitors.info.2")
 		));
 	}
 
@@ -164,7 +162,7 @@ public class NoSolicitorsSign extends Block {
 			level.setBlockAndUpdate(pos, state);
 			level.playSound(null, pos, SoundEvents.POWDER_SNOW_PLACE, SoundSource.BLOCKS, 0.2F, 0.7F);
 			player.displayClientMessage(Component.translatable("block.gag.no_solicitors.silent",
-					GAGUtil.styledBool(state.getValue(SILENT))), true);
+					Tooltips.bool(state.getValue(SILENT))), true);
 			return ItemInteractionResult.sidedSuccess(level.isClientSide());
 		}
 		return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;

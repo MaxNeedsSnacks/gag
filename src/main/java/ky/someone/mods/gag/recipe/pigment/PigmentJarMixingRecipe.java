@@ -1,9 +1,9 @@
 package ky.someone.mods.gag.recipe.pigment;
 
 import ky.someone.mods.gag.GAGRegistry;
-import ky.someone.mods.gag.GAGUtil;
 import ky.someone.mods.gag.item.PigmentJarItem;
 import ky.someone.mods.gag.item.data.Pigment;
+import ky.someone.mods.gag.util.GAGUtil;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
@@ -29,7 +29,7 @@ public class PigmentJarMixingRecipe extends CustomRecipe {
 
 		for (var stack : container.items()) {
 			if (stack.is(GAGRegistry.PIGMENT_JAR.get())) {
-				if (!PigmentJarItem.isEmpty(stack)) {
+				if (!PigmentJarItem.getPigment(stack).isEmpty()) {
 					found++;
 				}
 			} else if (!stack.isEmpty()) {

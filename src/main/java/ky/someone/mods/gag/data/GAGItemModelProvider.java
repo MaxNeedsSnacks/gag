@@ -2,7 +2,7 @@ package ky.someone.mods.gag.data;
 
 import com.google.common.collect.Collections2;
 import ky.someone.mods.gag.GAGRegistry;
-import ky.someone.mods.gag.GAGUtil;
+import ky.someone.mods.gag.util.GAGUtil;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.BlockItem;
