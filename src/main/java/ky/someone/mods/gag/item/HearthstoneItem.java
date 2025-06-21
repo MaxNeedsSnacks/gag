@@ -4,6 +4,7 @@ import ky.someone.mods.gag.GAGRegistry;
 import ky.someone.mods.gag.config.GAGConfig;
 import ky.someone.mods.gag.item.data.TeleportPos;
 import ky.someone.mods.gag.util.GAGUtil;
+import ky.someone.mods.gag.util.TooltipStyle;
 import ky.someone.mods.gag.util.Tooltips;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.ParticleTypes;
@@ -30,11 +31,11 @@ import java.util.List;
 public class HearthstoneItem extends GAGItem {
 
 	public HearthstoneItem() {
-		this(GAGConfig.hearthstone.durability());
+		this(new Properties().durability(GAGConfig.hearthstone.durability()));
 	}
 
-	public HearthstoneItem(int durability) {
-		super(new Properties().stacksTo(1).durability(durability));
+	public HearthstoneItem(Properties properties) {
+		super(properties);
 	}
 
 	@Override
@@ -138,11 +139,11 @@ public class HearthstoneItem extends GAGItem {
 					player.getCooldowns().addCooldown(stack.getItem(), GAGConfig.hearthstone.cooldown());
 				}
 			} else {
-				player.sendSystemMessage(Tooltips.FAIL.apply(getTranslation("too_weak")));
+				player.sendSystemMessage(getTranslation(Tooltips.FAIL, "too_weak"));
 				level.playSound(null, player.blockPosition(), GAGRegistry.TELEPORT_FAIL.get(), SoundSource.PLAYERS, 0.6f, 1f);
 			}
 		} else {
-			player.sendSystemMessage(Tooltips.FAIL.apply(getTranslation("too_weak")));
+			player.sendSystemMessage(getTranslation(Tooltips.FAIL, "too_weak"));
 			level.playSound(null, player.blockPosition(), GAGRegistry.TELEPORT_FAIL.get(), SoundSource.PLAYERS, 0.6f, 1f);
 		}
 		return stack;
@@ -151,13 +152,13 @@ public class HearthstoneItem extends GAGItem {
 	@Override
 	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
 		GAGUtil.appendInfoTooltip(tooltip, List.of(
-				Tooltips.MAIN.apply(getTranslation("info")),
+				getTranslation(Tooltips.MAIN, "info"),
 				Tooltips.EXTRA.apply(Component.translatable("info.gag.supports_unbreaking"))
 		));
 	}
 
 	public Component getTargetText(Player player, ItemStack stack) {
-		return Tooltips.INFO.apply(getTranslation("target.bound", Tooltips.SUCCESS.apply(getTranslation("target.respawn"))));
+		return getTranslation(Tooltips.INFO, "target.bound", getTranslation(Tooltips.SUCCESS, "target.respawn"));
 	}
 
 	@Override
@@ -176,8 +177,12 @@ public class HearthstoneItem extends GAGItem {
 		return List.of(
 				stack.getHoverName(),
 				getTargetText(player, stack),
-				Tooltips.MAIN.apply(getTranslation("warmup", warmupText))
+				getTranslation(Tooltips.MAIN, "warmup", warmupText)
 		);
+	}
+
+	protected MutableComponent getTranslation(TooltipStyle style, String key, Object... args) {
+		return style.lang("item.gag.hearthstone." + key, args);
 	}
 
 	protected MutableComponent getTranslation(String key, Object... args) {

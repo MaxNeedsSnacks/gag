@@ -6,7 +6,6 @@ import ky.someone.mods.gag.config.GAGConfig;
 import ky.someone.mods.gag.item.data.TeleportPos;
 import ky.someone.mods.gag.util.GAGUtil;
 import ky.someone.mods.gag.util.Tooltips;
-import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -17,7 +16,6 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
@@ -26,7 +24,7 @@ import java.util.List;
 public class EnergizedHearthstoneItem extends HearthstoneItem {
 
 	public EnergizedHearthstoneItem() {
-		super(GAGConfig.hearthstone.energizedDurability());
+		super(new Properties().durability(GAGConfig.hearthstone.energizedDurability()));
 	}
 
 	public boolean isBound(ItemStack stack) {
@@ -42,9 +40,9 @@ public class EnergizedHearthstoneItem extends HearthstoneItem {
 	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
 		tooltip.add(getTargetText(null, stack));
 		GAGUtil.appendInfoTooltip(tooltip, List.of(
-				Tooltips.MAIN.apply(getTranslation("info_adv")),
-				Tooltips.MAIN.apply(getTranslation("info_adv_2")),
-				Tooltips.MAIN.apply(getTranslation("info_adv_3")),
+				getTranslation(Tooltips.MAIN, "info_adv"),
+				getTranslation(Tooltips.MAIN, "info_adv_2"),
+				getTranslation(Tooltips.MAIN, "info_adv_3"),
 				Tooltips.EXTRA.lang("info.gag.supports_unbreaking")
 		));
 	}
@@ -53,8 +51,8 @@ public class EnergizedHearthstoneItem extends HearthstoneItem {
 		var target = getTeleportPos(player, stack);
 
 		if (target != null) {
-			if (GAGClientConfig.hearthstoneHidePosition) {
-				return Tooltips.INFO.apply(getTranslation("target.bound", Tooltips.FLAVOUR.apply(getTranslation("target.hidden"))));
+			if (GAGClientConfig.hearthstoneHidePosition || stack.has(GAGRegistry.HIDE_TARGET_DATA)) {
+				return getTranslation(Tooltips.INFO, "target.bound", getTranslation(Tooltips.FLAVOUR, "target.hidden"));
 			}
 
 			var pos = target.pos();
@@ -63,13 +61,13 @@ public class EnergizedHearthstoneItem extends HearthstoneItem {
 			var text = Tooltips.SUCCESS.apply(String.format("(%.1f %.1f %.1f)", pos.x, pos.y, pos.z));
 
 			if (player == null || !level.equals(player.level().dimension())) {
-				text.append(" @ ").append(Component.translatable(level.location().toString()).withStyle(ChatFormatting.GRAY));
+				text.append(Tooltips.FLAVOUR.apply(" @ " + level.location()));
 			}
 
-			return Tooltips.INFO.apply(getTranslation("target.bound", text));
+			return getTranslation(Tooltips.INFO, "target.bound", text);
 		}
 
-		return Tooltips.FAIL.apply(getTranslation("target.unbound"));
+		return getTranslation(Tooltips.FAIL, "target.unbound");
 	}
 
 	@Override
@@ -98,12 +96,10 @@ public class EnergizedHearthstoneItem extends HearthstoneItem {
 		if (entity instanceof ItemEntity itemEntity) {
 			var stack = itemEntity.getItem();
 			if (stack.is(GAGRegistry.HEARTHSTONE.get())) {
-				var newStack = new ItemStack(GAGRegistry.ENERGIZED_HEARTHSTONE.get());
+				var newStack = stack.transmuteCopy(GAGRegistry.ENERGIZED_HEARTHSTONE);
 				// damage the new stack relative to the old one
 				var damage = stack.getDamageValue() / (float) stack.getMaxDamage();
 				newStack.setDamageValue((int) (newStack.getMaxDamage() * damage));
-				// copy enchantments over to the new stack
-				EnchantmentHelper.setEnchantments(newStack, EnchantmentHelper.getEnchantmentsForCrafting(stack));
 				itemEntity.setItem(newStack);
 				bolt.hitEntities.add(entity);
 				return true;

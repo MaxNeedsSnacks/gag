@@ -25,7 +25,7 @@ public class GAGClientConfig {
 						"""
 								Whether the target position of hearthstones should be hidden from GUIs.
 								This may be useful for streamers who don't want to expose their base coordinates, for example.
-								(Note this may be replaced with a different mechanic in the future!)
+								(Note this *forces* all destinations to be hidden!)
 								""");
 			}
 		}

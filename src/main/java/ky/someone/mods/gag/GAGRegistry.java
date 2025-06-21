@@ -1,5 +1,6 @@
 package ky.someone.mods.gag;
 
+import com.mojang.serialization.Codec;
 import dev.shadowsoffire.placebo.registry.DeferredHelper;
 import ky.someone.mods.gag.block.NoSolicitorsSign;
 import ky.someone.mods.gag.effect.RepellingEffect;
@@ -30,8 +31,10 @@ import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.ExtraCodecs;
+import net.minecraft.util.Unit;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -123,6 +126,11 @@ public interface GAGRegistry {
 	DataComponentType<TeleportPos> TELEPORT_TARGET_DATA = HELPER.component("teleport_target", builder -> builder
 			.persistent(TeleportPos.CODEC)
 			.networkSynchronized(TeleportPos.STREAM_CODEC)
+	);
+
+	DataComponentType<Unit> HIDE_TARGET_DATA = HELPER.component("hide_target", builder -> builder
+			.persistent(Unit.CODEC)
+			.networkSynchronized(StreamCodec.unit(Unit.INSTANCE))
 	);
 
 	Supplier<EntityType<TimeAcceleratorEntity>> TIME_ACCELERATOR =
