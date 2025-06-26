@@ -2,8 +2,11 @@ package ky.someone.mods.gag.item.data;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import ky.someone.mods.gag.util.Tooltips;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceKey;
@@ -26,4 +29,16 @@ public record TeleportPos(ResourceKey<Level> level, Vec3 pos, float yaw) {
 			TeleportPos::yaw,
 			TeleportPos::new
 	);
+
+	public MutableComponent formatPos() {
+		return Tooltips.SUCCESS.apply(String.format("(%.1f %.1f %.1f)", pos.x, pos.y, pos.z));
+	}
+
+	public MutableComponent formatLevel() {
+		return Component.literal(level.location().toString());
+	}
+
+	public MutableComponent formatFull() {
+		return formatPos().append(Tooltips.FLAVOUR.apply(" @ ").append(formatLevel()));
+	}
 }

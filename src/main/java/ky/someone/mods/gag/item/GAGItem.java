@@ -1,17 +1,15 @@
 package ky.someone.mods.gag.item;
 
-import net.minecraft.network.chat.Component;
+import ky.someone.mods.gag.util.tooltip.TooltipSink;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
-
 /**
  * Temporary class implementing certain methods of
- * item extensions common to both Forge and Fabric, as
+ * data extensions common to both Forge and Fabric, as
  * well as some general convenience methods.
  */
 public abstract class GAGItem extends Item implements ItemWithSubsets {
@@ -37,11 +35,9 @@ public abstract class GAGItem extends Item implements ItemWithSubsets {
 		return shouldBob(oldStack, newStack);
 	}
 
-	public List<Component> getHoldingTooltip(Player player, ItemStack stack) {
-		return List.of();
+	public void getHoldingTooltip(Player player, ItemStack stack, TooltipSink sink) {
 	}
 
-	public List<Component> getUsingTooltip(Player player, ItemStack stack, int useTicks) {
-		return List.of();
+	public void getUsingTooltip(Player player, ItemStack stack, int useTicks, TooltipSink sink) {
 	}
 }

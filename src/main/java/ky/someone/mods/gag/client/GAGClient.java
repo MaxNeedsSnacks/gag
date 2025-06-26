@@ -3,9 +3,13 @@ package ky.someone.mods.gag.client;
 import ky.someone.mods.gag.GAGRegistry;
 import ky.someone.mods.gag.client.render.TimeAcceleratorEntityRenderer;
 import ky.someone.mods.gag.client.screen.LabelingMenuScreen;
+import ky.someone.mods.gag.client.tooltip.HStackClientTooltip;
+import ky.someone.mods.gag.client.tooltip.ItemClientTooltip;
 import ky.someone.mods.gag.item.PigmentJarItem;
 import ky.someone.mods.gag.particle.client.MagicParticle;
 import ky.someone.mods.gag.util.GAGUtil;
+import ky.someone.mods.gag.util.tooltip.HStackTooltipComponent;
+import ky.someone.mods.gag.util.tooltip.ItemTooltipComponent;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.neoforged.api.distmarker.Dist;
@@ -14,6 +18,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
@@ -52,5 +57,11 @@ public interface GAGClient {
 		event.registerEntityRenderer(GAGRegistry.TIME_ACCELERATOR.get(), TimeAcceleratorEntityRenderer::new);
 		event.registerEntityRenderer(GAGRegistry.MINING_DYNAMITE.get(), ThrownItemRenderer::new);
 		event.registerEntityRenderer(GAGRegistry.FISHING_DYNAMITE.get(), ThrownItemRenderer::new);
+	}
+
+	@SubscribeEvent
+	static void registerTooltips(RegisterClientTooltipComponentFactoriesEvent event) {
+		event.register(HStackTooltipComponent.class, HStackClientTooltip::of);
+		event.register(ItemTooltipComponent.class, ItemClientTooltip::new);
 	}
 }

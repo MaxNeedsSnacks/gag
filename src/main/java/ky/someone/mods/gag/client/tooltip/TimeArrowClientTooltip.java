@@ -8,12 +8,12 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.resources.ResourceLocation;
 
-public class TimeArrowTooltipComponent implements ClientTooltipComponent {
+public class TimeArrowClientTooltip implements ClientTooltipComponent {
 	static final ResourceLocation ARROW = GAGUtil.id("textures/gui/time_arrow.png");
 
 	private final TimeAcceleratorEntity accelerator;
 
-	public TimeArrowTooltipComponent(TimeAcceleratorEntity accelerator) {
+	public TimeArrowClientTooltip(TimeAcceleratorEntity accelerator) {
 		this.accelerator = accelerator;
 	}
 

@@ -54,16 +54,11 @@ public class EnergizedHearthstoneItem extends HearthstoneItem {
 				return getTranslation(Tooltips.INFO, "target.bound", getTranslation(Tooltips.FLAVOUR, "target.hidden"));
 			}
 
-			var pos = target.pos();
-			var level = target.level();
-
-			var text = Tooltips.SUCCESS.apply(String.format("(%.1f %.1f %.1f)", pos.x, pos.y, pos.z));
-
-			if (player == null || !level.equals(player.level().dimension())) {
-				text.append(Tooltips.FLAVOUR.apply(" @ " + level.location()));
+			if (player == null || !target.level().equals(player.level().dimension())) {
+				return getTranslation(Tooltips.INFO, "target.bound", target.formatFull());
 			}
 
-			return getTranslation(Tooltips.INFO, "target.bound", text);
+			return getTranslation(Tooltips.INFO, "target.bound", target.formatPos());
 		}
 
 		return getTranslation(Tooltips.FAIL, "target.unbound");

@@ -1,5 +1,6 @@
 package ky.someone.mods.gag.client.tooltip;
 
+import ky.someone.mods.gag.util.tooltip.ItemTooltipComponent;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
@@ -8,14 +9,8 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
-import javax.annotation.Nullable;
-
 @OnlyIn(Dist.CLIENT)
-public record ItemWithTextTooltipComponent(ItemStack stack, @Nullable Component text) implements ClientTooltipComponent {
-	public ItemWithTextTooltipComponent(ItemStack stack) {
-		this(stack, null);
-	}
-
+public record ItemClientTooltip(ItemTooltipComponent data) implements ClientTooltipComponent {
 	@Override
 	public int getHeight() {
 		return 18;
@@ -28,13 +23,15 @@ public record ItemWithTextTooltipComponent(ItemStack stack, @Nullable Component 
 
 	@Override
 	public void renderImage(Font font, int x, int y, GuiGraphics graphics) {
-		graphics.renderItem(stack, x + 1, y + 1);
+		ItemStack stack = data.stack();
 
 		if (!stack.isEmpty()) {
+			graphics.renderItem(stack, x + 1, y + 1);
+
 			graphics.pose().pushPose();
 
-			var text = this.text;
-			if (text == null && stack.getCount() != 1) {
+			var text = data.customText();
+			if (text == null && data().showCount() && stack.getCount() != 1) {
 				text = Component.literal(String.valueOf(stack.getCount()));
 			}
 

@@ -3,14 +3,16 @@ package ky.someone.mods.gag.client;
 import com.google.common.collect.Iterables;
 import ky.someone.mods.gag.GAGRegistry;
 import ky.someone.mods.gag.client.tooltip.ClientTooltipBuilder;
-import ky.someone.mods.gag.client.tooltip.EmptyTooltipComponent;
-import ky.someone.mods.gag.client.tooltip.TimeArrowTooltipComponent;
+import ky.someone.mods.gag.client.tooltip.EmptyClientTooltip;
+import ky.someone.mods.gag.client.tooltip.TimeArrowClientTooltip;
 import ky.someone.mods.gag.config.GAGConfig;
 import ky.someone.mods.gag.entity.TimeAcceleratorEntity;
 import ky.someone.mods.gag.item.GAGItem;
 import ky.someone.mods.gag.util.Tooltips;
+import ky.someone.mods.gag.util.VerticalAlignment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.GameType;
@@ -50,8 +52,6 @@ public interface GAGClientEvents {
 				if (accelSpeed == 0) return;
 
 				var speed = Tooltips.asStyledValue(accelSpeed, GAGConfig.temporalPouch.maxRate(), Integer.toString(1 << accelSpeed));
-				var duration = Component.translatable("info.gag.time_sand_tooltip_time",
-						Tooltips.asStyledValue(timeLeft, GAGConfig.temporalPouch.durationPerUse(), String.format("%.2f", timeLeft)));
 
 				var text = Tooltips.FLAVOUR
 						.literal("🚀 x")
@@ -60,48 +60,43 @@ public interface GAGClientEvents {
 						.append(Tooltips.asStyledValue(timeLeft, GAGConfig.temporalPouch.durationPerUse(), String.format("%.2f", timeLeft)))
 						.append("s");
 
-				if (mc.screen == null) {
-					var x = mc.getWindow().getGuiScaledWidth() / 2;
-					var y = mc.getWindow().getGuiScaledHeight() / 2;
-					graphics.renderTooltipInternal(mc.font,
-							new ClientTooltipBuilder()
-									.text(block.getName())
-									.hstack(new ClientTooltipBuilder()
-											.item(GAGRegistry.TIME_SAND_POUCH)
-											.add(new TimeArrowTooltipComponent(accelerator))
-											.item(block)
-											.build(), 1)
-									.add(EmptyTooltipComponent.y(4))
-									.text(text)
-									.build()
-							, x + 10, y, DefaultTooltipPositioner.INSTANCE);
-					//graphics.renderComponentTooltip(mc.font, text, x + 10, y);
-				}
+				renderHudTooltip(mc, graphics, new ClientTooltipBuilder()
+						.text(block.getName())
+						.hstack(new ClientTooltipBuilder()
+								.item(GAGRegistry.TIME_SAND_POUCH)
+								.add(new TimeArrowClientTooltip(accelerator))
+								.item(block)
+								.build(), 1, VerticalAlignment.CENTER)
+						.add(EmptyClientTooltip.y(4))
+						.text(text)
+						.build());
 
 				return;
 			}
 		}
 
 		var stack = player.getUseItem();
-		List<Component> tooltip = List.of();
+		var builder = new ClientTooltipBuilder();
 
 		if (!stack.isEmpty() && stack.getItem() instanceof GAGItem item) {
-			tooltip = item.getUsingTooltip(player, stack, player.getTicksUsingItem());
+			item.getUsingTooltip(player, stack, player.getTicksUsingItem(), builder);
 		} else if ((stack = player.getMainHandItem()).getItem() instanceof GAGItem item) {
-			tooltip = item.getHoldingTooltip(player, stack);
+			item.getHoldingTooltip(player, stack, builder);
 		} else if ((stack = player.getOffhandItem()).getItem() instanceof GAGItem item) {
-			tooltip = item.getHoldingTooltip(player, stack);
+			item.getHoldingTooltip(player, stack, builder);
 		}
+
+		var tooltip = builder.build();
 
 		if (!tooltip.isEmpty()) {
 			renderHudTooltip(mc, graphics, tooltip);
 		}
 	}
 
-	private static void renderHudTooltip(Minecraft mc, GuiGraphics graphics, List<Component> text) {
+	private static void renderHudTooltip(Minecraft mc, GuiGraphics graphics, List<ClientTooltipComponent> tooltip) {
 		if (mc.screen != null) return;
 		var x = mc.getWindow().getGuiScaledWidth() / 2;
 		var y = mc.getWindow().getGuiScaledHeight() / 2;
-		graphics.renderComponentTooltip(mc.font, text, x + 10, y);
+		graphics.renderTooltipInternal(mc.font, tooltip, x + 10, y, DefaultTooltipPositioner.INSTANCE);
 	}
 }
