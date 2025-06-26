@@ -86,10 +86,10 @@ neoForge {
 		}
 	}
 
-	/*parchment {
+	parchment {
 		minecraftVersion = minecraft_version
 		mappingsVersion = parchment_version
-	}*/
+	}
 }
 
 sourceSets.main.resources {
