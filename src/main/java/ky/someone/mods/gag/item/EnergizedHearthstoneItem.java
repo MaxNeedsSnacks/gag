@@ -42,7 +42,6 @@ public class EnergizedHearthstoneItem extends HearthstoneItem {
 		GAGUtil.appendInfoTooltip(tooltip, List.of(
 				getTranslation(Tooltips.MAIN, "info_adv"),
 				getTranslation(Tooltips.MAIN, "info_adv_2"),
-				getTranslation(Tooltips.MAIN, "info_adv_3"),
 				Tooltips.EXTRA.lang("info.gag.supports_unbreaking")
 		));
 	}

@@ -2,8 +2,6 @@
 	"itemGroup.gag.gag": "GAG — Gadgets Against Grind",
 	"info.gag.repelling_item": "When applied, gives the player an effect that stops nearby hostile mobs from spawning.",
 	"info.gag.supports_unbreaking": "(can be enchanted with Unbreaking and Mending)",
-	"info.gag.time_sand_tooltip_mult": "This block has been accelerated to %sx speed!",
-	"info.gag.time_sand_tooltip_time": "Time remaining: %s seconds",
 	"info.gag.lightning_crafting_hint": "Strike with Lightning",
 	"item.gag.time_sand": "Sands of Time",
 	"item.gag.time_sand_pouch": "Temporal Pouch",
