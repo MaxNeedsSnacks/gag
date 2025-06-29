@@ -50,7 +50,7 @@ public class EmiPigmentJarMixingRecipe extends EmiPatternCraftingRecipe {
 	}
 
 	private Pigment randomPigment(Random random) {
-		var color = random.nextInt(2 << 24);
+		var color = random.nextInt() & 0xffffff;
 		var amount = random.nextInt(PigmentJarItem.MAX_AMOUNT / 2) + 1;
 
 		return Pigment.ofRgb(color, amount);
