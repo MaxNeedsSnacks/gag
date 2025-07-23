@@ -6,6 +6,7 @@ import ky.someone.mods.gag.item.data.TeleportPos;
 import ky.someone.mods.gag.util.GAGUtil;
 import ky.someone.mods.gag.util.TooltipStyle;
 import ky.someone.mods.gag.util.Tooltips;
+import ky.someone.mods.gag.util.tooltip.TooltipSink;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
@@ -162,23 +163,20 @@ public class HearthstoneItem extends GAGItem {
 	}
 
 	@Override
-	public List<Component> getHoldingTooltip(Player player, ItemStack stack) {
-		return List.of(
-				stack.getHoverName(),
-				getTargetText(player, stack)
-		);
+	public void getHoldingTooltip(Player player, ItemStack stack, TooltipSink sink) {
+		sink.acceptText(stack.getHoverName());
+		sink.acceptText(getTargetText(player, stack));
 	}
 
 	@Override
-	public List<Component> getUsingTooltip(Player player, ItemStack stack, int useTicks) {
+	public void getUsingTooltip(Player player, ItemStack stack, int useTicks, TooltipSink sink) {
+		sink.acceptText(stack.getHoverName());
+		sink.acceptText(getTargetText(player, stack));
+
 		var totalUseTicks = getUseDuration(stack, player);
 		useTicks = Math.min(useTicks, totalUseTicks);
 		var warmupText = Tooltips.asStyledValue(useTicks, totalUseTicks, String.format("%.2f", (totalUseTicks - useTicks) / 20d));
-		return List.of(
-				stack.getHoverName(),
-				getTargetText(player, stack),
-				getTranslation(Tooltips.MAIN, "warmup", warmupText)
-		);
+		sink.acceptText(getTranslation(Tooltips.MAIN, "warmup", warmupText));
 	}
 
 	protected MutableComponent getTranslation(TooltipStyle style, String key, Object... args) {

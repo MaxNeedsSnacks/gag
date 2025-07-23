@@ -119,7 +119,7 @@ public interface GAGRegistry {
 	);
 
 	DataComponentType<Integer> GRAINS_OF_TIME_DATA = HELPER.component("grains_of_time", builder -> builder
-			.persistent(ExtraCodecs.POSITIVE_INT)
+			.persistent(ExtraCodecs.NON_NEGATIVE_INT)
 			.networkSynchronized(ByteBufCodecs.VAR_INT)
 	);
 

@@ -1,12 +1,10 @@
 package ky.someone.mods.gag.item;
 
-import net.minecraft.network.chat.Component;
+import ky.someone.mods.gag.util.tooltip.TooltipSink;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
 
 /**
  * Abstract class for all items registered by this mod.
@@ -21,11 +19,9 @@ public abstract class GAGItem extends Item implements ItemWithSubsets {
 		return player == null || !player.isCreative();
 	}
 
-	public List<Component> getHoldingTooltip(Player player, ItemStack stack) {
-		return List.of();
+	public void getHoldingTooltip(Player player, ItemStack stack, TooltipSink sink) {
 	}
 
-	public List<Component> getUsingTooltip(Player player, ItemStack stack, int useTicks) {
-		return List.of();
+	public void getUsingTooltip(Player player, ItemStack stack, int useTicks, TooltipSink sink) {
 	}
 }
