@@ -13,6 +13,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.Enchantments;
@@ -33,7 +34,7 @@ public class GAGEmiPlugin implements EmiPlugin {
 		registry.addRecipe(new EmiPigmentJarSplittingRecipe());
 
 		var hearthstoneEnergizing = EmiWorldInteractionRecipe.builder()
-				.id(GAGUtil.id("emi_recipes/hearthstone_energizing"))
+				.id(GAGUtil.id("/hearthstone_energizing"))
 				.leftInput(EmiStack.of(GAGRegistry.HEARTHSTONE))
 				.output(EmiStack.of(GAGRegistry.ENERGIZED_HEARTHSTONE))
 				.rightInput(new CustomNameEmiListIngredient(EmiIngredient.of(Ingredient.of(
@@ -46,6 +47,10 @@ public class GAGEmiPlugin implements EmiPlugin {
 				.build();
 
 		registry.addRecipe(hearthstoneEnergizing);
+	}
+
+	public static ResourceLocation synthetic(ResourceLocation id) {
+		return ResourceLocation.tryBuild(id.getNamespace(), "/" + id.getPath());
 	}
 
 	public record CustomNameEmiListIngredient(EmiIngredient wrapped, Component name) implements EmiIngredient {

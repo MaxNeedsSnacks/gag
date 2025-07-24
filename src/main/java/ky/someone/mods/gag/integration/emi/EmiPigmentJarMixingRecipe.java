@@ -13,6 +13,8 @@ import net.minecraft.world.item.DyeColor;
 import java.util.List;
 import java.util.Random;
 
+import static ky.someone.mods.gag.integration.emi.GAGEmiPlugin.synthetic;
+
 public class EmiPigmentJarMixingRecipe extends EmiPatternCraftingRecipe {
 	private static final List<DyeColor> DYES = List.of(DyeColor.values());
 
@@ -20,7 +22,7 @@ public class EmiPigmentJarMixingRecipe extends EmiPatternCraftingRecipe {
 		super(List.of(
 				EmiStack.of(GAGRegistry.PIGMENT_JAR),
 				EmiStack.of(GAGRegistry.PIGMENT_JAR)
-		), EmiStack.of(GAGRegistry.PIGMENT_JAR), PigmentJarMixingRecipe.ID);
+		), EmiStack.of(GAGRegistry.PIGMENT_JAR), synthetic(PigmentJarMixingRecipe.ID));
 	}
 
 	@Override
