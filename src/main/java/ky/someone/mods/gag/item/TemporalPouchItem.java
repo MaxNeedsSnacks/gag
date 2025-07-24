@@ -197,7 +197,7 @@ public class TemporalPouchItem extends GAGItem {
 	}
 
 	@Override
-	public boolean shouldBob(ItemStack oldStack, ItemStack newStack) {
+	public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
 		return false;
 	}
 }
