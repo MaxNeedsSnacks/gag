@@ -3,6 +3,7 @@ package ky.someone.mods.gag.item.data;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import ky.someone.mods.gag.util.Tooltips;
+import net.minecraft.Util;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -35,7 +36,8 @@ public record TeleportPos(ResourceKey<Level> level, Vec3 pos, float yaw) {
 	}
 
 	public MutableComponent formatLevel() {
-		return Component.literal(level.location().toString());
+		var dim = level.location();
+		return Component.translatableWithFallback(Util.makeDescriptionId("dimension", dim), dim.toString());
 	}
 
 	public MutableComponent formatFull() {
