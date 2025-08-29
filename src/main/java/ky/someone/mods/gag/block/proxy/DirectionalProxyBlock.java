@@ -1,4 +1,4 @@
-package ky.someone.mods.gag.block;
+package ky.someone.mods.gag.block.proxy;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -10,14 +10,17 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DirectionalBlock;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.Property;
 import net.neoforged.neoforge.capabilities.BlockCapability;
-import net.neoforged.neoforge.capabilities.IBlockCapabilityProvider;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class DirectionalProxyBlock<T> extends DirectionalBlock implements IBlockCapabilityProvider<T, Direction> {
+public abstract class DirectionalProxyBlock<T> extends DirectionalBlock {
+
+	public static final Property<Direction> FACINNG = DirectionalBlock.FACING;
+
 	protected DirectionalProxyBlock(Properties props) {
 		super(props);
 	}
@@ -58,13 +61,13 @@ public abstract class DirectionalProxyBlock<T> extends DirectionalBlock implemen
 
 	protected abstract BlockCapability<T, Direction> getProxiedCapability();
 
-	@Override
-	public @Nullable T getCapability(Level level, BlockPos pos, BlockState state, @Nullable BlockEntity blockEntity, Direction context) {
-		return getCapability(level, pos, state);
-	}
-
 	protected @Nullable T getCapability(Level level, BlockPos pos, BlockState state) {
 		var facing = state.getValue(FACING);
 		return level.getCapability(getProxiedCapability(), pos.relative(facing), facing.getOpposite());
+	}
+
+	protected void registerCapabilities(RegisterCapabilitiesEvent event) {
+		var cap = getProxiedCapability();
+		event.registerBlock(cap, new DirectionalProxyCapabilityProvider<>(cap), this);
 	}
 }

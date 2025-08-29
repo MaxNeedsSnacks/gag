@@ -1,4 +1,4 @@
-package ky.someone.mods.gag.block;
+package ky.someone.mods.gag.block.proxy;
 
 import com.mojang.serialization.MapCodec;
 import ky.someone.mods.gag.GAGRegistry;
@@ -34,6 +34,6 @@ public class FluidProxyBlock extends DirectionalProxyBlock<IFluidHandler> {
 
 	@SubscribeEvent
 	public static void onRegisterCapabilities(RegisterCapabilitiesEvent event) {
-		event.registerBlock(Capabilities.FluidHandler.BLOCK, GAGRegistry.FLUID_PROXY.get(), GAGRegistry.FLUID_PROXY.get());
+		GAGRegistry.FLUID_PROXY.get().registerCapabilities(event);
 	}
 }

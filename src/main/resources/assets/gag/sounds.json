@@ -1,4 +1,16 @@
 {
+  "item.time_sand_pouch.ding": {
+    "sounds": [
+      "note/icechime"
+    ],
+    "subtitle": "subtitles.gag.item.time_sand_pouch.ding"
+  },
+  "item.time_sand_pouch.dong": {
+    "sounds": [
+      "note/flute"
+    ],
+    "subtitle": "subtitles.gag.item.time_sand_pouch.dong"
+  },
   "entity.dynamite.throw": {
     "sounds": [
       "random/bow"

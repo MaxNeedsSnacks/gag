@@ -1,4 +1,4 @@
-package ky.someone.mods.gag.block;
+package ky.someone.mods.gag.block.proxy;
 
 import com.mojang.serialization.MapCodec;
 import ky.someone.mods.gag.GAGRegistry;
@@ -35,6 +35,6 @@ public class ItemProxyBlock extends DirectionalProxyBlock<IItemHandler> {
 
 	@SubscribeEvent
 	public static void onRegisterCapabilities(RegisterCapabilitiesEvent event) {
-		event.registerBlock(Capabilities.ItemHandler.BLOCK, GAGRegistry.ITEM_PROXY.get(), GAGRegistry.ITEM_PROXY.get());
+		GAGRegistry.ITEM_PROXY.get().registerCapabilities(event);
 	}
 }

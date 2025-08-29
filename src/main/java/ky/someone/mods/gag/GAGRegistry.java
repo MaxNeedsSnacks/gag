@@ -1,9 +1,8 @@
 package ky.someone.mods.gag;
 
-import com.mojang.serialization.Codec;
 import dev.shadowsoffire.placebo.registry.DeferredHelper;
-import ky.someone.mods.gag.block.FluidProxyBlock;
-import ky.someone.mods.gag.block.ItemProxyBlock;
+import ky.someone.mods.gag.block.proxy.FluidProxyBlock;
+import ky.someone.mods.gag.block.proxy.ItemProxyBlock;
 import ky.someone.mods.gag.block.NoSolicitorsSign;
 import ky.someone.mods.gag.effect.RepellingEffect;
 import ky.someone.mods.gag.entity.FishingDynamiteEntity;
@@ -153,15 +152,19 @@ public interface GAGRegistry {
 					.sized(0.25F, 0.25F)
 					.clientTrackingRange(4)
 					.updateInterval(10));
+
 	// sounds
-	Supplier<SoundEvent> DYNAMITE_THROW = simpleSound("entity.dynamite.throw");
-	Supplier<SoundEvent> HEARTHSTONE_THUNDER = simpleSound("item.hearthstone.thunder");
-	Supplier<SoundEvent> REPELLING_APPLY = simpleSound("item.repelling.apply");
-	Supplier<SoundEvent> TELEPORT = simpleSound("generic.teleport");
+	Holder<SoundEvent> DYNAMITE_THROW = simpleSound("entity.dynamite.throw");
+	Holder<SoundEvent> HEARTHSTONE_THUNDER = simpleSound("item.hearthstone.thunder");
+	Holder<SoundEvent> REPELLING_APPLY = simpleSound("item.repelling.apply");
 
-	Supplier<SoundEvent> TELEPORT_FAIL = simpleSound("generic.teleport.fail");
+	Holder<SoundEvent> TICK_ACCELERATE = simpleSound("item.time_sand_pouch.ding");
+	Holder<SoundEvent> TICK_ACCELERATE_2 = simpleSound("item.time_sand_pouch.dong");
 
-	static Supplier<SoundEvent> simpleSound(String name) {
+	Holder<SoundEvent> TELEPORT = simpleSound("generic.teleport");
+	Holder<SoundEvent> TELEPORT_FAIL = simpleSound("generic.teleport.fail");
+
+	static Holder<SoundEvent> simpleSound(String name) {
 		return HELPER.sound(name, () -> SoundEvent.createVariableRangeEvent(GAGUtil.id(name)));
 	}
 

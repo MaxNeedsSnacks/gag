@@ -72,7 +72,7 @@ public class EnergizedHearthstoneItem extends HearthstoneItem {
 				var pos = new TeleportPos(player.level().dimension(), player.position(), player.getYRot());
 				stack.set(GAGRegistry.TELEPORT_TARGET_DATA, pos);
 
-				player.playSound(GAGRegistry.HEARTHSTONE_THUNDER.get(), 0.5f, 1.25f);
+				player.playSound(GAGRegistry.HEARTHSTONE_THUNDER.value(), 0.5f, 1.25f);
 				return InteractionResultHolder.success(stack);
 			} else {
 				return InteractionResultHolder.fail(stack);
