@@ -48,7 +48,7 @@ public class RepellingItem extends GAGItem {
 		var hasEffect = player.hasEffect(GAGRegistry.REPELLING);
 		var stack = player.getItemInHand(hand);
 		if (!hasEffect) {
-			level.playSound(null, player.blockPosition(), GAGRegistry.REPELLING_APPLY.get(), SoundSource.PLAYERS, 1.5f, 1);
+			level.playSound(null, player.blockPosition(), GAGRegistry.REPELLING_APPLY.value(), SoundSource.PLAYERS, 1.5f, 1);
 			player.addEffect(new MobEffectInstance(GAGRegistry.REPELLING, duration, amplifier));
 			stack.shrink(1);
 		}

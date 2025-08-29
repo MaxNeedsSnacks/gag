@@ -83,6 +83,9 @@ public class GAGLangProvider extends ComponentL10nProvider {
 
 		add("subtitles.gag.entity.dynamite.throw", "Dynamite thrown");
 		add("subtitles.gag.item.repelling.apply", "Repelling item applied");
+
+		add("subtitles.gag.item.time_sand_pouch.ding", "Block tick accelerated");
+		add("subtitles.gag.item.time_sand_pouch.dong", "Block tick accelerated to very high speed");
 	}
 
 	public void addItemSub(Supplier<? extends Item> item, String sub, String value) {

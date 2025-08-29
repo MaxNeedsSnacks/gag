@@ -49,5 +49,7 @@
   "item.gag.time_sand_pouch.info.stored_grains": "Contains %2$s worth of Grains of Time",
   "itemGroup.gag.gag": "GAG — Gadgets Against Grind",
   "subtitles.gag.entity.dynamite.throw": "Dynamite thrown",
-  "subtitles.gag.item.repelling.apply": "Repelling item applied"
+  "subtitles.gag.item.repelling.apply": "Repelling item applied",
+  "subtitles.gag.item.time_sand_pouch.ding": "Block tick accelerated",
+  "subtitles.gag.item.time_sand_pouch.dong": "Block tick accelerated to very high speed"
 }

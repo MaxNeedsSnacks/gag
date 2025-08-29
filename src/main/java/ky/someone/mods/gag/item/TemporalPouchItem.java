@@ -11,7 +11,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionResult;
@@ -175,7 +174,7 @@ public class TemporalPouchItem extends GAGItem {
 	private void playNote(Level level, BlockPos pos, int rate) {
 		var pitches = new int[]{-6, -4, -2, -1, 1, 3, 5, 6};
 		var pitch = (float) Math.pow(2.0D, (pitches[(rate - 1) % 8]) / 12.0D);
-		var sound = rate > 8 ? SoundEvents.NOTE_BLOCK_FLUTE : SoundEvents.NOTE_BLOCK_CHIME;
+		var sound = rate > 8 ? GAGRegistry.TICK_ACCELERATE_2 : GAGRegistry.TICK_ACCELERATE;
 		level.playSound(null, pos, sound.value(), SoundSource.PLAYERS, 3.0F, pitch);
 	}
 
