@@ -16,6 +16,15 @@ public class GAGData {
 		var registries = event.getLookupProvider();
 
 		gen.addProvider(event.includeServer(), new GAGRecipesProvider(output, registries));
+
+		if (event.includeServer()) {
+			var blockTags = new GAGBlockTagsProvider(output, registries, efh);
+			var itemTags = new GAGItemTagsProvider(output, registries, blockTags.contentsGetter());
+
+			gen.addProvider(true, blockTags);
+			gen.addProvider(true, itemTags);
+		}
+
 		gen.addProvider(event.includeServer(), new GAGLootTableProvider(output, registries));
 
 		gen.addProvider(event.includeClient(), new GAGItemModelProvider(output, efh));
