@@ -86,6 +86,10 @@ public class GAGLangProvider extends ComponentL10nProvider {
 
 		add("subtitles.gag.item.time_sand_pouch.ding", "Block tick accelerated");
 		add("subtitles.gag.item.time_sand_pouch.dong", "Block tick accelerated to very high speed");
+
+		add("features.gag.capability_proxy", "Capability Proxies (GAG)");
+		addBlock(GAGRegistry.ITEM_PROXY, "Item Proxy");
+		addBlock(GAGRegistry.FLUID_PROXY, "Fluid Proxy");
 	}
 
 	public void addItemSub(Supplier<? extends Item> item, String sub, String value) {

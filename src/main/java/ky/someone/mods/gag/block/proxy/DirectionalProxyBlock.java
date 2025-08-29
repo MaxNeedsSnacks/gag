@@ -1,5 +1,6 @@
 package ky.someone.mods.gag.block.proxy;
 
+import ky.someone.mods.gag.GAGRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -22,7 +23,7 @@ public abstract class DirectionalProxyBlock<T> extends DirectionalBlock {
 	public static final Property<Direction> FACINNG = DirectionalBlock.FACING;
 
 	protected DirectionalProxyBlock(Properties props) {
-		super(props);
+		super(props.requiredFeatures(GAGRegistry.CAP_PROXY_FEATURE));
 	}
 
 	@Override

@@ -33,12 +33,18 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.PackType;
+import net.minecraft.server.packs.repository.Pack;
+import net.minecraft.server.packs.repository.PackSource;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.Unit;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.flag.FeatureFlag;
+import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
@@ -50,6 +56,7 @@ import net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.event.AddPackFindersEvent;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
@@ -85,6 +92,8 @@ public interface GAGRegistry {
 					.forEach(output::accept)));
 
 	BlockAndItem<NoSolicitorsSign, ?> NO_SOLICITORS_SIGN = BlockAndItem.create("no_solicitors", NoSolicitorsSign::new);
+
+	FeatureFlag CAP_PROXY_FEATURE = FeatureFlags.REGISTRY.getFlag(GAGUtil.id("capability_proxy"));
 	BlockAndItem<ItemProxyBlock, ?> ITEM_PROXY = BlockAndItem.create("item_proxy", ItemProxyBlock::new);
 	BlockAndItem<FluidProxyBlock, ?> FLUID_PROXY = BlockAndItem.create("fluid_proxy", FluidProxyBlock::new);
 
@@ -212,5 +221,17 @@ public interface GAGRegistry {
 	@SuppressWarnings("UnstableApiUsage")
 	static Stream<Item> getItems() {
 		return HELPER.getRegisteredObjects(Registries.ITEM).stream().map(Holder::value);
+	}
+
+	@SubscribeEvent
+	static void addFeaturePacks(final AddPackFindersEvent event) {
+		event.addPackFinders(
+				GAGUtil.id("data/gag/features/capability_proxy"),
+				PackType.SERVER_DATA,
+				Component.translatable("features.gag.capability_proxy"),
+				PackSource.FEATURE,
+				false,
+				Pack.Position.TOP
+		);
 	}
 }

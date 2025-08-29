@@ -1,4 +1,6 @@
 {
+  "block.gag.fluid_proxy": "Fluid Proxy",
+  "block.gag.item_proxy": "Item Proxy",
   "block.gag.no_solicitors": "'No Solicitors!' Sign",
   "block.gag.no_solicitors.info.1": "Wards off certain pesky intruders within a reasonable area.",
   "block.gag.no_solicitors.info.2": "(Right-click with wool to toggle silent mode)",
@@ -6,6 +8,7 @@
   "commands.gag.give_time.no_pouch": "%s does not have a temporal pouch in their inventory!",
   "commands.gag.give_time.success": "Successfully gave %s ticks worth of time to %s",
   "effect.gag.repelling": "Repelling",
+  "features.gag.capability_proxy": "Capability Proxies (GAG)",
   "info.gag.lightning_crafting_hint": "Strike with Lightning",
   "info.gag.repelling_item": "When applied, gives the player an effect that stops nearby hostile mobs from spawning.",
   "info.gag.supports_unbreaking": "(can be enchanted with Unbreaking and Mending)",

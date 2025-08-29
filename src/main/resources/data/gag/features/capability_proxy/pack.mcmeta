@@ -1,0 +1,11 @@
+{
+	"features": {
+		"enabled": [
+			"gag:capability_proxy"
+		]
+	},
+	"pack": {
+		"description": "Adds experimental blocks that forward capabilities from their neighbours. Here be dragons!",
+		"pack_format": 48
+	}
+}
