@@ -2,6 +2,8 @@ package ky.someone.mods.gag;
 
 import com.mojang.serialization.Codec;
 import dev.shadowsoffire.placebo.registry.DeferredHelper;
+import ky.someone.mods.gag.block.FluidProxyBlock;
+import ky.someone.mods.gag.block.ItemProxyBlock;
 import ky.someone.mods.gag.block.NoSolicitorsSign;
 import ky.someone.mods.gag.effect.RepellingEffect;
 import ky.someone.mods.gag.entity.FishingDynamiteEntity;
@@ -84,6 +86,8 @@ public interface GAGRegistry {
 					.forEach(output::accept)));
 
 	BlockAndItem<NoSolicitorsSign, ?> NO_SOLICITORS_SIGN = BlockAndItem.create("no_solicitors", NoSolicitorsSign::new);
+	BlockAndItem<ItemProxyBlock, ?> ITEM_PROXY = BlockAndItem.create("item_proxy", ItemProxyBlock::new);
+	BlockAndItem<FluidProxyBlock, ?> FLUID_PROXY = BlockAndItem.create("fluid_proxy", FluidProxyBlock::new);
 
 	// items
 	DeferredItem<TemporalPouchItem> TIME_SAND_POUCH = HELPER.item("time_sand_pouch", TemporalPouchItem::new);
