@@ -27,8 +27,7 @@ public class GAGLangProvider extends ComponentL10nProvider {
 		addItem(GAGRegistry.TIME_SAND_POUCH, "Temporal Pouch");
 
 		addItemInfo(GAGRegistry.TIME_SAND_POUCH, "stored_grains", "Contains %2$s worth of Grains of Time");
-		addItemInfo(GAGRegistry.TIME_SAND_POUCH, "1", "Slowly accumulates time while in a player's inventory.");
-		addItemInfo(GAGRegistry.TIME_SAND_POUCH, "2", "Use on a ticking block to accelerate it, using some of the stored time from the pouch.");
+		addItemInfo(GAGRegistry.TIME_SAND_POUCH, "Slowly accumulates time while in a player's inventory. Use on a ticking block to accelerate it, using some of the stored time from the pouch.");
 
 		addItem(GAGRegistry.ESCAPE_ROPE, "Escape Rope");
 		addItemSub(GAGRegistry.ESCAPE_ROPE, "no_space", "Could not find any space on the surface to teleport to.");
@@ -40,8 +39,7 @@ public class GAGLangProvider extends ComponentL10nProvider {
 		addItemSub(GAGRegistry.HEARTHSTONE, "no_target", "Couldn't find anywhere to teleport to, did you set your spawn point?");
 		addItemSub(GAGRegistry.HEARTHSTONE, "too_weak", "It seems this hearthstone is too weak to call home from this place.");
 		addItemSub(GAGRegistry.HEARTHSTONE, "info", "Teleports a player to their personal spawn point, or, if enabled, the world spawn.");
-		addItemSub(GAGRegistry.HEARTHSTONE, "info_adv", "This hearthstone has channelled the energy of the lightning it was struck by, and can now be used to teleport to any one bound loc");
-		addItemSub(GAGRegistry.HEARTHSTONE, "info_adv_2", "Note that to reset the stone later, you will need to hit it with lightning again.");
+		addItemSub(GAGRegistry.HEARTHSTONE, "info_adv", "A stronger hearthstone that has channelled the energy of raw lightning, and can be used to teleport to a single bound location. You can reset the stone by hitting it with lightning again.");
 		addItemSub(GAGRegistry.HEARTHSTONE, "target.bound", "\uD83E\uDDED %s");
 		addItemSub(GAGRegistry.HEARTHSTONE, "target.hidden", "[hidden target]");
 		addItemSub(GAGRegistry.HEARTHSTONE, "target.unbound", "\uD83E\uDDED Unbound");
@@ -68,8 +66,8 @@ public class GAGLangProvider extends ComponentL10nProvider {
 		addItem(GAGRegistry.SACRED_SALT, "Sacred Salt");
 		addItem(GAGRegistry.SACRED_SALVE, "Sacred Salve");
 		addItem(GAGRegistry.SACRED_BALM, "Sacred Balm");
-		addItemSub(GAGRegistry.SACRED_SALVE, "extra", "This lasts a bit longer than the salt, and also works in a larger area.");
-		addItemSub(GAGRegistry.SACRED_BALM, "extra", "This lasts considerably longer than the salt or salve, but also has a reduced radius.");
+		addItemSub(GAGRegistry.SACRED_SALVE, "extra", "Lasts a bit longer than the salt, and also works in a larger area.");
+		addItemSub(GAGRegistry.SACRED_BALM, "extra", "Lasts considerably longer than either the salt or salve, but has a reduced radius.");
 		addEffect(GAGRegistry.REPELLING, "Repelling");
 
 		addItem(GAGRegistry.MINING_DYNAMITE_ITEM, "Mining Dynamite");

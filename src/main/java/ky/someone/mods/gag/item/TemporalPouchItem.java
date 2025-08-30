@@ -187,8 +187,7 @@ public class TemporalPouchItem extends GAGItem {
 				.withStyle(ChatFormatting.ITALIC));
 
 		GAGUtil.appendInfoTooltip(tooltip, List.of(
-				Tooltips.MAIN.lang("item.gag.time_sand_pouch.info.1"),
-				Tooltips.MAIN.lang("item.gag.time_sand_pouch.info.2")
+				Tooltips.MAIN.lang("item.gag.time_sand_pouch.info")
 		));
 
 		//   "item.gag.time_sand_pouch.info.stored_grains": "Contains %1$s Grains of Time (worth %2$s)",
