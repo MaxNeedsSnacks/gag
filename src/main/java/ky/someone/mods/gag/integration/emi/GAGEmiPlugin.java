@@ -25,10 +25,12 @@ import net.minecraft.world.phys.Vec3;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 import java.util.function.UnaryOperator;
 
 @EmiEntrypoint
 public class GAGEmiPlugin implements EmiPlugin {
+	public static final Random RANDOM = new Random();
 
 	@Override
 	public void register(EmiRegistry registry) {
@@ -52,7 +54,7 @@ public class GAGEmiPlugin implements EmiPlugin {
 				.build();
 
 
-		int uniq = level.random.nextInt();
+		int uniq = RANDOM.nextInt();
 		var energizedHearthstoneRepairing = EmiWorldInteractionRecipe.builder()
 				.id(GAGUtil.id("/energized_hearthstone_repairing"))
 				.leftInput(EmiStack.EMPTY, s -> new GeneratedSlotWidget(r -> {
