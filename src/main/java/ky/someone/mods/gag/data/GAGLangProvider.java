@@ -3,6 +3,7 @@ package ky.someone.mods.gag.data;
 import ky.someone.mods.gag.GAGRegistry;
 import ky.someone.mods.gag.data.provider.ComponentL10nProvider;
 import ky.someone.mods.gag.util.GAGUtil;
+import net.minecraft.ChatFormatting;
 import net.minecraft.data.PackOutput;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
@@ -26,6 +27,9 @@ public class GAGLangProvider extends ComponentL10nProvider {
 		// add("item.gag.time_sand", "Sands of Time");
 		addItem(GAGRegistry.TIME_SAND_POUCH, "Temporal Pouch");
 
+		addItemSub(GAGRegistry.TIME_SAND_POUCH, "flavour", Component.literal("If I could save time in a ")
+				.append(Component.literal("bottle").withStyle(ChatFormatting.STRIKETHROUGH))
+				.append(Component.literal(" bundle...")));
 		addItemInfo(GAGRegistry.TIME_SAND_POUCH, "stored_grains", "Contains %2$s worth of Grains of Time");
 		addItemInfo(GAGRegistry.TIME_SAND_POUCH, "Slowly accumulates time while in a player's inventory. Use on a ticking block to accelerate it, using some of the stored time from the pouch.");
 

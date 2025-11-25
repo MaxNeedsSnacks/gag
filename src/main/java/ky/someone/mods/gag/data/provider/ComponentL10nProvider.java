@@ -1,7 +1,9 @@
 package ky.someone.mods.gag.data.provider;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
+import net.minecraft.Util;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
@@ -59,9 +61,15 @@ public abstract class ComponentL10nProvider implements DataProvider {
 			var key = entry.getKey();
 			var value = entry.getValue();
 
-			json.add(key, ComponentSerialization.CODEC
-					.encodeStart(JsonOps.INSTANCE, value)
-					.getOrThrow());
+			var str = value.tryCollapseToString();
+			if (str != null) {
+				json.addProperty(key, str);
+			} else {
+				json.add(key, ComponentSerialization.CODEC
+						.encodeStart(JsonOps.INSTANCE, value)
+						.map(elem -> Util.make(new JsonArray(), arr -> arr.add(elem)))
+						.getOrThrow());
+			}
 		}
 
 		return DataProvider.saveStable(cache, json, target);
