@@ -1,9 +1,7 @@
 # GAG Changelog
 
 ## Unreleased
-/
 
-## [5.2.0]
 This release fixes some minor issues with component formatting and the EMI plugin, which now uses its own random instead of the world random.
 
 Also, version numbers have changed format because I've switched to AlmostGradle for my build workflows. If this causes an issue for anybody, please let me know!
