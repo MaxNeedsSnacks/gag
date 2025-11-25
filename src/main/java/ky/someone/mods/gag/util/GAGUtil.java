@@ -1,5 +1,6 @@
 package ky.someone.mods.gag.util;
 
+import ky.someone.mods.gag.ModConstants;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.registries.Registries;
@@ -12,7 +13,7 @@ import java.util.List;
 
 public interface GAGUtil {
 
-	String MOD_ID = "gag";
+	String MOD_ID = ModConstants.MOD_ID;
 
 	static void appendInfoTooltip(List<Component> tooltip, List<Component> info) {
 		var isShift = Screen.hasShiftDown();

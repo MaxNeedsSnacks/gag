@@ -1,34 +1,21 @@
 plugins {
-	id 'net.neoforged.moddev'
-	id 'maven-publish'
+	id 'net.neoforged.moddev' version "2.0.80"
+	id 'com.almostreliable.almostgradle' version "1.4.1"
 }
 
-ext.ENV = System.getenv()
-
-tasks.named('wrapper', Wrapper).configure {
-	// Define wrapper values here so as to not have to always do so when updating gradlew.properties.
-	// Switching this to Wrapper.DistributionType.ALL will download the full gradle sources that comes with
-	// documentation attached on cursor hover of gradle classes and methods. However, this comes with increased
-	// file size for Gradle. If you do switch this to ALL, run the Gradle wrapper task twice afterwards.
-	// (Verify by checking gradle/wrapper/gradle-wrapper.properties to see if distributionUrl now points to `-all`)
-	distributionType = Wrapper.DistributionType.BIN
+almostgradle.setup {
+	it.withSourcesJar = false
+	it.dataGen = true
 }
 
-version = mod_version
-group = project.maven_group
-base.archivesBaseName = project.archives_base_name
+neoForge {
+	//interfaceInjectionData.from("src/main/resources/interfaces.json")
+}
 
 repositories {
 	maven {
-		url = "https://maven.architectury.dev/"
-	}
-	maven {
 		name = "Shadows (Placebo)"
 		url = "https://maven.shadowsoffire.dev/releases"
-	}
-	maven {
-		name = "FTB Library"
-		url = "https://maven.saps.dev/minecraft"
 	}
 	maven {
 		name = "TerraformersMC"
@@ -37,125 +24,11 @@ repositories {
 	mavenCentral()
 }
 
-// Mojang ships Java 21 to end users starting in 1.20.5, so mods should target Java 21.
-java.toolchain.languageVersion = JavaLanguageVersion.of(21)
-
-neoForge {
-	version = project.neoforge_version
-	accessTransformers {
-		publish(project.file('src/main/resources/META-INF/accesstransformer.cfg'))
-	}
-
-	interfaceInjectionData {
-		//from(file('interfaces.json'))
-		//publish(file('interfaces.json'))
-	}
-
-	runs {
-		configureEach {
-			logLevel = org.slf4j.event.Level.INFO
-			jvmArguments.addAll("-XX:+IgnoreUnrecognizedVMOptions", "-XX:+AllowEnhancedClassRedefinition")
-		}
-
-		client {
-			client()
-
-			if (ENV.MC_CLIENT_ARGS) {
-				programArguments.addAll(ENV.MC_CLIENT_ARGS.split(' '))
-			}
-
-			gameDirectory = file 'run'
-		}
-
-		server {
-			server()
-			programArgument("--nogui")
-			gameDirectory = file 'run_server'
-		}
-
-		data {
-			data()
-			// Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
-			programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
-		}
-	}
-
-	mods {
-		"${mod_id}" {
-			sourceSet sourceSets.main
-		}
-	}
-
-	parchment {
-		minecraftVersion = minecraft_version
-		mappingsVersion = parchment_version
-	}
-}
-
-sourceSets.main.resources {
-	srcDir 'src/generated/resources'
-}
-
-// same as my old localRuntime loom config
-configurations {
-	runtimeClasspath.extendsFrom localRuntime
-}
-
 dependencies {
-	compileOnly "dev.emi:emi-neoforge:${emi_version}:api"
-	localRuntime "dev.emi:emi-neoforge:${emi_version}"
-
 	jarJar(implementation("dev.shadowsoffire:Placebo")) {
 		version {
 			strictly '[1.21.1-9.8.0,)'
 			prefer '1.21.1-9.9.0'
-		}
-	}
-}
-
-processResources {
-	def toReplace = [
-			"version"             : project.version
-	]
-
-	inputs.properties toReplace
-	filesMatching("META-INF/neoforge.mods.toml") {
-		expand toReplace
-	}
-}
-
-afterEvaluate {
-	tasks.withType(JavaCompile) {
-		options.compilerArgs << "-Xmaxerrs" << "1000"
-		options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
-	}
-}
-
-// i want auto src / jdoc downloads please and thank you
-idea {
-	module {
-		downloadSources = true
-		downloadJavadoc = true
-	}
-}
-
-publishing {
-	publications {
-		mavenForge(MavenPublication) {
-			artifactId = "${rootProject.archives_base_name}-${project.name}"
-			from components.java
-		}
-	}
-
-	repositories {
-		if (ENV.SAPS_TOKEN) {
-			maven {
-				url "https://maven.saps.dev/minecraft"
-				credentials {
-					username = "max"
-					password = "${ENV.SAPS_TOKEN}"
-				}
-			}
 		}
 	}
 }
