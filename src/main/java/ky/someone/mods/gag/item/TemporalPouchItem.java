@@ -53,10 +53,10 @@ public class TemporalPouchItem extends GAGItem {
 	}
 
 	public MutableComponent getTimeForDisplay(ItemStack stack) {
-		int storedGrains = getStoredGrains(stack);
-		int seconds = storedGrains * GAGConfig.temporalPouch.durationPerUse() / GAGConfig.temporalPouch.grainsUsed();
-		int minutes = seconds / 60;
-		int hours = seconds / 3600;
+		long storedGrains = getStoredGrains(stack);
+		var seconds = storedGrains * GAGConfig.temporalPouch.durationPerUse() / GAGConfig.temporalPouch.grainsUsed();
+		var minutes = seconds / 60L;
+		var hours = seconds / 3600L;
 
 		String timeString = String.format("%ds", seconds);
 
