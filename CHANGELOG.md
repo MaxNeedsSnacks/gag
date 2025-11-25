@@ -1,6 +1,9 @@
 # GAG Changelog
 
 ## Unreleased
+- /
+
+## [5.2.0] - 2025-11-25
 
 This release fixes some minor issues with component formatting and the EMI plugin, which now uses its own random instead of the world random.
 
